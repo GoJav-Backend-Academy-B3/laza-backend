@@ -6,6 +6,8 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
+	gorm.io/driver/postgres v1.5.2
+	gorm.io/gorm v1.25.2
 )
 
 require (
@@ -39,6 +41,4 @@ require (
 	golang.org/x/text v0.11.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/postgres v1.5.2 // indirect
-	gorm.io/gorm v1.25.2 // indirect
 )
