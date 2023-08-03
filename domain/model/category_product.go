@@ -1,6 +1,6 @@
 package model
 
 type CategoryProduct struct {
-	ProductId  int `json:"product-id,omitempty"`
-	CategoryId int `json:"category-id,omitempty"`
+	ProductId  uint64 `json:"product_id,omitempty"`
+	CategoryId uint64 `json:"category_id,omitempty"`
 }

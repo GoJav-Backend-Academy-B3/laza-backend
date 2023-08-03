@@ -1,8 +1,8 @@
 package model
 
 type Bank struct {
-	Id       int    `json:"id,omitempty"`
-	BankName string `json:"bank-name,omitempty"`
-	BankCode string `json:"bank-code,omitempty"`
-	LogoUrl  string `json:"logo-url,omitempty"`
+	Id       uint64 `json:"id,omitempty"`
+	BankName string `json:"bank_name,omitempty"`
+	BankCode string `json:"bank_code,omitempty"`
+	LogoUrl  string `json:"logo_url,omitempty"`
 }
