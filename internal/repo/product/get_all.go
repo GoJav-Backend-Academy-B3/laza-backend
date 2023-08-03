@@ -1,8 +1,8 @@
 package product
 
-import "github.com/phincon-backend/laza/domain/entities"
+import "github.com/phincon-backend/laza/domain/model"
 
-func (r *ProductRepo) GetAll() (es []entities.Product, err error) {
+func (r *ProductRepo) GetAll() (es []model.Product, err error) {
 	tx := r.db.Find(&es)
 	err = tx.Error
 	return

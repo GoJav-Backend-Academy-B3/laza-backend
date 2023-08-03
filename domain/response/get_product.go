@@ -3,7 +3,7 @@ package response
 import (
 	"time"
 
-	"github.com/phincon-backend/laza/domain/entities"
+	"github.com/phincon-backend/laza/domain/model"
 )
 
 type Product struct {
@@ -18,7 +18,7 @@ type Product struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-func (p *Product) FillFromEntity(e entities.Product) {
+func (p *Product) FillFromEntity(e model.Product) {
 	p.Id = e.Id
 	p.Name = e.Name
 	p.Description = e.Description
