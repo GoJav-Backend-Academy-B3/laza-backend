@@ -26,6 +26,7 @@ func NewProductHandler(
 	path string,
 	viewProductUsecase usecase.ViewProductUsecase) handler.HandlerInterface {
 	return &productHandler{
+		path:               path,
 		viewProductUsecase: viewProductUsecase,
 	}
 }
