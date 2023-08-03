@@ -19,7 +19,7 @@ type InsertAction[EntityT any] interface {
 }
 
 type UpdateAction[EntityT any] interface {
-	Update(id string, dao EntityT) error
+	Update(id string, dao EntityT) (EntityT, error)
 }
 
 type DeleteAction[EntityT any] interface {
