@@ -15,7 +15,7 @@ type GetByIdAction[EntityT any] interface {
 }
 
 type InsertAction[EntityT any] interface {
-	Insert(dao EntityT) (string, error)
+	Insert(dao EntityT) (EntityT, error)
 }
 
 type UpdateAction[EntityT any] interface {
