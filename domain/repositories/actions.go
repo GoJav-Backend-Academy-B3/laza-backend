@@ -15,11 +15,11 @@ type GetByIdAction[EntityT any] interface {
 }
 
 type InsertAction[EntityT any] interface {
-	Insert(dao EntityT) (string, error)
+	Insert(dao EntityT) (EntityT, error)
 }
 
 type UpdateAction[EntityT any] interface {
-	Update(id string, dao EntityT) error
+	Update(id string, dao EntityT) (EntityT, error)
 }
 
 type DeleteAction[EntityT any] interface {

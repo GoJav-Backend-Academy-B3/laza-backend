@@ -3,6 +3,8 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"time"
 
 	"github.com/phincon-backend/laza/config"
@@ -14,11 +16,11 @@ import (
 var psqldb PsqlDB
 
 type PsqlDB struct {
-	Dbs *sql.DB
-	Trx *sql.Tx
+	Dbs *gorm.DB
+	Trx *gorm.DB
 }
 
-func GetPsqlConnection() db.Dbs {
+func GetPostgreSQLConnection() db.Dbs {
 	var nilDB PsqlDB
 	if psqldb != nilDB {
 		return &psqldb
@@ -43,29 +45,30 @@ func (d *PsqlDB) OpenConnection() {
 	if err != nil {
 		panic(err)
 	}
-
 	db_.SetConnMaxIdleTime(10 * time.Minute)
 	db_.SetConnMaxLifetime(12 * time.Hour)
 	db_.SetMaxIdleConns(10)
 	db_.SetMaxOpenConns(100)
 
-	d.Dbs = db_
+	gormdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db_}), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	d.Dbs = gormdb
 }
 
 func (d *PsqlDB) StartTrx() {
-	trx, err := psqldb.Dbs.Begin()
-	if err != nil {
-		return
-	}
-	psqldb.Trx = trx
+	db := psqldb.Dbs.Begin()
+	psqldb.Trx = db
 }
 
 func (d *PsqlDB) DoneTrx(err error) {
 	if err != nil {
 		psqldb.Trx.Rollback()
-		psqldb.Trx = &sql.Tx{}
+		psqldb.Trx = &gorm.DB{}
 	} else {
 		psqldb.Trx.Commit()
-		psqldb.Trx = &sql.Tx{}
+		psqldb.Trx = &gorm.DB{}
 	}
 }
