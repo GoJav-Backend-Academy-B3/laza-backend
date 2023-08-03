@@ -7,13 +7,17 @@ import (
 	u "github.com/phincon-backend/laza/internal/usecase/product"
 
 	r "github.com/phincon-backend/laza/internal/repo/product"
+
+	b "github.com/phincon-backend/laza/internal/db"
 )
 
 func NewProductsHandler() d.HandlerInterface {
 
 	// TODO: instantiate or get db
+	db := b.GetPostgreSQLConnection()
+	gorm := db.(*b.PsqlDB).Dbs
 
-	repo := r.NewProductRepo(db)
+	repo := r.NewProductRepo(gorm)
 
 	viewProduct := u.NewViewProductUsecaseImpl(repo)
 	return h.NewProductHandler("/products", viewProduct)
