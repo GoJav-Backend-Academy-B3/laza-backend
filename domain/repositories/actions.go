@@ -6,6 +6,10 @@ type GetAllAction[EntityT any] interface {
 	GetAll() ([]EntityT, error)
 }
 
+type GetWithLimitAction[EntityT any] interface {
+	GetWithLimit(offset, limit uint64) ([]EntityT, error)
+}
+
 type GetByIdAction[EntityT any] interface {
 	GetById(id string) (EntityT, error)
 }
