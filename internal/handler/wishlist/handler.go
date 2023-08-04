@@ -9,23 +9,21 @@ import (
 )
 
 type getWishlistHandler struct {
-	path                  string
 	updateWishlistUsecase usecase.UpdateWishListUsecase
 }
 
 func (h *getWishlistHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	hs = append(hs, handler.HandlerStruct{
 		Method:      http.MethodPut,
-		Path:        h.path,
+		Path:        "/product/:productId/wishlist",
 		HandlerFunc: h.Put,
 	})
 	return
 }
 
-func NewgetWishlistHandler(path string,
+func NewgetWishlistHandler(
 	uws usecase.UpdateWishListUsecase) handler.HandlerInterface {
 	return &getWishlistHandler{
-		path:                  path,
 		updateWishlistUsecase: uws,
 	}
 }
