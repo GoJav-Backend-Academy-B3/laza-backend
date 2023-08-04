@@ -18,7 +18,10 @@ func NewServerGin() *gin.Engine {
 	for _, v := range server {
 		handlers := v.GetHandlers()
 		for _, handler := range handlers {
-			r.Handle(handler.GinHandlerFunc())
+			method := handler.Method
+			path := handler.Path
+			hfunc := handler.HandlerFunc
+			r.Handle(method, path, hfunc...)
 		}
 	}
 
