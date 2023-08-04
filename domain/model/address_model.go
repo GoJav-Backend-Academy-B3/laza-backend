@@ -7,5 +7,5 @@ type Address struct {
 	RecieverName string `json:"reciever_name,omitempty"`
 	PhoneNumber  string `json:"phone_number,omitempty"`
 	IsPrimary    bool   `json:"is_primary,omitempty"`
-	UserId       uint   `json:"user_id,omitempty"`
+	UserId       uint64 `json:"user_id,omitempty"`
 }
