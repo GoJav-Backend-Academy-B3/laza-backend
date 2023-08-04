@@ -1,6 +1,8 @@
 package user
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/helper"
@@ -19,5 +21,6 @@ func (h *userHandler) update(c *gin.Context) {
 		return
 	}
 
-	h.updateUser.Execute(uint64(c.GetInt64(id)), request).Send(c)
+	idParse, _ := strconv.ParseUint(id, 10, 64)
+	h.updateUser.Execute(idParse, request).Send(c)
 }

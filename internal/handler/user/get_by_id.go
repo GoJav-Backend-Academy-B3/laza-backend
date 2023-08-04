@@ -1,6 +1,8 @@
 package user
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/helper"
 )
@@ -12,5 +14,6 @@ func (h *userHandler) getById(c *gin.Context) {
 		return
 	}
 
-	h.getByIdUser.Execute(uint64(c.GetInt64(id))).Send(c)
+	idParse, _ := strconv.ParseUint(id, 10, 64)
+	h.getByIdUser.Execute(idParse).Send(c)
 }
