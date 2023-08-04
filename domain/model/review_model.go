@@ -10,3 +10,7 @@ type Review struct {
 	UserId    uint64    `json:"user_id,omitempty"`
 	ProductId uint64    `json:"product_id,omitempty"`
 }
+
+func (Review) TableName() string {
+	return "review"
+}

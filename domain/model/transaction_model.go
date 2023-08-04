@@ -17,3 +17,7 @@ type Transaction struct {
 	TransactionTime   sql.NullTime    `json:"transaction_time"`
 	OrderId           uint64          `json:"order_id,omitempty"`
 }
+
+func (Transaction) TableName() string {
+	return "transaction"
+}

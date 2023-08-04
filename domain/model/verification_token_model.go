@@ -8,3 +8,7 @@ type VerificationToken struct {
 	ExpiryDate time.Time `json:"expiry_date"`
 	UserId     uint64    `json:"user_id,omitempty"`
 }
+
+func (VerificationToken) TableName() string {
+	return "verification_token"
+}

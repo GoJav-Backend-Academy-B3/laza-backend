@@ -8,3 +8,7 @@ type CreditCard struct {
 	UserId       uint64  `json:"user_id,omitempty"`
 	Orders       []Order `json:"orders" gorm:"foreignkey:Id"`
 }
+
+func (CreditCard) TableName() string {
+	return "credit_card"
+}

@@ -5,3 +5,7 @@ type Size struct {
 	Size     string    `json:"size,omitempty"`
 	Products []Product `json:"product" gorm:"many2many:size_product"`
 }
+
+func (Size) TableName() string {
+	return "size"
+}

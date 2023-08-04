@@ -12,3 +12,7 @@ type Gopay struct {
 	ExpiryDate    time.Time `json:"expiry_date"`
 	Orders        []Order   `json:"orders" gorm:"foreignkey:Id"`
 }
+
+func (Gopay) TableName() string {
+	return "gopay"
+}

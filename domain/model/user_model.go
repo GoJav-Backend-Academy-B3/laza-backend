@@ -23,3 +23,7 @@ type User struct {
 	VerificationCodes  []VerificationCode  `json:"verification_codes" gorm:"foreignkey:Id"`
 	VerificationTokens []VerificationToken `json:"verification_tokens" gorm:"foreignkey:Id"`
 }
+
+func (User) TableName() string {
+	return "users"
+}

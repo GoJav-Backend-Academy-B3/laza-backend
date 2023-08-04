@@ -16,3 +16,7 @@ type Order struct {
 	Products          []Product     `json:"products" gorm:"many2many:product_order"`
 	Transactions      []Transaction `json:"transactions" gorm:"foreignkey:Id"`
 }
+
+func (Order) TableName() string {
+	return "orders"
+}

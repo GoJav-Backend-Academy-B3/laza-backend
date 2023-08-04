@@ -6,3 +6,7 @@ type ProductOrder struct {
 	Quantity  uint16 `json:"quantity"`
 	Price     float64
 }
+
+func (ProductOrder) TableName() string {
+	return "product_order"
+}
