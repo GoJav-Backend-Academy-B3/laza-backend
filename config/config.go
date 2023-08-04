@@ -13,7 +13,6 @@ type configStruct struct {
 	PSQL_PORT         string
 	PSQL_DBNAME       string
 	PSQL_TIMEZONE     string
-	PSQL_SEARCH_PATH  string
 	PSQL_TimeoutQuick time.Duration
 	PSQL_TimeoutMid   time.Duration
 	PSQL_TimeoutSlow  time.Duration
@@ -28,7 +27,6 @@ func init() {
 	appConfig.PSQL_PORT = os.Getenv("PSQL_PORT")
 	appConfig.PSQL_DBNAME = os.Getenv("PSQL_DBNAME")
 	appConfig.PSQL_TIMEZONE = os.Getenv("PSQL_TIMEZONE")
-	appConfig.PSQL_SEARCH_PATH = os.Getenv("PSQL_SEARCH_PATH")
 
 	durationQuick, err := strconv.Atoi(os.Getenv("PSQL_TIMEOUT_1"))
 	if err != nil {
