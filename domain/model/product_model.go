@@ -23,3 +23,12 @@ type Product struct {
 func (Product) TableName() string {
 	return "product"
 }
+
+func (p *Product) Update(other Product) {
+	p.Name = other.Name
+	p.Description = other.Description
+	p.ImageUrl = other.ImageUrl
+	p.Price = other.Price
+	p.CategoryId = other.CategoryId
+	p.BrandId = other.BrandId
+}
