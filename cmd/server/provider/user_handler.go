@@ -14,5 +14,11 @@ func NewUserHandler() handlers.HandlerInterface {
 
 	repo := repo.NewUserRepo(gorm)
 	getAllUser := usca.NewGetAllUserUsecase(repo)
-	return hdle.NewUserHandler(getAllUser)
+	getByIdUser := usca.NewGetByIdUserUsecase(repo)
+	getWithLimitUser := usca.NewGetWithLimitUserUsecase(repo)
+	insertUser := usca.NewInsertUserUsecase(repo)
+	updateUser := usca.NewUpdateUserUsecase(repo)
+	deleteUser := usca.NewDeleteUserUsecase(repo)
+
+	return hdle.NewUserHandler(getAllUser, getByIdUser, getWithLimitUser, insertUser, updateUser, deleteUser)
 }
