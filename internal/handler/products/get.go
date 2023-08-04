@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/defaults"
 	"github.com/phincon-backend/laza/domain/response"
+	"github.com/phincon-backend/laza/helper"
 )
 
 func (h *productHandler) get(c *gin.Context) {
@@ -35,7 +36,7 @@ func (h *productHandler) get(c *gin.Context) {
 		product.FillFromEntity(each)
 		productsResponse = append(productsResponse, product)
 	}
-	response := response.GetResponse(productsResponse, 200, false)
+	response := helper.GetResponse(productsResponse, 200, false)
 
 	c.JSON(response.Code, response)
 }
