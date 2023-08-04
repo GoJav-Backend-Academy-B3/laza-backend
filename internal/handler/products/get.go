@@ -29,14 +29,22 @@ func (h *productHandler) get(c *gin.Context) {
 		offset = defaults.Query.Offset()
 	}
 
-	products, err := h.viewProductUsecase.Execute(offset, limit)
-	productsResponse := make([]response.Product, 0)
-	for _, each := range products {
-		var product response.Product
-		product.FillFromEntity(each)
-		productsResponse = append(productsResponse, product)
-	}
-	response := response.GetResponse(productsResponse, 200, false)
+	if len(search_q) == 0 {
+		products, err := h.viewProductUsecase.Execute(offset, limit)
+		if err != nil {
+			response := helper.GetResponse(err, http.StatusInternalServerError, 1 == 1)
+			c.JSON(http.StatusInternalServerError, response)
+			return
+		}
 
-	c.JSON(response.Code, response)
+		productsResponse := make([]response.Product, 0)
+		for _, each := range products {
+			var product response.Product
+			product.FillFromEntity(each)
+			productsResponse = append(productsResponse, product)
+		}
+		response := helper.GetResponse(productsResponse, 200, false)
+
+		c.JSON(response.Code, response)
+		return
 }
