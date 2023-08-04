@@ -28,7 +28,8 @@ func NewProductHandler(
 	viewProductUsecase uc.ViewProductUsecase,
 	searchProductByNameUsecase uc.SearchProductByNameUsecase) hd.HandlerInterface {
 	return &productHandler{
-		path:               path,
-		viewProductUsecase: viewProductUsecase,
+		path:                       path,
+		viewProductUsecase:         viewProductUsecase,
+		searchProductByNameUsecase: searchProductByNameUsecase,
 	}
 }
