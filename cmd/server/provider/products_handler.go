@@ -20,5 +20,6 @@ func NewProductsHandler() d.HandlerInterface {
 	repo := r.NewProductRepo(gorm)
 
 	viewProduct := u.NewViewProductUsecaseImpl(repo)
-	return h.NewProductHandler("/products", viewProduct)
+	searchProduct := u.NewSearchProductUsecaseImpl(repo)
+	return h.NewProductHandler("/products", viewProduct, searchProduct)
 }
