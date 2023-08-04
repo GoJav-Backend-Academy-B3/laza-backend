@@ -1,11 +1,13 @@
 package products
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/defaults"
 	"github.com/phincon-backend/laza/domain/response"
+	"github.com/phincon-backend/laza/helper"
 )
 
 func (h *productHandler) get(c *gin.Context) {
