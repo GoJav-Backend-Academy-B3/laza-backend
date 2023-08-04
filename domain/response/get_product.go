@@ -11,7 +11,7 @@ type Product struct {
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 	ImageUrl    string    `json:"image_url"`
-	Price       float32   `json:"price"`
+	Price       float64   `json:"price"`
 	CategoryId  uint64    `json:"category_id"`
 	BrandId     uint64    `json:"brand_id"`
 	CreatedAt   time.Time `json:"created_at"`
