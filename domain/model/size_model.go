@@ -1,6 +1,6 @@
 package model
 
 type Size struct {
-	Id   int    `json:"id,omitempty"`
+	Id   uint64 `json:"id,omitempty"`
 	Size string `json:"size,omitempty"`
 }
