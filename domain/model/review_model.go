@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Review struct {
-	Id        uint      `json:"id,omitempty"`
+	Id        uint      `json:"id,omitempty" gorm:"primarykey"`
 	Comment   string    `json:"comment,omitempty"`
 	Rating    float32   `json:"rating,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
