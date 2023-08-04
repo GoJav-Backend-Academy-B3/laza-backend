@@ -9,3 +9,7 @@ type Cart struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+func (Cart) TableName() string {
+	return "cart"
+}

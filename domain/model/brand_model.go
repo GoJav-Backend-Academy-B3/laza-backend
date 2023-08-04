@@ -6,3 +6,7 @@ type Brand struct {
 	LogoUrl  string    `json:"logo_url,omitempty"`
 	Products []Product `json:"products" gorm:"foreignkey:Id"`
 }
+
+func (Brand) TableName() string {
+	return "brand"
+}

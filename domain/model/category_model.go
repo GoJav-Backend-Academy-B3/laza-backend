@@ -5,3 +5,7 @@ type Category struct {
 	Category string    `json:"category,omitempty"`
 	Products []Product `json:"products" gorm:"many2many:category_product"`
 }
+
+func (Category) TableName() string {
+	return "category"
+}

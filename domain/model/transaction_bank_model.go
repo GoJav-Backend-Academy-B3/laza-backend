@@ -7,3 +7,7 @@ type TransactionBank struct {
 	VANumber   string  `gorm:"va_number"`
 	Orders     []Order `json:"orders" gorm:"foreignkey:Id"`
 }
+
+func (TransactionBank) TableName() string {
+	return "transaction_bank"
+}

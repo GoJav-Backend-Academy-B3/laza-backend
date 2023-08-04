@@ -5,3 +5,7 @@ type OrderStatus struct {
 	Status string  `json:"status,omitempty"`
 	Orders []Order `json:"orders" gorm:"foreignkey:Id"`
 }
+
+func (OrderStatus) TableName() string {
+	return "order_status"
+}

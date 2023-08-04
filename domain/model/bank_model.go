@@ -6,3 +6,7 @@ type Bank struct {
 	BankCode string `json:"bank_code,omitempty"`
 	LogoUrl  string `json:"logo_url,omitempty"`
 }
+
+func (Bank) TableName() string {
+	return "bank"
+}

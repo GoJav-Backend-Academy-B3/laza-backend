@@ -19,3 +19,7 @@ type Product struct {
 	WishlistUsers []User     `json:"wishlisted_users" gorm:"many2many:wishlist"`
 	Orders        []Order    `json:"orders" gorm:"many2many:product_order"`
 }
+
+func (Product) TableName() string {
+	return "product"
+}
