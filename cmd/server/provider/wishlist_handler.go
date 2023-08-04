@@ -20,5 +20,5 @@ func NewWishListsHandler() d.HandlerInterface {
 	repo := r.NewWishList(gorm)
 
 	viewProduct := u.NewUpdateWishListUsecaseImpl(repo)
-	return h.NewgetWishlistHandler("/wishlist/:userId/:productId", viewProduct)
+	return h.NewgetWishlistHandler("/product/:productId/wishlist", viewProduct)
 }
