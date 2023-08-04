@@ -4,3 +4,4 @@ package products
 
 const QUERY_LIMIT = "limit"
 const QUERY_OFFSET = "offset"
+const QUERY_SEARCH = "search"
