@@ -1,7 +1,6 @@
 package wishlist
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -30,7 +29,6 @@ func (h *getWishlistHandler) Put(ctx *gin.Context) {
 		response.Send(ctx)
 	}
 
-	fmt.Println(rs)
 	response := helper.GetResponse(rs, http.StatusOK, false)
 	response.Send(ctx)
 }
