@@ -16,8 +16,17 @@ func NewGetWithLimitUserUsecase(repo repositories.GetWithLimitAction[model.User]
 }
 
 // Excute implements user.GetWithLimitUserUsecase.
-func (uc *GetWithLimitUserUsecase) Execute(offset, limit uint64) *helper.Response {
-	result, err := uc.getWithLimitAction.GetWithLimit(offset, limit)
+func (uc *GetWithLimitUserUsecase) Execute(page, perpage uint64) *helper.Response {
+	if page == 0 || page < 1 {
+		page = 1
+	}
+
+	if perpage == 0 || perpage < 1 {
+		perpage = 5
+	}
+
+	offset := (page - 1) * perpage
+	result, err := uc.getWithLimitAction.GetWithLimit(offset, perpage)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
