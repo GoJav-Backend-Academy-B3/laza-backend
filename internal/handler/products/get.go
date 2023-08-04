@@ -47,4 +47,23 @@ func (h *productHandler) get(c *gin.Context) {
 
 		c.JSON(response.Code, response)
 		return
+	} else {
+		products, err := h.searchProductByNameUsecase.Execute(search_q, offset, limit)
+		if err != nil {
+			response := helper.GetResponse(err, http.StatusInternalServerError, 1 == 1)
+			c.JSON(http.StatusInternalServerError, response)
+			return
+		}
+
+		productsResponse := make([]response.Product, 0)
+		for _, each := range products {
+			var product response.Product
+			product.FillFromEntity(each)
+			productsResponse = append(productsResponse, product)
+		}
+		response := helper.GetResponse(productsResponse, 200, false)
+
+		c.JSON(response.Code, response)
+		return
+	}
 }
