@@ -3,9 +3,10 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"time"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"time"
 
 	"github.com/phincon-backend/laza/config"
 	"github.com/phincon-backend/laza/domain/db"
@@ -39,9 +40,10 @@ func (d *PsqlDB) OpenConnection() {
 	port := appConfig.PSQL_PORT
 	dbname := appConfig.PSQL_DBNAME
 	timezone := appConfig.PSQL_TIMEZONE
+	searchPath := appConfig.PSQL_SEARCH_PATH
 
-	connString := "host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s"
-	db_, err := sql.Open("postgres", fmt.Sprintf(connString, host, user, pass, dbname, port, timezone))
+	connString := "host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s search_path=%s"
+	db_, err := sql.Open("postgres", fmt.Sprintf(connString, host, user, pass, dbname, port, timezone, searchPath))
 	if err != nil {
 		panic(err)
 	}
