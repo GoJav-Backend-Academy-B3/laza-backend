@@ -12,6 +12,7 @@ func NewServerGin() *gin.Engine {
 	var server []handlers.HandlerInterface
 	server = append(server,
 		provider.NewHomeHandler(),
+		provider.NewProductsHandler(),
 	)
 
 	for _, v := range server {
