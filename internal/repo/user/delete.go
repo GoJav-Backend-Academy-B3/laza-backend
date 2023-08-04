@@ -1,6 +1,6 @@
 package user
 
-func (r *UserRepo) Delete(id uint64) error {
+func (r *UserRepo) Delete(id any) error {
 	if err := r.db.Delete("id = ?", id).Error; err != nil {
 		return err
 	}

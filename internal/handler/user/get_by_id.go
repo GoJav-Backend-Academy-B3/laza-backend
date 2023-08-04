@@ -12,5 +12,5 @@ func (h *userHandler) getById(c *gin.Context) {
 		return
 	}
 
-	h.getByIdUser.Excute(uint64(c.GetInt64(id))).Send(c)
+	h.getByIdUser.Execute(uint64(c.GetInt64(id))).Send(c)
 }

@@ -13,5 +13,5 @@ func (h *userHandler) insert(c *gin.Context) {
 		return
 	}
 
-	h.insertUser.Excute(request).Send(c)
+	h.insertUser.Execute(request).Send(c)
 }

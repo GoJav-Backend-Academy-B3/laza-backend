@@ -12,5 +12,5 @@ func (h *userHandler) delete(c *gin.Context) {
 		return
 	}
 
-	h.deleteUser.Excute(uint64(c.GetInt64(id))).Send(c)
+	h.deleteUser.Execute(uint64(c.GetInt64(id))).Send(c)
 }

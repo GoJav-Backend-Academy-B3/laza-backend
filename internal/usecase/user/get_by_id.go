@@ -16,7 +16,7 @@ func NewGetByIdUserUsecase(repo repositories.GetByIdAction[model.User]) user.Get
 }
 
 // Excute implements user.GetByIdUserUsecase.
-func (uc *GetByIdUserUsecase) Excute(id uint64) *helper.Response {
+func (uc *GetByIdUserUsecase) Execute(id uint64) *helper.Response {
 	result, err := uc.getByIdAction.GetById(id)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)

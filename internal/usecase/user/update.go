@@ -16,7 +16,7 @@ func NewUpdateUserUsecase(repo repositories.UpdateAction[model.User]) user.Updat
 }
 
 // Excute implements user.UpdateUserUsecase.
-func (uc *UpdateUserUsecase) Excute(id uint64, user model.User) *helper.Response {
+func (uc *UpdateUserUsecase) Execute(id uint64, user model.User) *helper.Response {
 	result, err := uc.updateAction.Update(id, user)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)

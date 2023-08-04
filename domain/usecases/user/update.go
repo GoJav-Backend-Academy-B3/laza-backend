@@ -6,5 +6,5 @@ import (
 )
 
 type UpdateUserUsecase interface {
-	Excute(id uint64, user model.User) *helper.Response
+	Execute(id uint64, user model.User) *helper.Response
 }

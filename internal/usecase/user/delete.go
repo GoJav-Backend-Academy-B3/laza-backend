@@ -16,7 +16,7 @@ func NewDeleteUserUsecase(repo repositories.DeleteAction[model.User]) user.Delet
 }
 
 // Excute implements user.DeleteUserUsecase.
-func (uc *DeleteUserUsecase) Excute(id uint64) *helper.Response {
+func (uc *DeleteUserUsecase) Execute(id uint64) *helper.Response {
 	err := uc.deleteAction.Delete(id)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)

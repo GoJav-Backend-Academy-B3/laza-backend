@@ -19,5 +19,5 @@ func (h *userHandler) update(c *gin.Context) {
 		return
 	}
 
-	h.updateUser.Excute(uint64(c.GetInt64(id)), request).Send(c)
+	h.updateUser.Execute(uint64(c.GetInt64(id)), request).Send(c)
 }
