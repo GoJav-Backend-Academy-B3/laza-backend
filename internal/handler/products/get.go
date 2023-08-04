@@ -13,6 +13,7 @@ func (h *productHandler) get(c *gin.Context) {
 	// Get limit and offset query string
 	limit_q := c.DefaultQuery(QUERY_LIMIT, defaults.Query.LimitString())
 	offset_q := c.DefaultQuery(QUERY_OFFSET, defaults.Query.OffsetString())
+	search_q := c.Query(QUERY_SEARCH)
 
 	// convert limit to unsigned integer
 	limit, err := strconv.ParseUint(limit_q, 10, 32)
