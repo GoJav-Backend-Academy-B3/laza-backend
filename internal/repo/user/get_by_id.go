@@ -4,12 +4,15 @@ import (
 	"errors"
 
 	"github.com/phincon-backend/laza/domain/model"
+	"gorm.io/gorm"
 )
 
 func (r *UserRepo) GetById(id any) (e model.User, err error) {
-	if err := r.db.Find(&e, "id = ?", id).Error; err != nil {
-		return e, errors.New("failed to get data")
+	tx := r.db.First(&e, "id = ?", id)
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+		err = errors.New("data user not found")
+	} else {
+		err = tx.Error
 	}
-
-	return e, nil
+	return
 }
