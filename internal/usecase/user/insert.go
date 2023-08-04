@@ -16,7 +16,7 @@ func NewInsertUserUsecase(repo repositories.InsertAction[model.User]) user.Inser
 }
 
 // Excute implements user.InsertUserUsecase.
-func (uc *InsertUserUsecase) Excute(user model.User) *helper.Response {
+func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
 	result, err := uc.insertAction.Insert(user)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
