@@ -7,9 +7,9 @@ import (
 type HandlerStruct struct {
 	Method      string
 	Path        string
-	HandlerFunc gin.HandlerFunc
+	HandlerFunc []gin.HandlerFunc
 }
 
-func (h HandlerStruct) GinHandlerFunc() (method string, path string, handlerFunc gin.HandlerFunc) {
+func (h HandlerStruct) GinHandlerFunc() (method string, path string, handlerFunc []gin.HandlerFunc) {
 	return h.Method, h.Path, h.HandlerFunc
 }
