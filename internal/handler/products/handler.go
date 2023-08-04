@@ -8,12 +8,12 @@ import (
 )
 
 type productHandler struct {
-	path               string
+	path                       string
 	viewProductUsecase         uc.ViewProductUsecase
+	searchProductByNameUsecase uc.SearchProductByNameUsecase
 }
 
 // GetHandlers implements handlers.HandlerInterface.
-	hs = append(hs, handler.HandlerStruct{
 func (h *productHandler) GetHandlers() (hs []hd.HandlerStruct) {
 	hs = append(hs, hd.HandlerStruct{
 		Method:      http.MethodGet,
@@ -25,8 +25,8 @@ func (h *productHandler) GetHandlers() (hs []hd.HandlerStruct) {
 
 func NewProductHandler(
 	path string,
-	viewProductUsecase usecase.ViewProductUsecase) handler.HandlerInterface {
 	viewProductUsecase uc.ViewProductUsecase,
+	searchProductByNameUsecase uc.SearchProductByNameUsecase) hd.HandlerInterface {
 	return &productHandler{
 		path:               path,
 		viewProductUsecase: viewProductUsecase,
