@@ -16,7 +16,7 @@ func NewGetAllUserUsecase(repo repositories.GetAllAction[model.User]) user.GetAl
 }
 
 // Excute implements user.GetAllUserUsecase.
-func (uc *GetAllUserUsecase) Excute() *helper.Response {
+func (uc *GetAllUserUsecase) Execute() *helper.Response {
 	result, err := uc.getAllAction.GetAll()
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)

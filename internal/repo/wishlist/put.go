@@ -4,7 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 )
 
-func (r *WishListRepo) Update(stamp string, ws *model.Wishlist) (*model.Wishlist, error) {
+func (r *WishListRepo) Update(stamp any, ws *model.Wishlist) (*model.Wishlist, error) {
 
 	if err := r.db.First(ws).Delete(ws).Error; err == nil {
 		return ws, nil
