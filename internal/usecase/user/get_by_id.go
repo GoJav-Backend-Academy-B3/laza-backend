@@ -5,6 +5,7 @@ import (
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"gorm.io/gorm"
 )
 
 type GetByIdUserUsecase struct {
@@ -18,7 +19,7 @@ func NewGetByIdUserUsecase(repo repositories.GetByIdAction[model.User]) user.Get
 // Excute implements user.GetByIdUserUsecase.
 func (uc *GetByIdUserUsecase) Execute(id uint64) *helper.Response {
 	result, err := uc.getByIdAction.GetById(id)
-	if err != nil {
+	if err != nil || err == gorm.ErrRecordNotFound {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 

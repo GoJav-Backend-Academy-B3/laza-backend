@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -11,6 +12,7 @@ import (
 type DataMail struct {
 	Username  string
 	Email     string
+	Token     string
 	Code      string
 	EmailBody string
 	Subject   string
@@ -43,6 +45,34 @@ func Mail(data *DataMail) *DataMail {
 		},
 	}
 
+	if data.Code != "" {
+		emailBody, _ := h.GenerateHTML(hermes.Email{
+			Body: hermes.Body{
+				Name: data.Username,
+				Intros: []string{
+					"Welcome to Lazapedia!",
+				},
+				Actions: []hermes.Action{
+					{
+						Instructions: "Please click the following button to verify your email. This code expires in 5 minutes.",
+						Button: hermes.Button{
+							Color: "#22BC66",
+							Text:  data.Code,
+						},
+					},
+				},
+			},
+		})
+
+		return &DataMail{
+			Username:  data.Username,
+			Email:     data.Email,
+			EmailBody: emailBody,
+			Subject:   data.Subject,
+		}
+	}
+
+	urlString := fmt.Sprintf("%s/auth/confirm_email/%s", os.Getenv("BASE_URL"), data.Token)
 	emailBody, _ := h.GenerateHTML(hermes.Email{
 		Body: hermes.Body{
 			Name: data.Username,
@@ -51,10 +81,11 @@ func Mail(data *DataMail) *DataMail {
 			},
 			Actions: []hermes.Action{
 				{
-					Instructions: "Please click the following button to verify your email. This code expires in 30 minutes.",
+					Instructions: "Please click the following button to verify your email. This link expires in 15 minutes.",
 					Button: hermes.Button{
 						Color: "#22BC66",
-						Text:  data.Code,
+						Text:  "Confirm your account",
+						Link:  urlString,
 					},
 				},
 			},
@@ -64,7 +95,6 @@ func Mail(data *DataMail) *DataMail {
 	return &DataMail{
 		Username:  data.Username,
 		Email:     data.Email,
-		Code:      data.Code,
 		EmailBody: emailBody,
 		Subject:   data.Subject,
 	}
