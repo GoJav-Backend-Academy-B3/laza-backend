@@ -32,8 +32,7 @@ func GetCloudinaryCredentials() CloudinaryCredentials {
 
 func UploadImage(c *gin.Context) (url string, err error) {
 	ctx := context.Background()
-	var w http.ResponseWriter = c.Writer
-	c.Request.Body = http.MaxBytesReader(w, c.Request.Body, 2*1024*1024)
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 2*1024*1024)
 
 	file, _, err := c.Request.FormFile("image")
 	if err != nil {
@@ -42,7 +41,6 @@ func UploadImage(c *gin.Context) (url string, err error) {
 		}
 		return
 	}
-
 	defer file.Close()
 
 	buff := make([]byte, 512)
@@ -53,7 +51,7 @@ func UploadImage(c *gin.Context) (url string, err error) {
 
 	filetype := http.DetectContentType(buff)
 	if filetype != "image/jpeg" && filetype != "image/png" && filetype != "image/jpg" && filetype != "image/webp" {
-		err = errors.New("file format is not allowed. Please upload a JPEG, JPG or PNG image")
+		err = errors.New("file format is not allowed. Please upload a JPEG, JPG, PNG or WEBP image")
 		return
 	}
 
@@ -63,18 +61,16 @@ func UploadImage(c *gin.Context) (url string, err error) {
 	}
 
 	imageId := strconv.Itoa(int(time.Now().UnixNano()))
-
 	creds := GetCloudinaryCredentials()
-
 	cld, err := cloudinary.NewFromParams(creds.Name, creds.APIKey, creds.Secret)
 	if err != nil {
 		return
 	}
 
-	resp, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: imageId})
+	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: imageId})
 	if err != nil {
 		return
 	}
 
-	return resp.SecureURL, nil
+	return result.SecureURL, nil
 }
