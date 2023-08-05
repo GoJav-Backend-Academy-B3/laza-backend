@@ -1,9 +1,10 @@
 package user
 
-func (r *UserRepo) Delete(id any) error {
-	if err := r.db.Delete("id = ?", id).Error; err != nil {
-		return err
-	}
+import "github.com/phincon-backend/laza/domain/model"
 
-	return nil
+func (r *UserRepo) Delete(id any) (err error) {
+	var user model.User
+	tx := r.db.Delete(user, "id = ?", id)
+	err = tx.Error
+	return
 }

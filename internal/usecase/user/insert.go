@@ -22,5 +22,17 @@ func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	configMail := helper.DataMail{
+		Username: result.Username,
+		Email:    result.Email,
+		Code:     helper.GenerateRandomNumericString(4),
+		Subject:  "Here's yout verication code",
+	}
+
+	err = helper.Mail(&configMail).Send()
+	if err != nil {
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+
 	return helper.GetResponse(result, 200, true)
 }
