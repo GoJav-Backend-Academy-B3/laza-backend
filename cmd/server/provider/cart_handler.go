@@ -13,11 +13,12 @@ func NewCartHandler() domain.HandlerInterface {
 	dbs := db.GetPostgreSQLConnection()
 	gorm := dbs.(*db.PsqlDB).Dbs
 
-	insertCartrepo := repo.NewCartRepo(gorm)
+	cartrepo := repo.NewCartRepo(gorm)
 
-	insertCartUc := usecase.NewinsertCartUsecase(insertCartrepo)
-	deleteCartUc := usecase.NewdeleteCartUsecase(insertCartrepo)
+	insertCartUc := usecase.NewinsertCartUsecase(cartrepo)
+	deleteCartUc := usecase.NewdeleteCartUsecase(cartrepo)
+	updateCartuc := usecase.NewupdateCartUsecase(cartrepo)
 
-	return handler.NewcartHandler(insertCartUc, deleteCartUc)
+	return handler.NewcartHandler(insertCartUc, deleteCartUc, updateCartuc)
 
 }
