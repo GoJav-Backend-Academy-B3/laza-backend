@@ -11,11 +11,9 @@ import (
 
 func (h *getWishlistHandler) Put(ctx *gin.Context) {
 	ws := model.Wishlist{}
-	userid, err := strconv.ParseUint(ctx.Param("userId"), 10, 32)
-	if err != nil {
-		response := helper.GetResponse(err, http.StatusBadRequest, true)
-		response.Send(ctx)
-	}
+
+	userid := uint64(1)
+
 	productid, err := strconv.ParseUint(ctx.Param("productId"), 10, 32)
 	if err != nil {
 		response := helper.GetResponse(err, http.StatusBadRequest, true)

@@ -4,25 +4,21 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 )
 
-func (r *WishListRepo) Update(stamp string, ws model.Wishlist) (rs model.Wishlist, err error) {
+func (r *WishListRepo) Update(stamp any, ws model.Wishlist) (rs model.Wishlist, err error) {
 
-	if err = r.db.First(&rs, "user_id = ? AND product_id =?", ws.UserId, ws.ProductId).Error; rs != (model.Wishlist{}) {
+	r.db.Where("user_id = ? AND product_id = ?", ws.UserId, ws.ProductId).Find(&ws)
+	if ws.IsLiked == false {
+		ws.IsLiked = true
+		err = r.db.Create(&ws).Scan(&rs).Error
 		if err != nil {
 			return
 		}
-		valueIsLiked := false
-		switch {
-		case rs.IsLiked == true:
-			valueIsLiked = false
-		case ws.IsLiked == false:
-			valueIsLiked = true
-		}
-		// Single Columns
-		tx := r.db.Model(&ws).Where("user_id = ? AND product_id = ?", ws.UserId, ws.ProductId).Update("is_liked", valueIsLiked).Scan(&rs)
-		err = tx.Error
-	} else {
-		ws.IsLiked = true
-		err = r.db.Create(&ws).Scan(&rs).Error
+		return
+	}
+	rs = ws
+	err = r.db.Delete(&ws).Error
+	if err != nil {
+		return
 	}
 	return
 }
