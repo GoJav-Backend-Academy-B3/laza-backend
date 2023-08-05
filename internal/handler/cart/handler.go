@@ -8,9 +8,10 @@ import (
 )
 
 type CartHandler struct {
-	insertCartUc uc.InsertCartUsecase
-	deleteCartUc uc.DeleteCartUsecase
-	updateCartuc uc.UpdateCartUsecase
+	insertCartUc  uc.InsertCartUsecase
+	deleteCartUc  uc.DeleteCartUsecase
+	updateCartUc  uc.UpdateCartUsecase
+	getCartByIdUc uc.GetCartByIdUsecase
 }
 
 func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
@@ -30,6 +31,11 @@ func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
 			Path:        "/product/:productId/cart",
 			HandlerFunc: ch.Update,
 		},
+		hd.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/cart",
+			HandlerFunc: ch.GetById,
+		},
 	)
 	return h
 }
@@ -37,12 +43,14 @@ func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
 func NewcartHandler(
 	insertCartUc uc.InsertCartUsecase,
 	deleteCartUc uc.DeleteCartUsecase,
-	updateCartuc uc.UpdateCartUsecase,
+	updateCartUc uc.UpdateCartUsecase,
+	getCartByIdUc uc.GetCartByIdUsecase,
 
 ) hd.HandlerInterface {
 	return &CartHandler{
-		insertCartUc: insertCartUc,
-		deleteCartUc: deleteCartUc,
-		updateCartuc: updateCartuc,
+		insertCartUc:  insertCartUc,
+		deleteCartUc:  deleteCartUc,
+		updateCartUc:  updateCartUc,
+		getCartByIdUc: getCartByIdUc,
 	}
 }

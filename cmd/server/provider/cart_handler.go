@@ -17,8 +17,9 @@ func NewCartHandler() domain.HandlerInterface {
 
 	insertCartUc := usecase.NewinsertCartUsecase(cartrepo)
 	deleteCartUc := usecase.NewdeleteCartUsecase(cartrepo)
-	updateCartuc := usecase.NewupdateCartUsecase(cartrepo)
+	updateCartUc := usecase.NewupdateCartUsecase(cartrepo, cartrepo)
+	getCartByIUc := usecase.NewgetCartByIdUsecase(cartrepo)
 
-	return handler.NewcartHandler(insertCartUc, deleteCartUc, updateCartuc)
+	return handler.NewcartHandler(insertCartUc, deleteCartUc, updateCartUc, getCartByIUc)
 
 }
