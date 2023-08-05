@@ -1,9 +1,7 @@
 package wishlist
 
-import (
-	"github.com/phincon-backend/laza/domain/response"
-)
+import "github.com/phincon-backend/laza/helper"
 
 type GetWishListUsecase interface {
-	Execute(userId uint64) (data *[]response.WishlistProduct, err error)
+	Execute(userId uint64) *helper.Response
 }

@@ -6,6 +6,7 @@ import (
 
 	u "github.com/phincon-backend/laza/internal/usecase/wishlist"
 
+	p "github.com/phincon-backend/laza/internal/repo/product"
 	r "github.com/phincon-backend/laza/internal/repo/wishlist"
 
 	b "github.com/phincon-backend/laza/internal/db"
@@ -17,8 +18,10 @@ func NewWishListsHandler() d.HandlerInterface {
 	db := b.GetPostgreSQLConnection()
 	gorm := db.(*b.PsqlDB).Dbs
 
-	repo := r.NewWishList(gorm)
+	wishlistRepo := r.NewWishList(gorm)
+	productRepo := p.NewProductRepo(gorm)
 
-	viewProduct := u.NewUpdateWishListUsecaseImpl(repo)
-	return h.NewgetWishlistHandler(viewProduct)
+	wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo)
+	wistlistGet := u.NewgetWishlistUsecase(wishlistRepo, productRepo)
+	return h.NewgetWishlistHandler(wishlistUpdate, wistlistGet)
 }
