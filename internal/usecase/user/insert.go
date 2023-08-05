@@ -66,7 +66,7 @@ func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
 	configMail := helper.DataMail{
 		Username: result.Username,
 		Email:    result.Email,
-		Code:     codeVerify,
+		Token:    codeVerify,
 		Subject:  "Verify your email",
 	}
 
