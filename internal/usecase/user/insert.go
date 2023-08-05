@@ -1,23 +1,64 @@
 package user
 
 import (
+	"time"
+
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type InsertUserUsecase struct {
-	insertAction repositories.InsertAction[model.User]
+	insertUserAction     repositories.InsertAction[model.User]
+	insertTokenAction    repositories.InsertAction[model.VerificationToken]
+	emailExistsAction    action.ExistsEmail
+	usernameExistsAction action.ExistsUsername
 }
 
-func NewInsertUserUsecase(repo repositories.InsertAction[model.User]) user.InsertUserUsecase {
-	return &InsertUserUsecase{insertAction: repo}
+func NewInsertUserUsecase(repoUser repositories.InsertAction[model.User],
+	repoToken repositories.InsertAction[model.VerificationToken], repoExistsEmail action.ExistsEmail,
+	repoExistsUsername action.ExistsUsername) user.InsertUserUsecase {
+	return &InsertUserUsecase{
+		insertUserAction:     repoUser,
+		insertTokenAction:    repoToken,
+		emailExistsAction:    repoExistsEmail,
+		usernameExistsAction: repoExistsUsername,
+	}
 }
 
 // Excute implements user.InsertUserUsecase.
 func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
-	result, err := uc.insertAction.Insert(user)
+	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
+		return helper.GetResponse("username is already registered", 401, true)
+	}
+
+	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
+		return helper.GetResponse("email is already registered", 401, true)
+	}
+
+	hashPassword, err := helper.HashPassword(user.Password)
+	if err != nil {
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+
+	user.Password = hashPassword
+
+	result, err := uc.insertUserAction.Insert(user)
+	if err != nil {
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+
+	codeVerify := helper.GenerateRandomNumericString(4)
+	expiryDate, _ := helper.GetExpiryDate(5*time.Minute, "Asia/Jakarta")
+	daoToken := model.VerificationToken{
+		Token:      codeVerify,
+		ExpiryDate: expiryDate,
+		UserId:     uint64(result.Id),
+	}
+
+	_, err = uc.insertTokenAction.Insert(daoToken)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
@@ -25,8 +66,8 @@ func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
 	configMail := helper.DataMail{
 		Username: result.Username,
 		Email:    result.Email,
-		Code:     helper.GenerateRandomNumericString(4),
-		Subject:  "Here's yout verication code",
+		Code:     codeVerify,
+		Subject:  "Verify your email",
 	}
 
 	err = helper.Mail(&configMail).Send()
