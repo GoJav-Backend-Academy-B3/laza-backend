@@ -45,7 +45,7 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 		return helper.GetResponse("already registered, you can login", 401, true)
 	} else if dataToken.Token != token {
 		return helper.GetResponse("failed to verify email", 401, true)
-	} else if dataToken.ExpiryDate.Before(time.Now().In(location)) {
+	} else if dataToken.ExpiryDate.In(location).Add(-7 * time.Hour).Before(time.Now().In(location)) {
 		return helper.GetResponse("expired verify email, please resend verify again!", 401, true)
 	}
 
