@@ -15,6 +15,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewUserHandler(),
 		provider.NewProductsHandler(),
 		provider.NewWishListsHandler(),
+		provider.NewCartHandler(),
 	)
 
 	for _, v := range server {
