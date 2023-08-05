@@ -1,4 +1,4 @@
-package user
+package auth
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,12 +6,12 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-func (h *userHandler) insert(c *gin.Context) {
+func (h *authHandler) register(c *gin.Context) {
 	var request model.User
 	if err := c.ShouldBindJSON(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return
 	}
 
-	h.insertUser.Execute(request).Send(c)
+	h.registerUser.Execute(request).Send(c)
 }

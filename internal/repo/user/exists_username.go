@@ -6,7 +6,6 @@ import (
 
 func (r *UserRepo) ExistsUsername(username string) bool {
 	var data model.User
-	err := r.db.
-		First(&data, "username = ?", username)
+	err := r.db.First(&data, "username = ?", username)
 	return err.Error == nil
 }
