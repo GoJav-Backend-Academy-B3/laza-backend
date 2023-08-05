@@ -14,7 +14,7 @@ func (pb *viewProductByBrandHandler) get(c *gin.Context) {
 	// Get limit and offset query string
 	limit_q := c.DefaultQuery(QUERY_LIMIT, defaults.Query.LimitString())
 	offset_q := c.DefaultQuery(QUERY_OFFSET, defaults.Query.OffsetString())
-	brand := c.Query(QUERY_BRAND)
+	brand := c.Query(QUERY_NAME)
 
 	// convert limit to unsigned integer
 	limit, err := strconv.ParseUint(limit_q, 10, 32)
