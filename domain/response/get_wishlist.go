@@ -12,3 +12,8 @@ type WishProduct struct {
 	Price     float64 `json:"price"`
 	BrandName string  `json:"brand_name"`
 }
+
+type WishListProductLimit struct {
+	Total           int           `json:"total"`
+	WishlistProduct []WishProduct `json:"products"`
+}

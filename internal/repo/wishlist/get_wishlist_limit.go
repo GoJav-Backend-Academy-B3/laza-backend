@@ -5,7 +5,7 @@ import (
 )
 
 func (r *WishListRepo) GetCartWithLimit(userId, offset, limit uint64) (rs []response.WishProduct, err error) {
-	err = r.db.Table("cart c").
+	err = r.db.Table("wishlist c").
 		Select("p.id,p.name, p.image_url,p.price, b.name as brand_name").
 		Joins("left join product p ON c.product_id = p.id").
 		Joins("left join brand b on p.brand_id = b.id").
