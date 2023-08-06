@@ -7,7 +7,7 @@ import (
 )
 
 func (h *authHandler) resendEmail(c *gin.Context) {
-	var request request.Resend
+	var request request.Email
 	if err := c.ShouldBindJSON(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return
