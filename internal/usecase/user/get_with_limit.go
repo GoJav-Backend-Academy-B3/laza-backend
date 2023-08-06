@@ -1,17 +1,17 @@
 package user
 
 import (
-	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type GetWithLimitUserUsecase struct {
-	getWithLimitAction repositories.GetWithLimitAction[model.User]
+	getWithLimitAction repositories.GetWithLimitAction[response.User]
 }
 
-func NewGetWithLimitUserUsecase(repo repositories.GetWithLimitAction[model.User]) user.GetWithLimitUserUsecase {
+func NewGetWithLimitUserUsecase(repo repositories.GetWithLimitAction[response.User]) user.GetWithLimitUserUsecase {
 	return &GetWithLimitUserUsecase{getWithLimitAction: repo}
 }
 

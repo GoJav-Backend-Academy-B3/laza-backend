@@ -6,18 +6,20 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
+	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type InsertUserUsecase struct {
-	insertUserAction     repositories.InsertAction[model.User]
+	insertUserAction     repositories.InsertAction[response.User]
 	insertTokenAction    repositories.InsertAction[model.VerificationToken]
 	emailExistsAction    action.ExistsEmail
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewInsertUserUsecase(repoUser repositories.InsertAction[model.User],
+func NewInsertUserUsecase(repoUser repositories.InsertAction[response.User],
 	repoToken repositories.InsertAction[model.VerificationToken], repoExistsEmail action.ExistsEmail,
 	repoExistsUsername action.ExistsUsername) user.InsertUserUsecase {
 	return &InsertUserUsecase{
@@ -29,7 +31,7 @@ func NewInsertUserUsecase(repoUser repositories.InsertAction[model.User],
 }
 
 // Excute implements user.InsertUserUsecase.
-func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
+func (uc *InsertUserUsecase) Execute(user request.User) *helper.Response {
 	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
 		return helper.GetResponse("username is already registered", 401, true)
 	}
@@ -43,9 +45,15 @@ func (uc *InsertUserUsecase) Execute(user model.User) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	user.Password = hashPassword
+	data := response.User{
+		FullName: user.FullName,
+		Username: user.Username,
+		Password: hashPassword,
+		Email:    user.Email,
+		ImageUrl: user.Image,
+	}
 
-	result, err := uc.insertUserAction.Insert(user)
+	result, err := uc.insertUserAction.Insert(data)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
