@@ -13,6 +13,7 @@ func NewServerGin() *gin.Engine {
 	server = append(server,
 		provider.NewHomeHandler(),
 		provider.NewProductsHandler(),
+		provider.NewAddressesHandler(),
 	)
 
 	for _, v := range server {

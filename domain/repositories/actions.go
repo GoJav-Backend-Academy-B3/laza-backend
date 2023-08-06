@@ -11,7 +11,7 @@ type GetWithLimitAction[EntityT any] interface {
 }
 
 type GetByIdAction[EntityT any] interface {
-	GetById(id string) (EntityT, error)
+	GetById(id any) (EntityT, error)
 }
 
 type InsertAction[EntityT any] interface {
@@ -19,11 +19,11 @@ type InsertAction[EntityT any] interface {
 }
 
 type UpdateAction[EntityT any] interface {
-	Update(id string, dao EntityT) (EntityT, error)
+	Update(id any, dao EntityT) (EntityT, error)
 }
 
 type DeleteAction[EntityT any] interface {
-	Delete(id string) error
+	Delete(id any) error
 }
 
 type BasicAction[EntityT any] interface {
