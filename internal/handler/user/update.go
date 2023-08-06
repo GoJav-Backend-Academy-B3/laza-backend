@@ -9,8 +9,8 @@ import (
 )
 
 func (h *userHandler) update(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+	if id <= 0 {
 		helper.GetResponse("missing 'id' path params", 400, true).Send(c)
 		return
 	}
@@ -28,6 +28,5 @@ func (h *userHandler) update(c *gin.Context) {
 	}
 
 	request.Image = url
-	idParse, _ := strconv.ParseUint(id, 10, 64)
-	h.updateUser.Execute(idParse, request).Send(c)
+	h.updateUser.Execute(id, request).Send(c)
 }
