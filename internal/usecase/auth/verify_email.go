@@ -3,21 +3,21 @@ package auth
 import (
 	"time"
 
-	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	actionUser "github.com/phincon-backend/laza/domain/repositories/user"
 	actionToken "github.com/phincon-backend/laza/domain/repositories/verification_token"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type VerifyEmailUserUsecase struct {
-	updateAction repositories.UpdateAction[model.User]
+	updateAction repositories.UpdateAction[response.User]
 	emailAction  actionUser.FindByEmail
 	tokenAction  actionToken.FindByToken
 }
 
-func NewVerifyEmailUserUsecase(repo repositories.UpdateAction[model.User],
+func NewVerifyEmailUserUsecase(repo repositories.UpdateAction[response.User],
 	emailAction actionUser.FindByEmail,
 	tokenAction actionToken.FindByToken) auth.VerifyEmailUserUsecase {
 	return &VerifyEmailUserUsecase{
@@ -49,8 +49,9 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 		return helper.GetResponse("expired verify email, please resend verify again!", 401, true)
 	}
 
-	var data model.User
-	data.IsVerified = true
+	data := response.User{
+		IsVerified: true,
+	}
 	_, err = uc.updateAction.Update(user.Id, data)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 401, true)

@@ -1,18 +1,18 @@
 package user
 
 import (
-	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 	"gorm.io/gorm"
 )
 
 type GetByIdUserUsecase struct {
-	getByIdAction repositories.GetByIdAction[model.User]
+	getByIdAction repositories.GetByIdAction[response.User]
 }
 
-func NewGetByIdUserUsecase(repo repositories.GetByIdAction[model.User]) user.GetByIdUserUsecase {
+func NewGetByIdUserUsecase(repo repositories.GetByIdAction[response.User]) user.GetByIdUserUsecase {
 	return &GetByIdUserUsecase{getByIdAction: repo}
 }
 
