@@ -13,5 +13,11 @@ func (h *authHandler) resendEmail(c *gin.Context) {
 		return
 	}
 
+	err := h.validate.Struct(request)
+	if err != nil {
+		helper.GetResponse(err.Error(), 400, true).Send(c)
+		return
+	}
+
 	h.resendEmailUser.Execute(request.Email).Send(c)
 }

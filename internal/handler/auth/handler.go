@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/domain/usecases/user"
@@ -13,6 +14,8 @@ type authHandler struct {
 	registerUser    user.InsertUserUsecase
 	verifyEmailUser auth.VerifyEmailUserUsecase
 	resendEmailUser auth.ResendEmailUserUsecase
+
+	validate *validator.Validate
 }
 
 func NewAuthHandler(loginUser auth.LoginUserUsecase, registerUser user.InsertUserUsecase,

@@ -21,6 +21,12 @@ func (h *userHandler) update(c *gin.Context) {
 		return
 	}
 
+	err := h.validate.Struct(request)
+	if err != nil {
+		helper.GetResponse(err.Error(), 400, true).Send(c)
+		return
+	}
+
 	url, err := helper.UploadImage(c)
 	if err != nil {
 		helper.GetResponse(err.Error(), 500, true).Send(c)
