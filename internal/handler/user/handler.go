@@ -3,6 +3,7 @@ package user
 import (
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 )
@@ -13,6 +14,8 @@ type userHandler struct {
 	getWithLimitUser user.GetWithLimitUserUsecase
 	updateUser       user.UpdateUserUsecase
 	deleteUser       user.DeleteUserUsecase
+
+	validate *validator.Validate
 }
 
 func NewUserHandler(
@@ -21,6 +24,7 @@ func NewUserHandler(
 	getWithLimitUser user.GetWithLimitUserUsecase,
 	updateUser user.UpdateUserUsecase,
 	deleteUser user.DeleteUserUsecase,
+	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &userHandler{
 		getAllUser:       getAllUser,
@@ -28,6 +32,7 @@ func NewUserHandler(
 		getWithLimitUser: getWithLimitUser,
 		updateUser:       updateUser,
 		deleteUser:       deleteUser,
+		validate:         validate,
 	}
 }
 
