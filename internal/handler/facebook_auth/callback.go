@@ -7,7 +7,6 @@ import (
 	"github.com/phincon-backend/laza/config"
 	"github.com/phincon-backend/laza/domain/response"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -21,14 +20,13 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 
 	// get oauth state from cookie for this user
 	oauthState, _ := c.Cookie("oauthstate")
-	state := c.Request.FormValue("oauthstate")
-	code := c.Request.FormValue("code")
+	state := c.Query("state")
+	code := c.Query("code")
 
 	// ERROR : Invalid OAuth State
 	if !strings.EqualFold(state, oauthState) {
-		log.Printf("s:%s o:%s", state, oauthState)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
 		fmt.Fprintf(c.Writer, "invalid oauth google state")
+		c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 
@@ -59,6 +57,6 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 		return
 	}
 
-	// send back response to browser
+	// send back response to browse
 	response.GetResponse(string(contents), http.StatusOK, false).Send(c)
 }
