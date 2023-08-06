@@ -17,7 +17,7 @@ func NewUserHandler() handlers.HandlerInterface {
 	getAllUser := usecase.NewGetAllUserUsecase(repoUser)
 	getByIdUser := usecase.NewGetByIdUserUsecase(repoUser)
 	getWithLimitUser := usecase.NewGetWithLimitUserUsecase(repoUser)
-	updateUser := usecase.NewUpdateUserUsecase(repoUser, repoUser, repoUser)
+	updateUser := usecase.NewUpdateUserUsecase(repoUser, repoUser, repoUser, repoUser)
 	deleteUser := usecase.NewDeleteUserUsecase(repoUser)
 
 	return handler.NewUserHandler(getAllUser, getByIdUser, getWithLimitUser, updateUser, deleteUser)
