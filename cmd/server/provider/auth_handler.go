@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/internal/db"
 	handler "github.com/phincon-backend/laza/internal/handler/auth"
@@ -14,6 +15,8 @@ func NewAuthHandler() handlers.HandlerInterface {
 	dbs := db.GetPostgreSQLConnection()
 	gorm := dbs.(*db.PsqlDB).Dbs
 
+	validate := validator.New()
+
 	repoUser := repoUser.NewUserRepo(gorm)
 	repoToken := repoToken.NewVerificationTokenRepo(gorm)
 
@@ -21,6 +24,6 @@ func NewAuthHandler() handlers.HandlerInterface {
 	registerUser := usecaseUser.NewInsertUserUsecase(repoUser, repoToken, repoUser, repoUser)
 	verifyEmailUser := usecaseAuth.NewVerifyEmailUserUsecase(repoUser, repoUser, repoToken)
 	resendEmailUser := usecaseAuth.NewResendEmailUserUsecase(repoToken, repoUser, repoUser)
-	
-	return handler.NewAuthHandler(loginUser, registerUser, verifyEmailUser, resendEmailUser)
+
+	return handler.NewAuthHandler(loginUser, registerUser, verifyEmailUser, resendEmailUser, validate)
 }

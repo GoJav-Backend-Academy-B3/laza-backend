@@ -24,6 +24,7 @@ func NewUserHandler(
 	getWithLimitUser user.GetWithLimitUserUsecase,
 	updateUser user.UpdateUserUsecase,
 	deleteUser user.DeleteUserUsecase,
+	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &userHandler{
 		getAllUser:       getAllUser,
@@ -31,6 +32,7 @@ func NewUserHandler(
 		getWithLimitUser: getWithLimitUser,
 		updateUser:       updateUser,
 		deleteUser:       deleteUser,
+		validate:         validate,
 	}
 }
 

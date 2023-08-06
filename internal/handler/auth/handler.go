@@ -18,13 +18,19 @@ type authHandler struct {
 	validate *validator.Validate
 }
 
-func NewAuthHandler(loginUser auth.LoginUserUsecase, registerUser user.InsertUserUsecase,
-	verifyEmailUser auth.VerifyEmailUserUsecase, resendEmailUser auth.ResendEmailUserUsecase) handlers.HandlerInterface {
+func NewAuthHandler(
+	loginUser auth.LoginUserUsecase,
+	registerUser user.InsertUserUsecase,
+	verifyEmailUser auth.VerifyEmailUserUsecase,
+	resendEmailUser auth.ResendEmailUserUsecase,
+	validate *validator.Validate,
+) handlers.HandlerInterface {
 	return &authHandler{
 		loginUser:       loginUser,
 		registerUser:    registerUser,
 		verifyEmailUser: verifyEmailUser,
 		resendEmailUser: resendEmailUser,
+		validate:        validate,
 	}
 }
 
