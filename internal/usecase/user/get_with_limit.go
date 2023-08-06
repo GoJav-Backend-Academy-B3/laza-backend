@@ -31,5 +31,5 @@ func (uc *GetWithLimitUserUsecase) Execute(page, perpage uint64) *helper.Respons
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	return helper.GetResponse(result, 200, true)
+	return helper.GetResponse(result, 200, false)
 }

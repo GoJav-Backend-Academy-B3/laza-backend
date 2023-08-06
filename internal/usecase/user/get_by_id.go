@@ -23,5 +23,5 @@ func (uc *GetByIdUserUsecase) Execute(id uint64) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	return helper.GetResponse(result, 200, true)
+	return helper.GetResponse(result, 200, false)
 }
