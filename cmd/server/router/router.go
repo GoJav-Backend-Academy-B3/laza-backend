@@ -14,7 +14,8 @@ func NewServerGin() *gin.Engine {
 		provider.NewHomeHandler(),
 		provider.NewUserHandler(),
 		provider.NewProductsHandler(),
-		provider.NewWishListsHandler(),
+		provider.NewBankHandler(),
+		// provider.NewWishListsHandler(),
 		provider.NewViewProductByBrandHandler(),
 	)
 

@@ -21,5 +21,7 @@ func NewProductsHandler() d.HandlerInterface {
 
 	viewProduct := u.NewViewProductUsecaseImpl(repo)
 	searchProduct := u.NewSearchProductUsecaseImpl(repo)
-	return h.NewProductHandler("/products", viewProduct, searchProduct)
+	getByIdProduct := u.NewGetByIdProductUsecase(repo)
+
+	return h.NewProductHandler("/products", viewProduct, searchProduct, getByIdProduct)
 }
