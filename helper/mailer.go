@@ -72,7 +72,7 @@ func Mail(data *DataMail) *DataMail {
 		}
 	}
 
-	urlString := fmt.Sprintf("%s/auth/confirm_email/?email=%s&token=%s", os.Getenv("BASE_URL"), data.Email, data.Token)
+	urlString := fmt.Sprintf("%s/auth/verify-email/?email=%s&token=%s", os.Getenv("BASE_URL"), data.Email, data.Token)
 	emailBody, _ := h.GenerateHTML(hermes.Email{
 		Body: hermes.Body{
 			Name: data.Username,
