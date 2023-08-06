@@ -2,6 +2,7 @@ package facebook_auth
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/config"
@@ -57,6 +58,20 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 		return
 	}
 
+	var fbResponse response.FBAuthResponse
+	if err = json.Unmarshal(contents, &fbResponse); err != nil {
+		response.GetResponse(fmt.Sprintf("failed to get user data %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		return
+	}
+
+	accessToken, err := fb.facebookAuthUsecase.Execute(fbResponse)
+	if err != nil {
+		response.GetResponse(fmt.Sprintf("failed to create access token %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		return
+	}
+	responseMap := map[string]string{
+		"access_token": accessToken,
+	}
 	// send back response to browse
-	response.GetResponse(string(contents), http.StatusOK, false).Send(c)
+	response.GetResponse(responseMap, http.StatusOK, false).Send(c)
 }

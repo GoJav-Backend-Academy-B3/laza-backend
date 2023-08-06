@@ -13,7 +13,7 @@ type Config struct {
 
 var FBConfig Config
 
-const OauthFacebookUrlAPI = "https://graph.facebook.com/v17.0/me?fields=id,name,first_name,email,picture&access_token="
+const OauthFacebookUrlAPI = "https://graph.facebook.com/v17.0/me?fields=name,email,picture&access_token="
 
 func init() {
 	LoadFBAuthConfig()

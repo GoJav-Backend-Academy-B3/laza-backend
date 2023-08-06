@@ -5,7 +5,7 @@ import (
 )
 
 type Transaction struct {
-	Id                uint            `json:"id,omitempty" gorm:"id"`
+	Id                string          `json:"id,omitempty" gorm:"primarykey"`
 	GrossAmount       sql.NullFloat64 `json:"gross_amount,omitempty"`
 	PaymentType       sql.NullString  `json:"payment_type,omitempty"`
 	Currency          sql.NullString  `json:"currency,omitempty"`
@@ -16,4 +16,8 @@ type Transaction struct {
 	SettlementTime    sql.NullTime    `json:"settlement_time"`
 	TransactionTime   sql.NullTime    `json:"transaction_time"`
 	OrderId           uint64          `json:"order_id,omitempty"`
+}
+
+func (Transaction) TableName() string {
+	return "transaction"
 }
