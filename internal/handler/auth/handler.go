@@ -10,10 +10,12 @@ import (
 )
 
 type authHandler struct {
-	loginUser       auth.LoginUserUsecase
-	registerUser    user.InsertUserUsecase
-	verifyEmailUser auth.VerifyEmailUserUsecase
-	resendEmailUser auth.ResendEmailUserUsecase
+	loginUser          auth.LoginUserUsecase
+	registerUser       user.InsertUserUsecase
+	verifyEmailUser    auth.VerifyEmailUserUsecase
+	resendEmailUser    auth.ResendEmailUserUsecase
+	forgetPasswordUser auth.ForgetPasswordUserUsecase
+	updatePasswordUser auth.UpdatePasswordUserUsecase
 
 	validate *validator.Validate
 }
@@ -23,14 +25,18 @@ func NewAuthHandler(
 	registerUser user.InsertUserUsecase,
 	verifyEmailUser auth.VerifyEmailUserUsecase,
 	resendEmailUser auth.ResendEmailUserUsecase,
+	forgetPasswordUser auth.ForgetPasswordUserUsecase,
+	updatePasswordUser auth.UpdatePasswordUserUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &authHandler{
-		loginUser:       loginUser,
-		registerUser:    registerUser,
-		verifyEmailUser: verifyEmailUser,
-		resendEmailUser: resendEmailUser,
-		validate:        validate,
+		loginUser:          loginUser,
+		registerUser:       registerUser,
+		verifyEmailUser:    verifyEmailUser,
+		resendEmailUser:    resendEmailUser,
+		forgetPasswordUser: forgetPasswordUser,
+		updatePasswordUser: updatePasswordUser,
+		validate:           validate,
 	}
 }
 
@@ -41,6 +47,8 @@ func (h *authHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/register", HandlerFunc: h.register},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/resend-verify", HandlerFunc: h.resendEmail},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/verify-email/", HandlerFunc: h.verifyEmail},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/forget-password", HandlerFunc: h.forgetPassword},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/update-password/", HandlerFunc: h.updatePassword},
 	)
 
 	return

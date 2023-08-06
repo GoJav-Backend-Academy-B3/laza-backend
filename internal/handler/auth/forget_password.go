@@ -6,7 +6,7 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-func (h *authHandler) resendEmail(c *gin.Context) {
+func (h *authHandler) forgetPassword(c *gin.Context) {
 	var request request.Email
 	if err := c.ShouldBindJSON(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
@@ -19,5 +19,5 @@ func (h *authHandler) resendEmail(c *gin.Context) {
 		return
 	}
 
-	h.resendEmailUser.Execute(request.Email).Send(c)
+	h.forgetPasswordUser.Execute(request.Email).Send(c)
 }
