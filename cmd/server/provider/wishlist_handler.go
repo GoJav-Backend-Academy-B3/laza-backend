@@ -6,13 +6,8 @@ import (
 
 	u "github.com/phincon-backend/laza/internal/usecase/wishlist"
 
-<<<<<<< HEAD
-	p "github.com/phincon-backend/laza/internal/repo/product"
-=======
-
 	p "github.com/phincon-backend/laza/internal/repo/product"
 
->>>>>>> dev
 	r "github.com/phincon-backend/laza/internal/repo/wishlist"
 
 	b "github.com/phincon-backend/laza/internal/db"
