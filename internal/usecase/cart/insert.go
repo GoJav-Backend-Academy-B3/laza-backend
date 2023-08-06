@@ -20,6 +20,7 @@ func (uc *insertCartUsecase) Execute(userId uint64, productId uint64) *h.Respons
 		Quantity:  1,
 	}
 
+	// check the product first
 	rs, err := uc.insertCartRepo.Insert(cart)
 	if err != nil {
 		return h.GetResponse(err.Error(), http.StatusInternalServerError, true)

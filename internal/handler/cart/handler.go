@@ -8,10 +8,11 @@ import (
 )
 
 type CartHandler struct {
-	insertCartUc  uc.InsertCartUsecase
-	deleteCartUc  uc.DeleteCartUsecase
-	updateCartUc  uc.UpdateCartUsecase
-	getCartByIdUc uc.GetCartByIdUsecase
+	insertCartUc   uc.InsertCartUsecase
+	deleteCartUc   uc.DeleteCartUsecase
+	updateCartUc   uc.UpdateCartUsecase
+	getCartByIdUc  uc.GetCartByIdUsecase
+	getCartOrderUc uc.GetCartOrderInfoUsecase
 }
 
 func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {

@@ -14,3 +14,8 @@ type CartOrderInfo struct {
 	ShippingCost float64 `json:"shipping_cost"`
 	Total        float64 `json:"total"`
 }
+
+type CartInfo struct {
+	CartPorduct   []CartPorduct `json:"products"`
+	CartOrderInfo CartOrderInfo `json:"order_info"`
+}
