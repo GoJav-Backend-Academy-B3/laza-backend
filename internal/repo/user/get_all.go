@@ -1,10 +1,8 @@
 package user
 
-import (
-	"github.com/phincon-backend/laza/domain/model"
-)
+import "github.com/phincon-backend/laza/domain/response"
 
-func (r *UserRepo) GetAll() (es []model.User, err error) {
+func (r *UserRepo) GetAll() (es []response.User, err error) {
 	tx := r.db.Find(&es)
 	err = tx.Error
 	return

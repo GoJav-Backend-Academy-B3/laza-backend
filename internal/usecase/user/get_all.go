@@ -1,17 +1,17 @@
 package user
 
 import (
-	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type GetAllUserUsecase struct {
-	getAllAction repositories.GetAllAction[model.User]
+	getAllAction repositories.GetAllAction[response.User]
 }
 
-func NewGetAllUserUsecase(repo repositories.GetAllAction[model.User]) user.GetAllUserUsecase {
+func NewGetAllUserUsecase(repo repositories.GetAllAction[response.User]) user.GetAllUserUsecase {
 	return &GetAllUserUsecase{getAllAction: repo}
 }
 
@@ -22,5 +22,5 @@ func (uc *GetAllUserUsecase) Execute() *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	return helper.GetResponse(result, 200, true)
+	return helper.GetResponse(result, 200, false)
 }
