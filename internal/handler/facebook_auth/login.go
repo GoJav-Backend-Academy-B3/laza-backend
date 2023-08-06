@@ -3,14 +3,14 @@ package facebook_auth
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/config"
-	"github.com/phincon-backend/laza/domain/response"
+	"github.com/phincon-backend/laza/helper"
 	"github.com/phincon-backend/laza/helpers"
 	"net/http"
 )
 
 func (fb *facebookAuthHandler) login(c *gin.Context) {
 	if c.Request.Method != http.MethodGet {
-		response.GetResponse("method not allowed", http.StatusMethodNotAllowed, true).Send(c)
+		helper.GetResponse("method not allowed", http.StatusMethodNotAllowed, true).Send(c)
 		return
 	}
 

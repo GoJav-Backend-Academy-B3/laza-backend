@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/config"
 	"github.com/phincon-backend/laza/domain/response"
+	"github.com/phincon-backend/laza/helper"
 	"io"
 	"net/http"
 	"strings"
@@ -15,7 +16,7 @@ import (
 func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 	// check is method is correct
 	if c.Request.Method != http.MethodGet {
-		response.GetResponse("method not allowed", http.StatusMethodNotAllowed, true).Send(c)
+		helper.GetResponse("method not allowed", http.StatusMethodNotAllowed, true).Send(c)
 		return
 	}
 
@@ -37,7 +38,7 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 
 	// ERROR : Auth Code Exchange Failed
 	if err != nil {
-		response.GetResponse(fmt.Sprintf("failed code exchange %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		helper.GetResponse(fmt.Sprintf("failed code exchange %s", err.Error()), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 
@@ -46,7 +47,7 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 
 	// ERROR : Unable to get user data from google
 	if err != nil {
-		response.GetResponse(fmt.Sprintf("failed code exchange %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		helper.GetResponse(fmt.Sprintf("failed code exchange %s", err.Error()), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 
@@ -54,24 +55,24 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 	defer res.Body.Close()
 	contents, err := io.ReadAll(res.Body)
 	if err != nil {
-		response.GetResponse(fmt.Sprintf("failed code exchange %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		helper.GetResponse(fmt.Sprintf("failed code exchange %s", err.Error()), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 
 	var fbResponse response.FBAuthResponse
 	if err = json.Unmarshal(contents, &fbResponse); err != nil {
-		response.GetResponse(fmt.Sprintf("failed to get user data %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		helper.GetResponse(fmt.Sprintf("failed to get user data %s", err.Error()), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 
 	accessToken, err := fb.facebookAuthUsecase.Execute(fbResponse)
 	if err != nil {
-		response.GetResponse(fmt.Sprintf("failed to create access token %s", err.Error()), http.StatusUnauthorized, true).Send(c)
+		helper.GetResponse(fmt.Sprintf("failed to create access token %s", err.Error()), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 	responseMap := map[string]string{
 		"access_token": accessToken,
 	}
 	// send back response to browse
-	response.GetResponse(responseMap, http.StatusOK, false).Send(c)
+	helper.GetResponse(responseMap, http.StatusOK, false).Send(c)
 }

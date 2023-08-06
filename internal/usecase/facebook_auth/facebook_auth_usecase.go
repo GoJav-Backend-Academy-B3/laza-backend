@@ -40,8 +40,9 @@ func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (
 	return
 }
 
-func NewFacebookAuthUsecase(existByusernameAction action.ExistsUsername) facebook_auth.FacebookAuthUsecase {
+func NewFacebookAuthUsecase(existByusernameAction action.ExistsUsername, insertAction repositories.InsertAction[response.User]) facebook_auth.FacebookAuthUsecase {
 	return &facebookAuthUsecaseImpl{
 		existByUsernameAction: existByusernameAction,
+		insertUserAction:      insertAction,
 	}
 }
