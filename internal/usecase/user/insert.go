@@ -75,7 +75,7 @@ func (uc *InsertUserUsecase) Execute(user request.User) *helper.Response {
 		Username: result.Username,
 		Email:    result.Email,
 		Token:    codeVerify,
-		Subject:  "Verify your email",
+		Subject:  "Your verification account",
 	}
 
 	err = helper.Mail(&configMail).Send()
