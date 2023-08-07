@@ -11,6 +11,10 @@ func (r *ProductRepo) Update(id_r any, e model.Product) (product model.Product, 
 	tx := r.db.First(&product, "id = ?", id)
 	// TODO: result.Error might return gorm.ErrRecordNotFound if
 	//       no `id` can be found
+	err = tx.Error
+	if err != nil {
+		return
+	}
 
 	// Modify data
 	product.Update(e)
