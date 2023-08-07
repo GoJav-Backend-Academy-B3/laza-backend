@@ -9,6 +9,12 @@ package provider
 // 	b "github.com/phincon-backend/laza/internal/db"
 // )
 
+
+	p "github.com/phincon-backend/laza/internal/repo/product"
+
+	r "github.com/phincon-backend/laza/internal/repo/wishlist"
+
+
 // func NewWishListsHandler() d.HandlerInterface {
 
 // 	// TODO: instantiate or get db
@@ -16,6 +22,7 @@ package provider
 // 	gorm := db.(*b.PsqlDB).Dbs
 
 // 	repo := r.NewWishList(gorm)
+
 
 // 	viewProduct := u.NewUpdateWishListUsecaseImpl(repo)
 // 	return h.NewgetWishlistHandler("/wishlist/:userId/:productId", viewProduct)
@@ -27,3 +34,13 @@ package provider
 // wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo)
 // wistlistGet := u.NewgetWishlistUsecase(wishlistRepo, productRepo)
 // return h.NewgetWishlistHandler(wishlistUpdate, wistlistGet)
+
+
+	wishlistRepo := r.NewWishList(gorm)
+	productRepo := p.NewProductRepo(gorm)
+
+	wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo)
+	wistlistGet := u.NewgetWishlistUsecase(wishlistRepo, productRepo)
+	return h.NewgetWishlistHandler(wishlistUpdate, wistlistGet)
+
+}
