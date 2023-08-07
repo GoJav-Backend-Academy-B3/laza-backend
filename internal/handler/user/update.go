@@ -1,21 +1,15 @@
 package user
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 )
 
 func (h *userHandler) update(c *gin.Context) {
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	if id <= 0 {
-		helper.GetResponse("missing 'id' path params", 400, true).Send(c)
-		return
-	}
+	userId := c.MustGet("userId").(uint64)
 
-	var request request.User
+	var request requests.User
 	if err := c.Bind(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return
@@ -34,5 +28,5 @@ func (h *userHandler) update(c *gin.Context) {
 	}
 
 	request.Image = url
-	h.updateUser.Execute(id, request).Send(c)
+	h.updateUser.Execute(userId, request).Send(c)
 }

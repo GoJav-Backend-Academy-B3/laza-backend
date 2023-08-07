@@ -1,4 +1,4 @@
-package request
+package requests
 
 type User struct {
 	FullName string `json:"full_name" form:"full_name" validate:"required,min=3"`

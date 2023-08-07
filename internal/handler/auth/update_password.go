@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 )
 
@@ -21,7 +21,7 @@ func (h *authHandler) updatePassword(c *gin.Context) {
 		return
 	}
 
-	var request request.UpdatePassword
+	var request requests.UpdatePassword
 	if err := c.ShouldBindJSON(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return
