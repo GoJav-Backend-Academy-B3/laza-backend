@@ -21,14 +21,14 @@ func NewAddAddressUsecase(addressRepo repositories.InsertAction[model.Address], 
 }
 
 // AddAddress implements address.AddAddressUsecase.
-func (u *addAddressUsecase) AddAddress(request requests.AddressRequest) (model.Address, error) {
+func (u *addAddressUsecase) AddAddress(request requests.AddressRequest, userId uint64) (model.Address, error) {
 	address := model.Address{
 		Country:      request.Country,
 		City:         request.City,
 		ReceiverName: request.ReceiverName,
 		PhoneNumber:  request.PhoneNumber,
 		IsPrimary:    request.IsPrimary,
-		UserId:       request.UserId,
+		UserId:       userId,
 	}
 
 	if address.IsPrimary {

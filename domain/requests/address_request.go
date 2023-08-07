@@ -6,5 +6,4 @@ type AddressRequest struct {
 	ReceiverName string `validate:"required,alpha" json:"receiver_name,omitempty"`
 	PhoneNumber  string `validate:"required,numeric,max=20" json:"phone_number,omitempty"`
 	IsPrimary    bool   `validate:"required" json:"is_primary,omitempty"`
-	UserId       uint64 `validate:"required" json:"user_id,omitempty"`
 }

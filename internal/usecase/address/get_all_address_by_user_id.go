@@ -1,8 +1,6 @@
 package address
 
 import (
-	"strconv"
-
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	repository "github.com/phincon-backend/laza/domain/repositories/address"
@@ -16,8 +14,7 @@ type getAddressUsecase struct {
 
 // GetAddressById implements address.GetAddressUsecase.
 func (u *getAddressUsecase) GetAddressById(id uint64) (address model.Address, err error) {
-	convert := strconv.Itoa(int(id))
-	address, err = u.getAddressById.GetById(convert)
+	address, err = u.getAddressById.GetById(id)
 	if err != nil {
 		return
 	}

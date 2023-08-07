@@ -1,15 +1,9 @@
 package user
 
-import (
-	"errors"
+import "github.com/phincon-backend/laza/domain/response"
 
-	"github.com/phincon-backend/laza/domain/model"
-)
-
-func (r *UserRepo) Update(id uint64, dao model.User) (*model.User, error) {
-	if err := r.db.Model(dao).Where("id = ?", id).Updates(&dao).Error; err != nil {
-		return nil, errors.New("failed to update data")
-	}
-
-	return &dao, nil
+func (r *UserRepo) Update(id any, dao response.User) (e response.User, err error) {
+	tx := r.db.Model(dao).Where("id = ?", id).Updates(&dao).Scan(&e)
+	err = tx.Error
+	return
 }

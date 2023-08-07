@@ -1,15 +1,11 @@
 package user
 
 import (
-	"errors"
-
-	"github.com/phincon-backend/laza/domain/model"
+	"github.com/phincon-backend/laza/domain/response"
 )
 
-func (r *UserRepo) Insert(dao model.User) (*model.User, error) {
-	if err := r.db.Create(dao).Error; err != nil {
-		return nil, errors.New("failed to create data")
-	}
-
-	return &dao, nil
+func (r *UserRepo) Insert(dao response.User) (e response.User, err error) {
+	tx := r.db.Create(&dao).Scan(&e)
+	err = tx.Error
+	return
 }

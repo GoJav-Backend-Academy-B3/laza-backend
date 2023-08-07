@@ -6,5 +6,5 @@ import (
 )
 
 type UpdateAddressUsecase interface {
-	UpdateAddressById(id uint64, request requests.AddressRequest) (address model.Address, err error)
+	UpdateAddressById(id uint64, userId uint64, request requests.AddressRequest) (address model.Address, err error)
 }

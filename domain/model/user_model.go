@@ -10,6 +10,7 @@ type User struct {
 	Password           string              `json:"password,omitempty"`
 	Email              string              `json:"email,omitempty"`
 	FullName           string              `json:"full_name,omitempty"`
+	ImageUrl           string              `json:"image_url,omitempty"`
 	IsVerified         bool                `json:"is_verified,omitempty"`
 	IsAdmin            bool                `json:"is_admin,omitempty"`
 	CreatedAt          time.Time           `json:"created_at"`

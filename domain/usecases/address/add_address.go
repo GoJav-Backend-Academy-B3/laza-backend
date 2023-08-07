@@ -6,5 +6,5 @@ import (
 )
 
 type AddAddressUsecase interface {
-	AddAddress(request requests.AddressRequest) (model.Address, error)
+	AddAddress(request requests.AddressRequest, userId uint64) (model.Address, error)
 }
