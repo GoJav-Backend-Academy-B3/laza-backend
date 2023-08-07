@@ -17,6 +17,7 @@ func main() {
 	config.LoadConfig()
 
 	godotenv.Load("/Users/juandaantoniuspakpahan/phincon/week5/project/laza-backend/.env")
+
 	gothic.Store = helper.GetStore()
 	goth.UseProviders(
 		twitter.New(os.Getenv("TWITTER_KEY"), os.Getenv("TWITTER_SECRET"), "http://127.0.0.1:8080/auth/twitter/callback?provider=twitter"),
