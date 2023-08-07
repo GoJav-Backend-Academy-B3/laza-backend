@@ -4,7 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 )
 
-func (r *ProductRepo) Update(id_r any, e model.Product) (model.Product, error) {
+func (r *ProductRepo) Update(id_r any, e model.Product) (product model.Product, err error) {
 
 	id := id_r.(uint64)
 	// Grab product that matches with `id`
