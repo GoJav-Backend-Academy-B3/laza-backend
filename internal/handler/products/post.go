@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 )
 
@@ -27,5 +28,7 @@ func (h *productHandler) post(c *gin.Context) {
 		helper.GetResponse(err.Error(), http.StatusBadRequest, true).Send(c)
 		return
 	}
-	helper.GetResponse(model, http.StatusCreated, false).Send(c)
+	response := response.Product{}
+	response.FillFromEntity(model)
+	helper.GetResponse(response, http.StatusCreated, false).Send(c)
 }
