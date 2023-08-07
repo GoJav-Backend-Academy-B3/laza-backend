@@ -31,4 +31,5 @@ func (p *Product) Update(other Product) {
 	p.Price = other.Price
 	p.CategoryId = other.CategoryId
 	p.BrandId = other.BrandId
+	p.Sizes = other.Sizes
 }
