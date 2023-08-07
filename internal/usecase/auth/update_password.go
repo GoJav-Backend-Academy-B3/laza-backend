@@ -6,7 +6,7 @@ import (
 	"github.com/phincon-backend/laza/domain/repositories"
 	actionUser "github.com/phincon-backend/laza/domain/repositories/user"
 	actionCode "github.com/phincon-backend/laza/domain/repositories/verification_code"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
@@ -31,7 +31,7 @@ func NewUpdatePasswordUserUsecase(
 }
 
 // Execute implements auth.UpdatePasswordUserUsecase.
-func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user request.UpdatePassword) *helper.Response {
+func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.UpdatePassword) *helper.Response {
 	if user.Password != user.RePassword {
 		return helper.GetResponse("passwords do not match. please try again.", 401, true)
 	}
