@@ -1,11 +1,12 @@
 package router
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/cmd/server/provider"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
-	"strings"
 )
 
 func NewServerGin() *gin.Engine {
@@ -21,6 +22,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewCartHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
+		provider.NewtwitterAuthHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {

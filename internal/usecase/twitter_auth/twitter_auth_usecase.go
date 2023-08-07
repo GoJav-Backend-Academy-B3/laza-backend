@@ -1,6 +1,8 @@
 package twitterauth
 
 import (
+	"net/http"
+
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/response"
@@ -10,17 +12,69 @@ import (
 
 type twitterAuthUsecase struct {
 	existByUsernameAction action.ExistsUsername
+	existByEmailAction    action.ExistsEmail
 	insertUserAction      repositories.InsertAction[response.User]
+	findByEmailAction     action.FindByEmail
 }
 
-func (uc *twitterAuthUsecase) Execute(response.TwitterResponse) *helper.Response {
+func (uc *twitterAuthUsecase) Execute(rp response.TwitterResponse) *helper.Response {
+	var userDAO = new(response.User)
+	response := map[string]string{}
 
-	return nil
+	if exist := uc.existByUsernameAction.ExistsUsername(rp.Data.NickName); !exist {
+		userDAO.FullName = rp.Data.Name
+		userDAO.Email = rp.Data.Name
+		userDAO.Username = rp.Data.NickName
+		userDAO.ImageUrl = rp.Data.RawData.ProfileImageURLHTTPS
+		userDAO.IsAdmin = false
+		userDAO.IsVerified = true
+
+		insertedUser, err := uc.insertUserAction.Insert(*userDAO)
+		if err != nil {
+			return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		}
+
+		jwt := helper.NewToken(uint64(insertedUser.Id), false)
+
+		accessToken, err := jwt.Create()
+		if err != nil {
+			return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		}
+		response["access_token"] = accessToken
+
+		return helper.GetResponse(response, http.StatusOK, false)
+	}
+
+	user, err := uc.findByEmailAction.FindByEmail(rp.Data.Email)
+
+	if err != nil {
+		return helper.GetResponse("user is not exist", 401, true)
+	}
+
+	jwt := helper.NewToken(uint64(user.Id), user.IsAdmin)
+
+	accessToken, err := jwt.Create()
+	if err != nil {
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+
+	response["access_token"] = accessToken
+
+	return helper.GetResponse(response, 200, false)
+
 }
 
-func NewtwitterAuthUsecase(existByUsernameAction action.ExistsUsername, insertUserAction repositories.InsertAction[response.User]) tAuth.TwitterAuthUsecase {
+func NewtwitterAuthUsecase(
+	existByUsernameAction action.ExistsUsername,
+	insertUserAction repositories.InsertAction[response.User],
+	findByEmailAction action.FindByEmail,
+	existByEmailAction action.ExistsEmail,
+
+) tAuth.TwitterAuthUsecase {
 	return &twitterAuthUsecase{
 		existByUsernameAction: existByUsernameAction,
 		insertUserAction:      insertUserAction,
+		findByEmailAction:     findByEmailAction,
+		existByEmailAction:    existByEmailAction,
 	}
 }
