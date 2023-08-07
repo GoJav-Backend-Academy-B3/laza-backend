@@ -8,6 +8,10 @@ import (
 
 	r "github.com/phincon-backend/laza/internal/repo/product"
 
+	rs "github.com/phincon-backend/laza/internal/repo/size"
+
+	rc "github.com/phincon-backend/laza/internal/repo/category"
+
 	b "github.com/phincon-backend/laza/internal/db"
 )
 
@@ -17,9 +21,13 @@ func NewProductsHandler() d.HandlerInterface {
 	db := b.GetPostgreSQLConnection()
 	gorm := db.(*b.PsqlDB).Dbs
 
-	repo := r.NewProductRepo(gorm)
+	productRepo := r.NewProductRepo(gorm)
+	sizeRepo := rs.NewSizeRepo(gorm)
+	categoryRepo := rc.NewCategoryRepo(gorm)
 
-	viewProduct := u.NewViewProductUsecaseImpl(repo)
-	searchProduct := u.NewSearchProductUsecaseImpl(repo)
-	return h.NewProductHandler("/products", viewProduct, searchProduct)
+	viewProduct := u.NewViewProductUsecaseImpl(productRepo)
+	searchProduct := u.NewSearchProductUsecaseImpl(productRepo)
+	createProduct := u.NewCreateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
+	return h.NewProductHandler("/products",
+		createProduct, viewProduct, searchProduct)
 }
