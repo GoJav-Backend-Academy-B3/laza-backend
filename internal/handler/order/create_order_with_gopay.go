@@ -32,7 +32,7 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 	result := make(map[string]any)
 
 	result["order"] = order
-	result["gopay"] = gopay
+	result["gopay_details"] = gopay
 
 	response := helper.GetResponse(result, http.StatusOK, false)
 	response.Send(c)
