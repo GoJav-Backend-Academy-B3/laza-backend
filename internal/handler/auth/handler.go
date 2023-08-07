@@ -11,6 +11,7 @@ import (
 
 type authHandler struct {
 	loginUser          auth.LoginUserUsecase
+	loginGoogleUser    auth.LoginGoogleUserUsecase
 	registerUser       user.InsertUserUsecase
 	verifyEmailUser    auth.VerifyEmailUserUsecase
 	resendEmailUser    auth.ResendEmailUserUsecase
@@ -22,6 +23,7 @@ type authHandler struct {
 
 func NewAuthHandler(
 	loginUser auth.LoginUserUsecase,
+	loginGoogleUser auth.LoginGoogleUserUsecase,
 	registerUser user.InsertUserUsecase,
 	verifyEmailUser auth.VerifyEmailUserUsecase,
 	resendEmailUser auth.ResendEmailUserUsecase,
@@ -31,6 +33,7 @@ func NewAuthHandler(
 ) handlers.HandlerInterface {
 	return &authHandler{
 		loginUser:          loginUser,
+		loginGoogleUser:    loginGoogleUser,
 		registerUser:       registerUser,
 		verifyEmailUser:    verifyEmailUser,
 		resendEmailUser:    resendEmailUser,
@@ -44,6 +47,8 @@ func NewAuthHandler(
 func (h *authHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/login", HandlerFunc: h.login},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/login-google", HandlerFunc: h.loginGoogle},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/login-google/callback", HandlerFunc: h.loginGoogleCallback},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/register", HandlerFunc: h.register},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/resend-verify", HandlerFunc: h.resendEmail},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/verify-email/", HandlerFunc: h.verifyEmail},

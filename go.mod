@@ -6,11 +6,14 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
+	golang.org/x/oauth2 v0.11.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.2
 )
 
 require (
+	cloud.google.com/go/compute v1.20.1 // indirect
+	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	github.com/Masterminds/semver v1.4.2 // indirect
 	github.com/Masterminds/sprig v2.16.0+incompatible // indirect
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
