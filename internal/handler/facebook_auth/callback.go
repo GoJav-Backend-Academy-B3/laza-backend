@@ -33,7 +33,7 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 	}
 
 	// Exchange Auth Code for Tokens
-	token, err := config.FBConfig.LoginConfig.Exchange(
+	token, err := config.OAuthConfig.FacebookLoginConfig.Exchange(
 		context.Background(), code)
 
 	// ERROR : Auth Code Exchange Failed

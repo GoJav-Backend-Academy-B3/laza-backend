@@ -31,7 +31,7 @@ func NewLoginGoogleUserUsecase(
 
 // Excute implements user.InsertUserUsecase.
 func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper.Response {
-	username := helpers.ExtractUsernameFromEmail(user.Email)
+	username := helper.ExtractUsernameFromEmail(user.Email)
 	if userExists := uc.usernameExistsAction.ExistsUsername(username); userExists {
 		return helper.GetResponse("username is already registered", 401, true)
 	}

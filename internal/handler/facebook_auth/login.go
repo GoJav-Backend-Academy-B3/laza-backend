@@ -1,10 +1,11 @@
 package facebook_auth
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/config"
 	"github.com/phincon-backend/laza/helper"
-	"net/http"
 )
 
 func (fb *facebookAuthHandler) login(c *gin.Context) {
@@ -22,6 +23,6 @@ func (fb *facebookAuthHandler) login(c *gin.Context) {
 		and validate that it matches the state query parameter
 		on your redirect callback.
 	*/
-	redirectURL := config.FBConfig.LoginConfig.AuthCodeURL(oauthState)
+	redirectURL := config.OAuthConfig.GoogleLoginConfig.AuthCodeURL(oauthState)
 	c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 }

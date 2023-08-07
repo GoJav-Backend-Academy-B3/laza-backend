@@ -17,7 +17,7 @@ func (h *authHandler) loginGoogle(c *gin.Context) {
 		and validate that it matches the the state query parameter
 		on your redirect callback.
 	*/
-	u := config.AppsConfig.GoogleLoginConfig.AuthCodeURL(oauthState)
+	u := config.OAuthConfig.GoogleLoginConfig.AuthCodeURL(oauthState)
 
 	c.Redirect(http.StatusTemporaryRedirect, u)
 }

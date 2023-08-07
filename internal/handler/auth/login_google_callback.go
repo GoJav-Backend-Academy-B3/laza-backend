@@ -23,7 +23,7 @@ func (h *authHandler) loginGoogleCallback(c *gin.Context) {
 	}
 
 	// Exchange Auth Code for Tokens
-	token, err := config.AppsConfig.GoogleLoginConfig.Exchange(
+	token, err := config.OAuthConfig.GoogleLoginConfig.Exchange(
 		context.Background(), code)
 
 	// ERROR : Auth Code Exchange Failed
