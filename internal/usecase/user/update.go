@@ -7,41 +7,46 @@ import (
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
-	"gorm.io/gorm"
 )
 
 type UpdateUserUsecase struct {
 	updateAction         repositories.UpdateAction[response.User]
-	emailActon           action.FindByEmail
-	usernameActon        action.FindByUsername
+	getByIdAction        repositories.GetByIdAction[response.User]
+	emailExistsAction    action.ExistsEmail
+	usernameExistsAction action.ExistsUsername
 }
 
-func NewUpdateUserUsecase(repo repositories.UpdateAction[response.User],
-	emailActon action.FindByEmail, usernameActon action.FindByUsername) user.UpdateUserUsecase {
+func NewUpdateUserUsecase(repo repositories.UpdateAction[response.User], getByIdAction repositories.GetByIdAction[response.User],
+	emailExistsAction action.ExistsEmail, usernameExistsAction action.ExistsUsername) user.UpdateUserUsecase {
 	return &UpdateUserUsecase{
 		updateAction:         repo,
-		emailActon:           emailActon,
-		usernameActon:        usernameActon,
+		getByIdAction:        getByIdAction,
+		emailExistsAction:    emailExistsAction,
+		usernameExistsAction: usernameExistsAction,
 	}
 }
 
 // Excute implements user.UpdateUserUsecase.
 func (uc *UpdateUserUsecase) Execute(id uint64, user request.User) *helper.Response {
-	dataEmail, err := uc.emailActon.FindByEmail(user.Email)
+	dataUser, err := uc.getByIdAction.GetById(id)
 	if err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return helper.GetResponse(err.Error(), 500, true)
-		}
-		dataEmail.Email = user.Email
-		dataEmail.IsVerified = false
+		return helper.GetResponse(err.Error(), 500, true)
+
 	}
 
-	dataUsername, err := uc.usernameActon.FindByUsername(user.Username)
-	if err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return helper.GetResponse(err.Error(), 500, true)
+	if dataUser.Email != user.Email {
+		if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
+			return helper.GetResponse("email is already registered", 401, true)
 		}
-		dataUsername.Username = user.Username
+		dataUser.Email = user.Email
+		dataUser.IsVerified = false
+	}
+
+	if dataUser.Username != user.Username {
+		if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
+			return helper.GetResponse("username is already registered", 401, true)
+		}
+		dataUser.Username = user.Username
 	}
 
 	hashPassword, err := helper.HashPassword(user.Password)
@@ -51,11 +56,11 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user request.User) *helper.Respo
 
 	data := response.User{
 		FullName:   user.FullName,
-		Username:   dataUsername.Username,
+		Username:   dataUser.Username,
 		Password:   hashPassword,
-		Email:      dataEmail.Email,
+		Email:      dataUser.Email,
 		ImageUrl:   user.Image,
-		IsVerified: dataEmail.IsVerified,
+		IsVerified: dataUser.IsVerified,
 	}
 
 	result, err := uc.updateAction.Update(id, data)

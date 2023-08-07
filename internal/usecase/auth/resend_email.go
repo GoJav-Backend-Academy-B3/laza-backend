@@ -54,7 +54,7 @@ func (uc *ResendEmailUserUsecase) Execute(email string) *helper.Response {
 		Username: data.Username,
 		Email:    data.Email,
 		Token:    codeVerify,
-		Subject:  "Verify your email",
+		Subject:  "Your verification account",
 	}
 
 	err = helper.Mail(&configMail).Send()
