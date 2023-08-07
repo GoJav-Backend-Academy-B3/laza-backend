@@ -40,6 +40,8 @@ func NewServerGin() *gin.Engine {
 		provider.NewProductsHandler(),
 		provider.NewWishListsHandler(),
 		provider.NewCartHandler(),
+		provider.NewBankHandler(),
+		provider.NewReviewHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
 		provider.NewAddressesHandler(),
