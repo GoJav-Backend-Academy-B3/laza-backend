@@ -18,7 +18,7 @@ import (
 // @Security JWT
 // @Success 201 {object} helper.Response{code=string,isError=bool,status=string,data=model.Address}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
-// @Error 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /address [post]
 func (h *addressHandler) PostAddressHandler(ctx *gin.Context) {
 	var request requests.AddressRequest
