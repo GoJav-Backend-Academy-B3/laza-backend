@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Order struct {
 	Id                string        `json:"id,omitempty"  gorm:"primarykey"`
@@ -8,7 +10,7 @@ type Order struct {
 	CreatedAt         time.Time     `json:"created_at"`
 	UpdatedAt         time.Time     `json:"updated_at"`
 	UserId            uint64        `json:"user_id,omitempty"`
-	OrderStatus       string        `json:"order_status,omitempty"`
+	OrderStatus       uint64        `json:"order_status,omitempty"`
 	AddressId         uint64        `json:"address_id,omitempty"`
 	CreditCardId      uint64        `json:"credit_card_id,omitempty"`
 	TransactionBankId uint64        `json:"transaction_bank_id,omitempty"`
