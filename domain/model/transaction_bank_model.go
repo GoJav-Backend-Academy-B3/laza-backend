@@ -1,10 +1,10 @@
 package model
 
 type TransactionBank struct {
-	Id         uint64  `gorm:"id" gorm:"primarykey"`
-	BankCode   string  `gorm:"bank_code"`
-	BillerCode string  `gorm:"biller_code"`
-	VANumber   string  `gorm:"va_number"`
+	Id         uint64  `json:"id" gorm:"primarykey"`
+	BankCode   string  `json:"bank_code"`
+	BillerCode string  `json:"biller_code"`
+	VANumber   string  `json:"va_number"`
 	Orders     []Order `json:"orders" gorm:"foreignkey:Id"`
 }
 
