@@ -1,9 +1,12 @@
 package product
 
-import "github.com/phincon-backend/laza/domain/model"
+import (
+	"github.com/phincon-backend/laza/domain/model"
+)
 
-func (r *ProductRepo) Update(id string, e model.Product) (model.Product, error) {
+func (r *ProductRepo) Update(id_r any, e model.Product) (model.Product, error) {
 
+	id := id_r.(uint64)
 	// Grab product that matches with `id`
 	var product model.Product
 	tx := r.db.First(&product, "id = ?", id)
