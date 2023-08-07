@@ -1,7 +1,6 @@
 package products
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +20,6 @@ func (h *productHandler) post(c *gin.Context) {
 			true).Send(c)
 		return
 	}
-	log.Printf("%v: size: %v\n", request.Image.Filename, request.Image.Size)
 
 	model, err := h.createProductUsecase.Execute(request)
 	if err != nil {
