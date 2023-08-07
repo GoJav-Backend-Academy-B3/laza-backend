@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/response"
+	"github.com/phincon-backend/laza/helper"
 )
 
 func (h *HomeHandler) get(c *gin.Context) {
@@ -13,5 +13,5 @@ func (h *HomeHandler) get(c *gin.Context) {
 		"demo": "",
 		"docs": "",
 	}
-	response.GetResponse(response_map, http.StatusOK, false)
+	helper.GetResponse(response_map, http.StatusOK, false)
 }

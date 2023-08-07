@@ -36,27 +36,40 @@ go mod tidy
 3. Add Env
 
 ```sh
-# Database
+JWT_KEYS=
 
 PSQL_USER= 
-PSQL_PASS=
+PSQL_PASS=  
 PSQL_HOST=
 PSQL_PORT=
 PSQL_DBNAME=
-PSQL_TIMEZONE=
+PSQL_TIMEZONE=Asia/Jakarta
 PSQL_TIMEOUT_1=1
 PSQL_TIMEOUT_2=4
 PSQL_TIMEOUT_3=7
+# Use this if you have different schema target
+PSQL_SEARCH_PATH=
 
-#App
+# Setup for send mail
+SMTP_HOST=
+SMTP_PORT=
+MAIL_USER=
+MAIL_PASS=
+
+# Setup for Cloudinary
+CLOUD_NAME=
+CLOUD_APIKEY=
+CLOUD_SECRET=
 
 APP_PORT=
+BASE_URL=
+
 ```
 
 4. Run the app
 
 ```bash
-go run app/cmd/main.go
+go run /cmd/server/main.go
 ```
 
 

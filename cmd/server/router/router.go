@@ -12,7 +12,14 @@ func NewServerGin() *gin.Engine {
 	var server []handlers.HandlerInterface
 	server = append(server,
 		provider.NewHomeHandler(),
+		provider.NewAuthHandler(),
+		provider.NewUserHandler(),
 		provider.NewProductsHandler(),
+		provider.NewWishListsHandler(),
+		provider.NewCartHandler(),
+		provider.NewViewProductByBrandHandler(),
+		provider.NewFacebookAuthHandler(),
+    provider.NewAddressesHandler(),
 	)
 
 	for _, v := range server {
@@ -24,3 +31,4 @@ func NewServerGin() *gin.Engine {
 
 	return r
 }
+
