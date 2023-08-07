@@ -13,6 +13,6 @@ func NewFacebookAuthHandler() domain.HandlerInterface {
 	gorm := dbs.(*db.PsqlDB).Dbs
 
 	repoUsers := repoUser.NewUserRepo(gorm)
-	usecase := uc.NewFacebookAuthUsecase(repoUsers, repoUsers)
+	usecase := uc.NewFacebookAuthUsecase(*repoUsers)
 	return handler.NewFacebookAuthHandler("/auth/facebook", "/auth/facebook/callback", usecase)
 }
