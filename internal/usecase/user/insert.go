@@ -6,7 +6,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
@@ -31,7 +31,7 @@ func NewInsertUserUsecase(repoUser repositories.InsertAction[response.User],
 }
 
 // Excute implements user.InsertUserUsecase.
-func (uc *InsertUserUsecase) Execute(user request.User) *helper.Response {
+func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
 		return helper.GetResponse("username is already registered", 401, true)
 	}
