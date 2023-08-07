@@ -1,7 +1,5 @@
 package bank
 
-import "github.com/phincon-backend/laza/domain/model"
-
 type GetAllBank[EntityT any] interface {
 	GetAll() ([]EntityT, error)
 }
@@ -22,7 +20,4 @@ type DeleteBank[EntityT any] interface {
 }
 type ExistsBank interface {
 	ExistsBank(name string) bool
-}
-type FindByBank interface {
-	FindByBank(name string) (model.Bank, error)
 }

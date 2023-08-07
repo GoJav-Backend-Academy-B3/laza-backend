@@ -6,8 +6,6 @@ package provider
 
 // 	u "github.com/phincon-backend/laza/internal/usecase/wishlist"
 
-// 	r "github.com/phincon-backend/laza/internal/repo/wishlist"
-
 // 	b "github.com/phincon-backend/laza/internal/db"
 // )
 
@@ -22,3 +20,10 @@ package provider
 // 	viewProduct := u.NewUpdateWishListUsecaseImpl(repo)
 // 	return h.NewgetWishlistHandler("/wishlist/:userId/:productId", viewProduct)
 // }
+
+// wishlistRepo := r.NewWishList(gorm)
+// productRepo := p.NewProductRepo(gorm)
+
+// wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo)
+// wistlistGet := u.NewgetWishlistUsecase(wishlistRepo, productRepo)
+// return h.NewgetWishlistHandler(wishlistUpdate, wistlistGet)

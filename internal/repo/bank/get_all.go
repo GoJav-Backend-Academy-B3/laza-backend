@@ -5,7 +5,7 @@ import (
 )
 
 func (r *BankRepo) GetAll() (es []model.Bank, err error) {
-	tx := r.db.Find(&es)
+	tx := r.db.Find(&es).Scan(&es)
 	err = tx.Error
 	return
 }

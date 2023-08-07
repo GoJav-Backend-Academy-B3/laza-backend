@@ -54,7 +54,7 @@ func Mail(data *DataMail) *DataMail {
 				},
 				Actions: []hermes.Action{
 					{
-						Instructions: "Please click the following button to verify your email. This code expires in 5 minutes.",
+						Instructions: "Here is your approval code. This code expires in 5 minutes.",
 						Button: hermes.Button{
 							Color: "#22BC66",
 							Text:  data.Code,
@@ -72,7 +72,7 @@ func Mail(data *DataMail) *DataMail {
 		}
 	}
 
-	urlString := fmt.Sprintf("%s/auth/confirm_email/%s", os.Getenv("BASE_URL"), data.Token)
+	urlString := fmt.Sprintf("%s/auth/verify-email/?email=%s&token=%s", os.Getenv("BASE_URL"), data.Email, data.Token)
 	emailBody, _ := h.GenerateHTML(hermes.Email{
 		Body: hermes.Body{
 			Name: data.Username,
@@ -81,7 +81,7 @@ func Mail(data *DataMail) *DataMail {
 			},
 			Actions: []hermes.Action{
 				{
-					Instructions: "Please click the following button to verify your email. This link expires in 15 minutes.",
+					Instructions: "Please click the following button to verify your email. This link expires in 5 minutes.",
 					Button: hermes.Button{
 						Color: "#22BC66",
 						Text:  "Confirm your account",

@@ -12,10 +12,14 @@ func NewServerGin() *gin.Engine {
 	var server []handlers.HandlerInterface
 	server = append(server,
 		provider.NewHomeHandler(),
+		provider.NewAuthHandler(),
 		provider.NewUserHandler(),
-		provider.NewProductsHandler(),
 		provider.NewBankHandler(),
-		// provider.NewWishListsHandler(),
+		provider.NewProductsHandler(),
+		// // provider.NewWishListsHandler(),
+
+		provider.NewReviewHandler(),
+		provider.NewCartHandler(),
 		provider.NewViewProductByBrandHandler(),
 	)
 
