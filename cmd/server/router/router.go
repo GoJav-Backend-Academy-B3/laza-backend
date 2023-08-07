@@ -19,6 +19,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewCartHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
+    provider.NewAddressesHandler(),
 	)
 
 	for _, v := range server {
@@ -30,3 +31,4 @@ func NewServerGin() *gin.Engine {
 
 	return r
 }
+
