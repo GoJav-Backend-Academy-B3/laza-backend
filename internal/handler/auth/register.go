@@ -2,12 +2,20 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
+
+	"github.com/phincon-backend/laza/domain/request"
+
 	"github.com/phincon-backend/laza/domain/requests"
+
 	"github.com/phincon-backend/laza/helper"
 )
 
 func (h *authHandler) register(c *gin.Context) {
+
+	var request request.User
+
 	var request requests.User
+
 	if err := c.Bind(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return
