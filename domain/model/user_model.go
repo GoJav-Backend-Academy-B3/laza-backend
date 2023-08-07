@@ -15,7 +15,7 @@ type User struct {
 	IsAdmin            bool                `json:"is_admin,omitempty"`
 	CreatedAt          time.Time           `json:"created_at"`
 	UpdatedAt          time.Time           `json:"updated_at"`
-	Addresses          []Address           `json:"addresses" gorm:"foreignkey:Id"`
+	Addresses          []Address           `json:"addresses" gorm:"foreignKey:UserId"`
 	CreditCards        []CreditCard        `json:"credit_cards" gorm:"foreignKey:Id"`
 	Reviews            []Review            `json:"reviews" gorm:"foreignkey:Id"`
 	CartProducts       []Product           `json:"cart_products" gorm:"many2many:cart"`
