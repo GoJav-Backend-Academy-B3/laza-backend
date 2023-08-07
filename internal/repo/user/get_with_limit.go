@@ -1,16 +1,11 @@
 package user
 
 import (
-	"errors"
-
-	"github.com/phincon-backend/laza/domain/model"
+	"github.com/phincon-backend/laza/domain/response"
 )
 
-func (r *UserRepo) GetWithLimit(limit, offset uint) (*[]model.User, error) {
-	var es []model.User
-	if err := r.db.Find(&es).Offset(int(offset)).Limit(int(limit)).Error; err != nil {
-		return nil, errors.New("failed to get data")
-	}
-
-	return &es, nil
+func (r *UserRepo) GetWithLimit(offset, limit uint64) (es []response.User, err error) {
+	tx := r.db.Offset(int(offset)).Limit(int(limit)).Find(&es)
+	err = tx.Error
+	return
 }
