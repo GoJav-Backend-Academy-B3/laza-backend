@@ -17,12 +17,12 @@ func (h *twitterAuthHandler) GetHandlers() (hs []handler.HandlerStruct) {
 		handler.HandlerStruct{
 			Method:      http.MethodGet,
 			Path:        h.path,
-			HandlerFunc: h.TwitterCallBack,
+			HandlerFunc: h.loginTwitter,
 		},
 		handler.HandlerStruct{
 			Method:      http.MethodGet,
 			Path:        h.pathCallback,
-			HandlerFunc: h.loginTwitter,
+			HandlerFunc: h.twitterCallBack,
 		},
 	)
 	return hs

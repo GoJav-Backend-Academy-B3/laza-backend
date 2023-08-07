@@ -14,8 +14,9 @@ type ProviderIndex struct {
 	ProvidersMap map[string]string
 }
 
-func (fb *twitterAuthHandler) loginTwitter(c *gin.Context) {
+func (h *twitterAuthHandler) loginTwitter(c *gin.Context) {
 	gothic.Store = helper.GetStore()
+
 	if gothUser, err := gothic.CompleteUserAuth(c.Writer, c.Request); err == nil {
 		log.Println(gothUser)
 		helper.GetResponse(gothUser, http.StatusOK, false).Send(c)

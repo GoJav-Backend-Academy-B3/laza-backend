@@ -1,6 +1,7 @@
 package twitterauth
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,10 +9,10 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-func (h *twitterAuthHandler) TwitterCallBack(c *gin.Context) {
+func (h *twitterAuthHandler) twitterCallBack(c *gin.Context) {
 	gothic.Store = helper.GetStore()
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
-
+	fmt.Println("WT")
 	if err != nil {
 		helper.GetResponse(err.Error(), http.StatusUnauthorized, true).Send(c)
 		return
