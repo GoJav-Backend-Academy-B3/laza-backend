@@ -1,9 +1,10 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
-	"github.com/markbates/goth/providers/twitterv2"
+	"github.com/markbates/goth/providers/twitter"
 	"github.com/phincon-backend/laza/helper"
 	"os"
 
@@ -14,10 +15,10 @@ import (
 
 func main() {
 	config.LoadConfig()
-
+	godotenv.Load("d:/phincon/laza-backend/.env")
 	gothic.Store = helper.GetStore()
 	goth.UseProviders(
-		twitterv2.New(os.Getenv("TWITTER_KEY"), os.Getenv("TWITTER_SECRET"), "http://127.0.0.1:8080/auth/twitter/callback?provider=twitterv2"),
+		twitter.New(os.Getenv("TWITTER_KEY"), os.Getenv("TWITTER_SECRET"), "http://127.0.0.1:8080/auth/twitter/callback?provider=twitter"),
 	)
 	apps := router.NewServerGin()
 	var address string = "0.0.0.0:8080"
