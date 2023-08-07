@@ -18,6 +18,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewWishListsHandler(),
 		provider.NewCartHandler(),
 		provider.NewViewProductByBrandHandler(),
+		provider.NewFacebookAuthHandler(),
 	)
 
 	for _, v := range server {
