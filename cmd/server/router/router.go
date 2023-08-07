@@ -47,7 +47,7 @@ func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/login")
 	noAuthList = append(noAuthList, "/register")
 	noAuthList = append(noAuthList, "/login-google")
-	// noAuthList = append(noAuthList, "/login-google/callback")
+	noAuthList = append(noAuthList, "/login-google/callback")
 	for _, item := range noAuthList {
 		if strings.EqualFold(item, url) {
 			return true
