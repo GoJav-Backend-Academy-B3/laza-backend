@@ -16,8 +16,15 @@ func NewServerGin() *gin.Engine {
 		provider.NewHomeHandler(),
 		provider.NewAuthHandler(),
 		provider.NewUserHandler(),
+		provider.NewBankHandler(),
 		provider.NewProductsHandler(),
+
+		// // provider.NewWishListsHandler(),
+
+		provider.NewReviewHandler(),
+
 		provider.NewWishListsHandler(),
+
 		provider.NewCartHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),

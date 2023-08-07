@@ -2,7 +2,11 @@ package auth
 
 import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
+
+	"github.com/phincon-backend/laza/domain/request"
+
 	"github.com/phincon-backend/laza/domain/requests"
+
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
 )
@@ -18,7 +22,11 @@ func NewLoginUserUsecase(usernameActon action.FindByUsername) auth.LoginUserUsec
 }
 
 // Execute implements auth.LoginUserUsecase.
+
+func (uc *LoginUserUsecase) Execute(user request.Login) *helper.Response {
+
 func (uc *LoginUserUsecase) Execute(user requests.Login) *helper.Response {
+
 	data, err := uc.usernameActon.FindByUsername(user.Username)
 	if err != nil {
 		return helper.GetResponse("user is not exist", 401, true)
