@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"os"
 	"strconv"
 	"time"
@@ -22,6 +23,7 @@ type configStruct struct {
 var appConfig = new(configStruct)
 
 func init() {
+	godotenv.Load("d:/phincon/laza-backend/.env")
 	appConfig.PSQL_USER = os.Getenv("PSQL_USER")
 	appConfig.PSQL_PASS = os.Getenv("PSQL_PASS")
 	appConfig.PSQL_HOST = os.Getenv("PSQL_HOST")

@@ -16,11 +16,11 @@ func (fb *facebookAuthHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	hs = append(hs, handler.HandlerStruct{
 		Method:      http.MethodGet,
 		Path:        fb.loginPath,
-		HandlerFunc: fb.login,
+		HandlerFunc: fb.loginTwitter,
 	}, handler.HandlerStruct{
 		Method:      http.MethodGet,
 		Path:        fb.callbackPath,
-		HandlerFunc: fb.FbCallback,
+		HandlerFunc: fb.TwitterCallback,
 	})
 	return
 }

@@ -14,5 +14,5 @@ func NewFacebookAuthHandler() domain.HandlerInterface {
 
 	repoUsers := repoUser.NewUserRepo(gorm)
 	usecase := uc.NewFacebookAuthUsecase(*repoUsers)
-	return handler.NewFacebookAuthHandler("/auth/facebook", "/auth/facebook/callback", usecase)
+	return handler.NewFacebookAuthHandler("/auth", "/auth/twitter/callback", usecase)
 }
