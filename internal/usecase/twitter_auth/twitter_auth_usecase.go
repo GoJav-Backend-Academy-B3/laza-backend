@@ -14,6 +14,7 @@ type twitterAuthUsecase struct {
 }
 
 func (uc *twitterAuthUsecase) Execute(response.TwitterResponse) *helper.Response {
+
 	return nil
 }
 
