@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/config"
@@ -11,12 +12,12 @@ import (
 
 func (h *authHandler) loginGoogleCallback(c *gin.Context) {
 	// get oauth state from cookie for this user
-	oauthState, _ := c.Request.Cookie("oauthstate")
+	oauthState, _ := c.Cookie("oauthstate")
 	state := c.Query("state")
 	code := c.Query("code")
 
 	// ERROR : Invalid OAuth State
-	if state != oauthState.Value {
+	if !strings.EqualFold(state, oauthState) {
 		c.Redirect(http.StatusTemporaryRedirect, "/")
 		helper.GetResponse("invalid oauth google state", 400, true).Send(c)
 		return
