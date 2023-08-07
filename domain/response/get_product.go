@@ -17,11 +17,6 @@ type Product struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
-type ProductReview struct {
-	Avrg_Rating float64               `json:"rating_avrg"`
-	Total       int                   `json:"total"`
-	Products    []model.ProductReview `json:"products"`
-}
 
 func (p *Product) FillFromEntity(e model.Product) {
 	p.Id = e.Id

@@ -23,6 +23,6 @@ func (fb *facebookAuthHandler) login(c *gin.Context) {
 		and validate that it matches the state query parameter
 		on your redirect callback.
 	*/
-	redirectURL := config.OAuthConfig.FacebookLoginConfig.AuthCodeURL(oauthState)
+	redirectURL := config.OAuthConfig.GoogleLoginConfig.AuthCodeURL(oauthState)
 	c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 }
