@@ -73,6 +73,15 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 	responseMap := map[string]string{
 		"access_token": accessToken,
 	}
+	cookie := &http.Cookie{
+		Name:     "access_token",
+		Value:    accessToken,
+		Path:     "/",
+		HttpOnly: true,
+		MaxAge:   int(config.LoadJWTConfig().GetTokenExpiry()),
+	}
+	http.SetCookie(c.Writer, cookie)
+
 	// send back response to browse
 	helper.GetResponse(responseMap, http.StatusOK, false).Send(c)
 }
