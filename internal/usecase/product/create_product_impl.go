@@ -12,7 +12,7 @@ import (
 	"github.com/phincon-backend/laza/helper"
 	"gorm.io/gorm"
 
-	domain "github.com/phincon-backend/laza/domain/usecases/product"
+	usecase "github.com/phincon-backend/laza/domain/usecases/product"
 	icategory "github.com/phincon-backend/laza/internal/repo/category"
 	iproduct "github.com/phincon-backend/laza/internal/repo/product"
 	isize "github.com/phincon-backend/laza/internal/repo/size"
@@ -66,7 +66,6 @@ func (u *CreateProductUsecaseImpl) Execute(request request.ProductRequest) (prod
 		return product, errors.New("NotFound: Category not found")
 	}
 
-	// TODO: Upload product image to cloudinary
 	file, err := request.Image.Open()
 	defer file.Close()
 	if err != nil {
@@ -79,17 +78,15 @@ func (u *CreateProductUsecaseImpl) Execute(request request.ProductRequest) (prod
 		return
 	}
 
-	product, err = u.insertProductAction.Insert(
-		model.Product{
-			Name:        request.Name,
-			Description: request.Description,
-			ImageUrl:    url,
-			Price:       request.Price,
-			CategoryId:  category.Id,
-			BrandId:     ps[0].BrandId, // didapat dari search by brand, ambil salah satu brand id
-			Sizes:       sizeModels,
-		},
-	)
+	product, err = u.insertProductAction.Insert(model.Product{
+		Name:        request.Name,
+		Description: request.Description,
+		ImageUrl:    url,
+		Price:       request.Price,
+		CategoryId:  category.Id,
+		BrandId:     ps[0].BrandId, // didapat dari search by brand, ambil salah satu brand id
+		Sizes:       sizeModels,
+	})
 	if err != nil {
 		return
 	}
@@ -100,7 +97,7 @@ func (u *CreateProductUsecaseImpl) Execute(request request.ProductRequest) (prod
 func NewCreateProductUsecaseImpl(
 	productRepo *iproduct.ProductRepo,
 	sizeRepo *isize.SizeRepo,
-	categoryRepo *icategory.CategoryRepo) domain.CreateProductUsecase {
+	categoryRepo *icategory.CategoryRepo) usecase.CreateProductUsecase {
 	return &CreateProductUsecaseImpl{
 		insertProductAction:     productRepo,
 		searchByBrandAction:     productRepo,
