@@ -11,7 +11,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var authHeader string
 
-		if authHeader = c.GetHeader("Authorization"); authHeader == "" {
+		if authHeader = c.GetHeader("X-Auth-Token"); authHeader == "" {
 			helper.GetResponse("header not provide, please login", 401, true).Send(c)
 			c.Abort()
 			return
