@@ -29,7 +29,7 @@ func (h *addressHandler) GetHandlers() []handlers.HandlerStruct {
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        "/address/user/:userId",
+			Path:        "/address",
 			HandlerFunc: h.GetAllAddressByUserIdHandler,
 		},
 		handlers.HandlerStruct{
