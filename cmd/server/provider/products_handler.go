@@ -28,6 +28,8 @@ func NewProductsHandler() d.HandlerInterface {
 	viewProduct := u.NewViewProductUsecaseImpl(productRepo)
 	searchProduct := u.NewSearchProductUsecaseImpl(productRepo)
 	createProduct := u.NewCreateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
+	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
+	deleteProduct := u.NewDeleteProductUsecaseImpl(productRepo)
 	return h.NewProductHandler("/products",
-		createProduct, viewProduct, searchProduct)
+		createProduct, updateProduct, viewProduct, deleteProduct, searchProduct)
 }
