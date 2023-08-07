@@ -5,11 +5,11 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-func RoleMiddleware(role bool) gin.HandlerFunc {
+func AdminRoleMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		isAllowed := c.MustGet("role").(bool)
 
-		if isAllowed != role {
+		if !isAllowed {
 			helper.GetResponse("you do not have permission to access", 401, true).Send(c)
 			c.Abort()
 			return
