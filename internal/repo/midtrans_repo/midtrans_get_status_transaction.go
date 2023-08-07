@@ -3,7 +3,7 @@ package midtrans_repo
 import (
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
-	midtrans_core "github.com/phincon-backend/laza/external/midtrans"
+	"github.com/phincon-backend/laza/external/midtrans"
 )
 
 func FetchMidtransTransactionStatus(orderId string) (*coreapi.TransactionStatusResponse, *midtrans.Error) {
