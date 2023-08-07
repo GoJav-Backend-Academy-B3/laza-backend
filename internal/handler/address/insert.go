@@ -23,7 +23,7 @@ import (
 func (h *addressHandler) PostAddressHandler(ctx *gin.Context) {
 	var request requests.AddressRequest
 
-	userId := ctx.MustGet("authID").(uint64)
+	userId := ctx.MustGet("userId").(uint64)
 
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {

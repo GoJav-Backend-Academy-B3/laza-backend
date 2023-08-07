@@ -26,7 +26,7 @@ func (h *addressHandler) UpdateAddressHandler(ctx *gin.Context) {
 	var request requests.AddressRequest
 
 	id, _ := strconv.ParseUint(ctx.Param("id"), 10, 32)
-	userId := ctx.MustGet("authID").(uint64)
+	userId := ctx.MustGet("userId").(uint64)
 
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {

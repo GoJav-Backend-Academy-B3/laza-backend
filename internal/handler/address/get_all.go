@@ -19,7 +19,7 @@ import (
 // @Error 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /address/ [get]
 func (h *addressHandler) GetAllAddressByUserIdHandler(ctx *gin.Context) {
-	userId := ctx.MustGet("authID").(uint64)
+	userId := ctx.MustGet("userId").(uint64)
 
 	addresses, err := h.get.GetAllAddressByUserId(userId)
 	if err != nil {
