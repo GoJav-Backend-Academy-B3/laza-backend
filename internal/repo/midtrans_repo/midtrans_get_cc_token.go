@@ -1,4 +1,4 @@
-package midtrans_repo
+package midtrans
 
 import (
 	"github.com/midtrans/midtrans-go"
@@ -7,7 +7,7 @@ import (
 	"github.com/phincon-backend/laza/external/midtrans"
 )
 
-func FetchMidtransCCToken(cardNumber string, expMonth int, expYear int, cvv string) (*coreapi.CardTokenResponse, *midtrans.Error) {
+func (m *MidtransRepo) FetchMidtransCCToken(cardNumber string, expMonth int, expYear int, cvv string) (*coreapi.CardTokenResponse, *midtrans.Error) {
 
 	token, err := midtrans_core.MidtransCore.CardToken(cardNumber, expMonth, expYear, cvv, consts.MidtransSandBoxClientKey)
 

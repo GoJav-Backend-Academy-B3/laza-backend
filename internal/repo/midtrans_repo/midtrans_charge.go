@@ -1,4 +1,4 @@
-package midtrans_repo
+package midtrans
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 	"github.com/phincon-backend/laza/external/midtrans"
 )
 
-func ChargeMidtrans(req *coreapi.ChargeReq) (coreapi.ChargeResponse, error) {
+func (m *MidtransRepo) ChargeMidtrans(req *coreapi.ChargeReq) (coreapi.ChargeResponse, error) {
 	chargeResp, errmd := midtrans_core.MidtransCore.ChargeTransaction(req)
 
 	if errmd != nil {
