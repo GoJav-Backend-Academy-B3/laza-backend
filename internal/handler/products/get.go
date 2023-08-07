@@ -31,7 +31,6 @@ func (h *productHandler) get(c *gin.Context) {
 		offset = defaults.Query.Offset()
 	}
 
-
 	if len(search_q) == 0 {
 		products, err := h.viewProductUsecase.Execute(offset, limit)
 		if err != nil {
@@ -57,7 +56,7 @@ func (h *productHandler) get(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, response)
 			return
 		}
-    
+
 		productsResponse := make([]response.Product, 0)
 		for _, each := range products {
 			var product response.Product

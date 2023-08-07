@@ -1,10 +1,11 @@
-package helpers
+package helper
 
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"github.com/gin-gonic/gin"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GenerateStateOauthCookie(c *gin.Context) (state string) {

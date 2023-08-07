@@ -6,7 +6,7 @@ import (
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/facebook_auth"
 	"github.com/phincon-backend/laza/helper"
-	"github.com/phincon-backend/laza/helpers"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type facebookAuthUsecaseImpl struct {
@@ -17,7 +17,7 @@ type facebookAuthUsecaseImpl struct {
 func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (accessToken string, err error) {
 	var userDAO = new(response.User)
 	userDAO.Email = fbResponse.Email
-	userDAO.Username = helpers.ExtractUsernameFromEmail(fbResponse.Email)
+	userDAO.Username = helper.ExtractUsernameFromEmail(fbResponse.Email)
 	userDAO.FullName = fbResponse.Name
 	userDAO.ImageUrl = fbResponse.Picture.Data.URL
 	userDAO.IsAdmin = false
@@ -40,9 +40,9 @@ func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (
 	return
 }
 
-func NewFacebookAuthUsecase(existByusernameAction action.ExistsUsername, insertAction repositories.InsertAction[response.User]) facebook_auth.FacebookAuthUsecase {
+func NewFacebookAuthUsecase(userRepo user.UserRepo) facebook_auth.FacebookAuthUsecase {
 	return &facebookAuthUsecaseImpl{
-		existByUsernameAction: existByusernameAction,
-		insertUserAction:      insertAction,
+		existByUsernameAction: &userRepo,
+		insertUserAction:      &userRepo,
 	}
 }

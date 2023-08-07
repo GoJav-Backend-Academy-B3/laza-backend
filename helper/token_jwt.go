@@ -1,13 +1,13 @@
 package helper
 
 import (
-	"os"
+	"github.com/phincon-backend/laza/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var mySecret = []byte(os.Getenv("JWT_KEYS"))
+var mySecret = []byte(config.LoadJWTConfig().GetJWTKey())
 
 type claims struct {
 	UserId uint64
@@ -20,7 +20,7 @@ func NewToken(id uint64, role bool) *claims {
 		UserId: id,
 		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(15 * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(config.LoadJWTConfig().GetTokenExpiry())),
 		},
 	}
 

@@ -13,11 +13,6 @@ type Login struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
-type Email struct {
+type Resend struct {
 	Email string `json:"email" validate:"required,email"`
-}
-
-type UpdatePassword struct {
-	Password   string `json:"password" validate:"required,min=8"`
-	RePassword string `json:"re_password" validate:"required,min=8"`
 }
