@@ -13,16 +13,16 @@ type User struct {
 	ImageUrl           string              `json:"image_url,omitempty"`
 	IsVerified         bool                `json:"is_verified,omitempty"`
 	IsAdmin            bool                `json:"is_admin,omitempty"`
-	CreatedAt          time.Time           `json:"created_at"`
-	UpdatedAt          time.Time           `json:"updated_at"`
-	Addresses          []Address           `json:"addresses" gorm:"foreignKey:UserId"`
-	CreditCards        []CreditCard        `json:"credit_cards" gorm:"foreignKey:Id"`
-	Reviews            []Review            `json:"reviews" gorm:"foreignkey:Id"`
-	CartProducts       []Product           `json:"cart_products" gorm:"many2many:cart"`
-	WishlistedProducts []Product           `json:"wishlisted_product" gorm:"many2many:wishlist"`
-	Orders             []Order             `json:"orders" gorm:"foreignkey:Id"`
-	VerificationCodes  []VerificationCode  `json:"verification_codes" gorm:"foreignkey:Id"`
-	VerificationTokens []VerificationToken `json:"verification_tokens" gorm:"foreignkey:Id"`
+	CreatedAt          time.Time           `json:"created_at,omitempty"`
+	UpdatedAt          time.Time           `json:"updated_at,omitempty"`
+	Addresses          []Address           `json:"addresses,omitempty" gorm:"foreignKey:UserId"`
+	CreditCards        []CreditCard        `json:"credit_cards,omitempty" gorm:"foreignKey:Id"`
+	Reviews            []Review            `json:"reviews,omitempty" gorm:"foreignkey:Id"`
+	CartProducts       []Product           `json:"cart_products,omitempty" gorm:"many2many:cart"`
+	WishlistedProducts []Product           `json:"wishlisted_product,omitempty" gorm:"many2many:wishlist"`
+	Orders             []Order             `json:"orders,omitempty" gorm:"foreignkey:Id"`
+	VerificationCodes  []VerificationCode  `json:"verification_codes,omitempty" gorm:"foreignkey:Id"`
+	VerificationTokens []VerificationToken `json:"verification_tokens,omitempty" gorm:"foreignkey:Id"`
 }
 
 func (User) TableName() string {

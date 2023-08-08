@@ -20,6 +20,7 @@ func (u *updateAddressUsecase) UpdateAddressById(id uint64, userId uint64, reque
 	}
 
 	address = model.Address{
+		Id:           id,
 		Country:      request.Country,
 		City:         request.City,
 		ReceiverName: request.ReceiverName,
