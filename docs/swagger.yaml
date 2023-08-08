@@ -31,6 +31,20 @@ definitions:
       user_id:
         type: integer
     type: object
+  model.Bank:
+    properties:
+      bank_code:
+        type: string
+      bank_name:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+    required:
+    - bank_code
+    - bank_name
+    type: object
   model.Category:
     properties:
       category:
@@ -340,6 +354,19 @@ paths:
                 isError:
                   type: boolean
               type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
       security:
       - JWT: []
       summary: Post Details
@@ -370,6 +397,19 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -428,6 +468,19 @@ paths:
                 isError:
                   type: boolean
               type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
       security:
       - JWT: []
       summary: Delete address identified by the given id
@@ -463,6 +516,19 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -526,11 +592,93 @@ paths:
                 isError:
                   type: boolean
               type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
       security:
       - JWT: []
       summary: put Details
       tags:
       - address
+  /bank:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Post details of bank
+      parameters:
+      - in: formData
+        name: bank_code
+        required: true
+        type: string
+      - in: formData
+        name: bank_name
+        required: true
+        type: string
+      - in: formData
+        name: id
+        type: integer
+      - in: formData
+        name: image
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Post Details
+      tags:
+      - bank
 securityDefinitions:
   JWT:
     description: 'How to input in swagger : ''Bearer <insert_your_token_here>'''

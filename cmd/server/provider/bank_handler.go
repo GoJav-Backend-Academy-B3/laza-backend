@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/internal/db"
 	handler "github.com/phincon-backend/laza/internal/handler/bank"
@@ -13,6 +14,7 @@ func NewBankHandler() handlers.HandlerInterface {
 	gorm := dbs.(*db.PsqlDB).Dbs
 
 	repoBank := repoBank.NewBankRepo(gorm)
+	validate := validator.New()
 
 	getAllBank := usecase.NewGetAllBankUsecase(repoBank)
 	getByIdBank := usecase.NewGetByIdBankUsecase(repoBank)
@@ -22,5 +24,5 @@ func NewBankHandler() handlers.HandlerInterface {
 
 	// insertBanks := usecase.NewInsertBankUsecase(repoBanks)
 
-	return handler.NewBankHandler(getAllBank, getByIdBank, insertBank, updateBank, deleteBank)
+	return handler.NewBankHandler(getAllBank, getByIdBank, insertBank, updateBank, deleteBank, validate)
 }

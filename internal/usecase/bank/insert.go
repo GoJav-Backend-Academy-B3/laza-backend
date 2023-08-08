@@ -20,15 +20,10 @@ func NewInsertBankUsecase(repoBank action.InsertBank[model.Bank], repoExistsBank
 }
 
 func (uc *InsertBanksUsecase) Execute(bank model.Bank) *helper.Response {
-	if bank.BankName == "" {
-		return helper.GetResponse("Name Bank is required", 400, true)
-	}
-	if bank.BankCode == "" {
-		return helper.GetResponse("Bank Code is required", 400, true)
-	}
-	if userExists := uc.bankExistsAction.ExistsBank(bank.BankName); userExists {
+	if bankExists := uc.bankExistsAction.ExistsBank(bank.BankName); bankExists {
 		return helper.GetResponse("Name Bank is already registered", 401, true)
 	}
+
 	result, err := uc.insertBankAction.Insert(bank)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
