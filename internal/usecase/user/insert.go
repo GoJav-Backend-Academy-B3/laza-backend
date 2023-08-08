@@ -8,28 +8,25 @@ import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_token"
 )
 
 type InsertUserUsecase struct {
-	insertUserAction     repositories.InsertAction[model.User]
 	insertTokenAction    repositories.InsertAction[model.VerificationToken]
+	insertUserAction     repositories.InsertAction[model.User]
 	emailExistsAction    action.ExistsEmail
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewInsertUserUsecase(
-	repoUser repositories.InsertAction[model.User],
-	repoToken repositories.InsertAction[model.VerificationToken],
-	repoExistsEmail action.ExistsEmail,
-	repoExistsUsername action.ExistsUsername,
-) user.InsertUserUsecase {
+func NewInsertUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.VerificationTokenRepo) contract.InsertUserUsecase {
 	return &InsertUserUsecase{
-		insertUserAction:     repoUser,
-		insertTokenAction:    repoToken,
-		emailExistsAction:    repoExistsEmail,
-		usernameExistsAction: repoExistsUsername,
+		insertTokenAction:    &tokenRepo,
+		insertUserAction:     &userRepo,
+		emailExistsAction:    &userRepo,
+		usernameExistsAction: &userRepo,
 	}
 }
 

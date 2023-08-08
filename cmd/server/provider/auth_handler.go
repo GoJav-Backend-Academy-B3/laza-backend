@@ -22,13 +22,13 @@ func NewAuthHandler() handlers.HandlerInterface {
 	repoToken := repoToken.NewVerificationTokenRepo(gorm)
 	repoCode := repoCode.NewVerificationCodeRepo(gorm)
 
-	loginUser := usecaseAuth.NewLoginUserUsecase(repoUser)
-	loginGoogleUser := usecaseAuth.NewLoginGoogleUserUsecase(repoUser, repoUser, repoUser, repoUser)
-	registerUser := usecaseUser.NewInsertUserUsecase(repoUser, repoToken, repoUser, repoUser)
-	verifyEmailUser := usecaseAuth.NewVerifyEmailUserUsecase(repoUser, repoUser, repoToken)
-	resendEmailUser := usecaseAuth.NewResendEmailUserUsecase(repoToken, repoUser, repoUser)
-	forgetPasswordUser := usecaseAuth.NewForgetPasswordUserUsecase(repoCode, repoCode, repoCode, repoUser, repoUser)
-	updatePasswordUser := usecaseAuth.NewUpdatePasswordUserUsecase(repoUser, repoUser, repoCode)
+	loginUser := usecaseAuth.NewLoginUserUsecase(*repoUser)
+	loginGoogleUser := usecaseAuth.NewLoginGoogleUserUsecase(*repoUser)
+	registerUser := usecaseUser.NewInsertUserUsecase(*repoUser, *repoToken)
+	verifyEmailUser := usecaseAuth.NewVerifyEmailUserUsecase(*repoUser, *repoToken)
+	resendEmailUser := usecaseAuth.NewResendEmailUserUsecase(*repoUser, *repoToken)
+	forgetPasswordUser := usecaseAuth.NewForgetPasswordUserUsecase(*repoUser, *repoCode)
+	updatePasswordUser := usecaseAuth.NewUpdatePasswordUserUsecase(*repoUser, *repoCode)
 
 	return handler.NewAuthHandler(loginUser, loginGoogleUser, registerUser, verifyEmailUser, resendEmailUser, forgetPasswordUser, updatePasswordUser, validate)
 }

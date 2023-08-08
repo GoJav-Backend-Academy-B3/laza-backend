@@ -9,6 +9,8 @@ import (
 	actionToken "github.com/phincon-backend/laza/domain/repositories/verification_token"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_token"
 )
 
 type VerifyEmailUserUsecase struct {
@@ -17,15 +19,11 @@ type VerifyEmailUserUsecase struct {
 	tokenAction  actionToken.FindByToken
 }
 
-func NewVerifyEmailUserUsecase(
-	repo repositories.UpdateAction[model.User],
-	emailAction actionUser.FindByEmail,
-	tokenAction actionToken.FindByToken,
-) auth.VerifyEmailUserUsecase {
+func NewVerifyEmailUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.VerificationTokenRepo) auth.VerifyEmailUserUsecase {
 	return &VerifyEmailUserUsecase{
-		updateAction: repo,
-		emailAction:  emailAction,
-		tokenAction:  tokenAction,
+		updateAction: &userRepo,
+		emailAction:  &userRepo,
+		tokenAction:  &tokenRepo,
 	}
 }
 

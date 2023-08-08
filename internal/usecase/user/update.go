@@ -6,8 +6,9 @@ import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type UpdateUserUsecase struct {
@@ -17,17 +18,12 @@ type UpdateUserUsecase struct {
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewUpdateUserUsecase(
-	repo repositories.UpdateAction[model.User],
-	getByIdAction repositories.GetByIdAction[model.User],
-	emailExistsAction action.ExistsEmail,
-	usernameExistsAction action.ExistsUsername,
-) user.UpdateUserUsecase {
+func NewUpdateUserUsecase(userRepo user.UserRepo) contract.UpdateUserUsecase {
 	return &UpdateUserUsecase{
-		updateAction:         repo,
-		getByIdAction:        getByIdAction,
-		emailExistsAction:    emailExistsAction,
-		usernameExistsAction: usernameExistsAction,
+		updateAction:         &userRepo,
+		getByIdAction:        &userRepo,
+		emailExistsAction:    &userRepo,
+		usernameExistsAction: &userRepo,
 	}
 }
 

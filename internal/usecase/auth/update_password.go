@@ -10,6 +10,8 @@ import (
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_code"
 )
 
 type UpdatePasswordUserUsecase struct {
@@ -18,15 +20,11 @@ type UpdatePasswordUserUsecase struct {
 	codeAction   actionCode.FindByCode
 }
 
-func NewUpdatePasswordUserUsecase(
-	repo repositories.UpdateAction[model.User],
-	emailAction actionUser.FindByEmail,
-	codeAction actionCode.FindByCode,
-) auth.UpdatePasswordUserUsecase {
+func NewUpdatePasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_code.VerificationCodeRepo) auth.UpdatePasswordUserUsecase {
 	return &UpdatePasswordUserUsecase{
-		updateAction: repo,
-		emailAction:  emailAction,
-		codeAction:   codeAction,
+		updateAction: &userRepo,
+		emailAction:  &userRepo,
+		codeAction:   &codeRepo,
 	}
 }
 

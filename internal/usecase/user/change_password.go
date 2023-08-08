@@ -4,8 +4,9 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/requests"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type ChangePasswordUserUsecase struct {
@@ -13,13 +14,10 @@ type ChangePasswordUserUsecase struct {
 	getByIdAction repositories.GetByIdAction[model.User]
 }
 
-func NewChangePasswordUserUsecase(
-	updateAction repositories.UpdateAction[model.User],
-	getByIdAction repositories.GetByIdAction[model.User],
-) user.ChangePasswordUserUsecase {
+func NewChangePasswordUserUsecase(userRepo user.UserRepo) contract.ChangePasswordUserUsecase {
 	return &ChangePasswordUserUsecase{
-		updateAction:  updateAction,
-		getByIdAction: getByIdAction,
+		updateAction:  &userRepo,
+		getByIdAction: &userRepo,
 	}
 }
 

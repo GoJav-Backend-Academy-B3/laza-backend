@@ -5,15 +5,16 @@ import (
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type LoginUserUsecase struct {
 	usernameActon action.FindByUsername
 }
 
-func NewLoginUserUsecase(usernameActon action.FindByUsername) auth.LoginUserUsecase {
+func NewLoginUserUsecase(userRepo user.UserRepo) auth.LoginUserUsecase {
 	return &LoginUserUsecase{
-		usernameActon: usernameActon,
+		usernameActon: &userRepo,
 	}
 }
 

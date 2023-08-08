@@ -6,6 +6,7 @@ import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type LoginGoogleUserUsecase struct {
@@ -15,17 +16,12 @@ type LoginGoogleUserUsecase struct {
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewLoginGoogleUserUsecase(
-	insertUserAction repositories.InsertAction[model.User],
-	findByEmailAction action.FindByEmail,
-	emailExistsAction action.ExistsEmail,
-	usernameExistsAction action.ExistsUsername,
-) auth.LoginGoogleUserUsecase {
+func NewLoginGoogleUserUsecase(userRepo user.UserRepo) auth.LoginGoogleUserUsecase {
 	return &LoginGoogleUserUsecase{
-		insertUserAction:     insertUserAction,
-		findByEmailAction:    findByEmailAction,
-		emailExistsAction:    emailExistsAction,
-		usernameExistsAction: usernameExistsAction,
+		insertUserAction:     &userRepo,
+		findByEmailAction:    &userRepo,
+		emailExistsAction:    &userRepo,
+		usernameExistsAction: &userRepo,
 	}
 }
 
