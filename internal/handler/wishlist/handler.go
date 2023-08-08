@@ -18,7 +18,7 @@ func (h *getWishlistHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	hs = append(hs,
 		handler.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/products/:productId/wishlists",
+			Path:        "/products/:id/wishlists",
 			HandlerFunc: h.Put,
 		},
 		handler.HandlerStruct{

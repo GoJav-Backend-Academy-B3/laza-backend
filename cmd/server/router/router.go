@@ -7,15 +7,12 @@ import (
 	"github.com/phincon-backend/laza/cmd/server/provider"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
-<<<<<<< HEAD
-=======
 
 	_ "github.com/phincon-backend/laza/docs"
 
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	swaggerfiles "github.com/swaggo/files"
->>>>>>> dev
 )
 
 // @title Laza
@@ -48,11 +45,8 @@ func NewServerGin() *gin.Engine {
 		provider.NewReviewHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
-<<<<<<< HEAD
 		provider.NewtwitterAuthHandler(),
-=======
 		provider.NewAddressesHandler(),
->>>>>>> dev
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {

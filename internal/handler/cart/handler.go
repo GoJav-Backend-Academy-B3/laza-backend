@@ -19,17 +19,17 @@ func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
 	h = append(h,
 		hd.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/products/:productId/cart",
+			Path:        "/products/:id/cart",
 			HandlerFunc: ch.post,
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodDelete,
-			Path:        "/products/:productId/cart",
+			Path:        "/products/:id/cart",
 			HandlerFunc: ch.Delete,
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/products/:productId/cart",
+			Path:        "/products/:id/cart",
 			HandlerFunc: ch.Update,
 		},
 		hd.HandlerStruct{
