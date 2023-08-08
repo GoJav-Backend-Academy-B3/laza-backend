@@ -16,9 +16,11 @@ type ResendEmailUserUsecase struct {
 	emailExistsAction actionUser.ExistsEmail
 }
 
-func NewResendEmailUserUsecase(repo repositories.UpdateAction[model.VerificationToken],
+func NewResendEmailUserUsecase(
+	repo repositories.UpdateAction[model.VerificationToken],
 	emailExistsAction actionUser.ExistsEmail,
-	emailAction actionUser.FindByEmail) auth.ResendEmailUserUsecase {
+	emailAction actionUser.FindByEmail,
+) auth.ResendEmailUserUsecase {
 	return &ResendEmailUserUsecase{
 		updateAction:      repo,
 		emailAction:       emailAction,

@@ -1,17 +1,17 @@
 package user
 
 import (
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
-	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type DeleteUserUsecase struct {
-	deleteAction repositories.DeleteAction[response.User]
+	deleteAction repositories.DeleteAction[model.User]
 }
 
-func NewDeleteUserUsecase(repo repositories.DeleteAction[response.User]) user.DeleteUserUsecase {
+func NewDeleteUserUsecase(repo repositories.DeleteAction[model.User]) user.DeleteUserUsecase {
 	return &DeleteUserUsecase{deleteAction: repo}
 }
 
