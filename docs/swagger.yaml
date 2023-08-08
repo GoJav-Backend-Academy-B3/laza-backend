@@ -624,12 +624,11 @@ paths:
         name: bank_name
         required: true
         type: string
-      - in: formData
-        name: id
-        type: integer
-      - in: formData
+      - description: bank
+        in: formData
         name: image
-        type: string
+        required: true
+        type: file
       produces:
       - application/json
       responses:

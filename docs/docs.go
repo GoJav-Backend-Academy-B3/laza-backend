@@ -584,14 +584,11 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
-                        "name": "id",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
+                        "type": "file",
+                        "description": "bank",
                         "name": "image",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {

@@ -3,6 +3,7 @@ package bank
 import (
 	"github.com/phincon-backend/laza/domain/model"
 	action "github.com/phincon-backend/laza/domain/repositories/bank"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/bank"
 	"github.com/phincon-backend/laza/helper"
 )
@@ -19,9 +20,27 @@ func NewInsertBankUsecase(repoBank action.InsertBank[model.Bank], repoExistsBank
 	}
 }
 
-func (uc *InsertBanksUsecase) Execute(bank model.Bank) *helper.Response {
-	if bankExists := uc.bankExistsAction.ExistsBank(bank.BankName); bankExists {
+func (uc *InsertBanksUsecase) Execute(request requests.BankRequest) *helper.Response {
+	if bankExists := uc.bankExistsAction.ExistsBank(request.BankName); bankExists {
 		return helper.GetResponse("Name Bank is already registered", 401, true)
+	}
+
+	file, err := request.LogoUrl.Open()
+	defer file.Close()
+	if err != nil {
+		// TODO: Should return error here
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+	url, err := helper.UploadImageFile(file)
+	if err != nil {
+		// TODO: Should return error here
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+
+	bank := model.Bank{
+		BankName: request.BankName,
+		BankCode: request.BankCode,
+		LogoUrl:  url,
 	}
 
 	result, err := uc.insertBankAction.Insert(bank)
