@@ -20,7 +20,7 @@ import (
 // @Security JWT
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=model.Address}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
-// @Error 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /address/{id} [put]
 func (h *addressHandler) UpdateAddressHandler(ctx *gin.Context) {
 	var request requests.AddressRequest

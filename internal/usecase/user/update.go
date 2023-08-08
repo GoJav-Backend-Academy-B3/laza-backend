@@ -36,7 +36,7 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 
 	if dataUser.Email != user.Email {
 		if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-			return helper.GetResponse("email is already registered", 401, true)
+			return helper.GetResponse("email is already registered", 500, true)
 		}
 		dataUser.Email = user.Email
 		dataUser.IsVerified = false
@@ -44,7 +44,7 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 
 	if dataUser.Username != user.Username {
 		if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-			return helper.GetResponse("username is already registered", 401, true)
+			return helper.GetResponse("username is already registered", 500, true)
 		}
 		dataUser.Username = user.Username
 	}

@@ -16,7 +16,7 @@ import (
 // @Security JWT
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=model.Address}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
-// @Error 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /address/ [get]
 func (h *addressHandler) GetAllAddressByUserIdHandler(ctx *gin.Context) {
 	userId := ctx.MustGet("userId").(uint64)

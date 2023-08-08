@@ -7,7 +7,7 @@ import (
 	"github.com/phincon-backend/laza/domain/repositories"
 	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
 	"github.com/phincon-backend/laza/domain/request"
-	"github.com/phincon-backend/laza/helpers"
+	"github.com/phincon-backend/laza/helper"
 	"time"
 )
 
@@ -51,7 +51,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	// Generate order number
 	var orderNumber string
 	for true {
-		orderNumber = helpers.GenerateOrderNumber()
+		orderNumber = helper.GenerateOrderNumber()
 		_, err := uc.getOrder.GetById(orderNumber)
 		if err == nil {
 			break
