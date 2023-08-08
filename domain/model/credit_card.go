@@ -1,7 +1,7 @@
 package model
 
 type CreditCard struct {
-	Id           uint    `json:"id,omitempty"  gorm:"primarykey"`
+	Id           uint64  `json:"id,omitempty"  gorm:"primarykey"`
 	CardNumber   string  `json:"card_number,omitempty"`
 	ExpiredMonth int     `json:"expired_month,omitempty"`
 	ExpiredYear  int     `json:"expired_year,omitempty"`
