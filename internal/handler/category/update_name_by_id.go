@@ -2,15 +2,16 @@ package category
 
 import (
 	"errors"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func (ch *categoryHandler) updateNameById(c *gin.Context) {
-	var categoryRequest request.CategoryRequest
+	var categoryRequest requests.CategoryRequest
 
 	if err := c.ShouldBindJSON(&categoryRequest); err != nil {
 		helper.GetResponse(err.Error(), http.StatusBadRequest, true).Send(c)
