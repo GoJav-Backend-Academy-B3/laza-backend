@@ -120,22 +120,13 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 
 	// insert order to db
 	order := model.Order{
-		Id:        orderNumber,
-		Amount:    int64(grossAmount),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		UserId: sql.NullInt64{
-			Int64: int64(userId),
-			Valid: true,
-		},
-		OrderStatusId: sql.NullInt64{
-			Int64: 1,
-			Valid: true,
-		},
-		AddressId: sql.NullInt64{
-			Int64: int64(addressId),
-			Valid: true,
-		},
+		Id:            orderNumber,
+		Amount:        int64(grossAmount),
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+		UserId:        uint64(userId),
+		OrderStatusId: uint64(1),
+		AddressId:     uint64(addressId),
 		GopayId: sql.NullInt64{
 			Int64: int64(gopayRespond.Id),
 			Valid: true,

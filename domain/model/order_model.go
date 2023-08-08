@@ -7,12 +7,12 @@ import (
 
 type Order struct {
 	Id                string        `json:"id,omitempty"  gorm:"primarykey"`
-	Amount            int64         `json:"amount,omitempty"`
+	Amount            int64         `json:"amount"`
 	CreatedAt         time.Time     `json:"created_at"`
 	UpdatedAt         time.Time     `json:"updated_at"`
-	UserId            sql.NullInt64 `json:"user_id,omitempty"`
-	OrderStatusId     sql.NullInt64 `json:"order_status,omitempty"`
-	AddressId         sql.NullInt64 `json:"address_id,omitempty"`
+	UserId            uint64        `json:"user_id"`
+	OrderStatusId     uint64        `json:"order_status"`
+	AddressId         uint64        `json:"address_id"`
 	CreditCardId      sql.NullInt64 `json:"credit_card_id,omitempty"`
 	TransactionBankId sql.NullInt64 `json:"transaction_bank_id,omitempty"`
 	GopayId           sql.NullInt64 `json:"gopay_id,omitempty"`
