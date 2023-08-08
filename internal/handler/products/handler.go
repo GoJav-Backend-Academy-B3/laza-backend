@@ -3,6 +3,7 @@ package products
 import (
 	"net/http"
 
+	"github.com/phincon-backend/laza/domain/handlers"
 	hd "github.com/phincon-backend/laza/domain/handlers"
 	uc "github.com/phincon-backend/laza/domain/usecases/product"
 )
@@ -14,14 +15,22 @@ type productHandler struct {
 	viewProductUsecase         uc.ViewProductUsecase
 	deleteProductUsecase       uc.DeleteProductUsecase
 	searchProductByNameUsecase uc.SearchProductByNameUsecase
+	getByIdProduct             uc.GetByIdProductUsecase
 }
 
 // GetHandlers implements handlers.HandlerInterface.
+
 func (h *productHandler) GetHandlers() (hs []hd.HandlerStruct) {
-	hs = append(hs, hd.HandlerStruct{
+	
+  hs = append(hs, hd.HandlerStruct{
 		Method:      http.MethodGet,
 		Path:        h.path,
 		HandlerFunc: h.get,
+	})
+  hs = append(hs, hd.HandlerStruct{
+		Method:      http.MethodGet,
+		Path:        h.path + "/:id",
+		HandlerFunc: h.getProductById,
 	})
 	hs = append(hs, hd.HandlerStruct{
 		Method:      http.MethodPost,
@@ -40,14 +49,15 @@ func (h *productHandler) GetHandlers() (hs []hd.HandlerStruct) {
 	})
 	return
 }
-
 func NewProductHandler(
 	path string,
 	createProductUsecase uc.CreateProductUsecase,
 	updateProductUsecase uc.UpdateProductUsecase,
 	viewProductUsecase uc.ViewProductUsecase,
-	deleteProductUsecase uc.DeleteProductUsecase,
-	searchProductByNameUsecase uc.SearchProductByNameUsecase) hd.HandlerInterface {
+  deleteProductUsecase uc.DeleteProductUsecase,
+	searchProductByNameUsecase uc.SearchProductByNameUsecase, 
+  GetByIdProductUsecase uc.GetByIdProductUsecase) 
+  hd.HandlerInterface {
 	return &productHandler{
 		path:                       path,
 		createProductUsecase:       createProductUsecase,
@@ -55,5 +65,6 @@ func NewProductHandler(
 		viewProductUsecase:         viewProductUsecase,
 		deleteProductUsecase:       deleteProductUsecase,
 		searchProductByNameUsecase: searchProductByNameUsecase,
+		getByIdProduct:             GetByIdProductUsecase,
 	}
 }
