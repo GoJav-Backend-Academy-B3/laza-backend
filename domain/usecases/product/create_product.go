@@ -2,9 +2,9 @@ package product
 
 import (
 	"github.com/phincon-backend/laza/domain/model"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 )
 
 type CreateProductUsecase interface {
-	Execute(request request.ProductRequest) (model.Product, error)
+	Execute(request requests.ProductRequest) (model.Product, error)
 }

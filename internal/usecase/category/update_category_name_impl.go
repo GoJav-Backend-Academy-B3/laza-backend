@@ -2,9 +2,10 @@ package category
 
 import (
 	"errors"
+
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories/category"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
 	uc "github.com/phincon-backend/laza/domain/usecases/category"
 	"github.com/phincon-backend/laza/mapper"
@@ -14,7 +15,7 @@ type updateCategoryNameByIdUsecaseImpl struct {
 	updateByIdAction category.UpdateByIdAction
 }
 
-func (ucn updateCategoryNameByIdUsecaseImpl) Execute(categoryDTO request.CategoryRequest) (category response.CategorySimpleResponse, err error) {
+func (ucn updateCategoryNameByIdUsecaseImpl) Execute(categoryDTO requests.CategoryRequest) (category response.CategorySimpleResponse, err error) {
 	var categoryModel = new(model.Category)
 	categoryModel.Id = categoryDTO.Id
 	categoryModel.Category = categoryDTO.Category
