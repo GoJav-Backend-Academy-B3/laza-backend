@@ -1,37 +1,42 @@
 package facebook_auth
 
 import (
+	"errors"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/facebook_auth"
 	"github.com/phincon-backend/laza/helper"
 	"github.com/phincon-backend/laza/internal/repo/user"
+	"gorm.io/gorm"
 )
 
 type facebookAuthUsecaseImpl struct {
-	existByUsernameAction action.ExistsUsername
-	insertUserAction      repositories.InsertAction[response.User]
+	insertUserAction repositories.InsertAction[response.User]
+	findByEmail      action.FindByEmail
 }
 
 func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (accessToken string, err error) {
-	var userDAO = new(response.User)
-	userDAO.Email = fbResponse.Email
-	userDAO.Username = helper.ExtractUsernameFromEmail(fbResponse.Email)
-	userDAO.FullName = fbResponse.Name
-	userDAO.ImageUrl = fbResponse.Picture.Data.URL
-	userDAO.IsAdmin = false
-	userDAO.IsVerified = true
+	var userDTO = new(response.User)
+	userDTO.Email = fbResponse.Email
+	userDTO.Username = helper.ExtractUsernameFromEmail(fbResponse.Email)
+	userDTO.FullName = fbResponse.Name
+	userDTO.ImageUrl = fbResponse.Picture.Data.URL
+	userDTO.IsAdmin = false
+	userDTO.IsVerified = true
 
-	var insertedUser response.User
-	if exist := fb.existByUsernameAction.ExistsUsername(userDAO.Username); !exist {
-		insertedUser, err = fb.insertUserAction.Insert(*userDAO)
-		if err != nil {
+	user, err := fb.findByEmail.FindByEmail(userDTO.Email)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			user, err = fb.insertUserAction.Insert(*userDTO)
+			if err != nil {
+				return "", err
+			}
+		} else {
 			return "", err
 		}
 	}
-
-	jwt := helper.NewToken(uint64(insertedUser.Id), false)
+	jwt := helper.NewToken(uint64(user.Id), false)
 
 	accessToken, err = jwt.Create()
 	if err != nil {
@@ -42,7 +47,7 @@ func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (
 
 func NewFacebookAuthUsecase(userRepo user.UserRepo) facebook_auth.FacebookAuthUsecase {
 	return &facebookAuthUsecaseImpl{
-		existByUsernameAction: &userRepo,
-		insertUserAction:      &userRepo,
+		insertUserAction: &userRepo,
+		findByEmail:      &userRepo,
 	}
 }

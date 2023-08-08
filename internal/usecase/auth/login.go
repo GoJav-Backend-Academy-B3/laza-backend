@@ -21,15 +21,15 @@ func NewLoginUserUsecase(usernameActon action.FindByUsername) auth.LoginUserUsec
 func (uc *LoginUserUsecase) Execute(user requests.Login) *helper.Response {
 	data, err := uc.usernameActon.FindByUsername(user.Username)
 	if err != nil {
-		return helper.GetResponse("user is not exist", 401, true)
+		return helper.GetResponse("user is not exist", 500, true)
 	}
 
 	if !helper.CheckPassword(data.Password, user.Password) {
-		return helper.GetResponse("password false", 401, true)
+		return helper.GetResponse("password false", 500, true)
 	}
 
 	if !data.IsVerified {
-		return helper.GetResponse("please verify your account", 401, true)
+		return helper.GetResponse("please verify your account", 500, true)
 	}
 
 	jwt := helper.NewToken(uint64(data.Id), data.IsAdmin)
