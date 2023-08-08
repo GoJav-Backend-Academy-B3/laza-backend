@@ -45,12 +45,26 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	var imageUrl = helper.DefaultImageProfileUrl
+	if user.Image != nil {
+		file, err := user.Image.Open()
+		if err != nil {
+			return helper.GetResponse(err.Error(), 500, true)
+		}
+
+		url, err := helper.UploadImageFile(file)
+		if err != nil {
+			return helper.GetResponse(err.Error(), 500, true)
+		}
+		imageUrl = url
+	}
+
 	data := response.User{
 		FullName: user.FullName,
 		Username: user.Username,
 		Password: hashPassword,
 		Email:    user.Email,
-		ImageUrl: user.Image,
+		ImageUrl: imageUrl,
 	}
 
 	result, err := uc.insertUserAction.Insert(data)

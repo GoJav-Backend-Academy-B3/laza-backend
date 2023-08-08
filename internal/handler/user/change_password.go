@@ -6,6 +6,17 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// ChangePasswordUser godoc
+// @Summary Change Password User
+// @Description Change passsword user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Security JWT
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /user/change-password [put]
 func (h *userHandler) changePassword(c *gin.Context) {
 	userId := c.MustGet("userId").(uint64)
 

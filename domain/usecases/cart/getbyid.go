@@ -3,5 +3,5 @@ package cart
 import "github.com/phincon-backend/laza/helper"
 
 type GetCartByIdUsecase interface {
-	Execute(userd any) *helper.Response
+	Execute(userId uint64) *helper.Response
 }

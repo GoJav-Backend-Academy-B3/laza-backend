@@ -39,11 +39,12 @@ func (d *PsqlDB) OpenConnection() {
 	host := appConfig.PSQL_HOST
 	port := appConfig.PSQL_PORT
 	dbname := appConfig.PSQL_DBNAME
+	sslMode := appConfig.PSQL_SSL_MODE
 	timezone := appConfig.PSQL_TIMEZONE
 	searchPath := appConfig.PSQL_SEARCH_PATH
 
-	connString := "host=%s user=%s password=%s dbname=%s port=%s sslmode=require TimeZone=%s search_path=%s"
-	db_, err := sql.Open("postgres", fmt.Sprintf(connString, host, user, pass, dbname, port, timezone, searchPath))
+	connString := "host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s search_path=%s"
+	db_, err := sql.Open("postgres", fmt.Sprintf(connString, host, user, pass, dbname, port, sslMode, timezone, searchPath))
 	if err != nil {
 		panic(err)
 	}

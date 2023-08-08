@@ -54,12 +54,26 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	var imageUrl = helper.DefaultImageProfileUrl
+	if user.Image != nil {
+		file, err := user.Image.Open()
+		if err != nil {
+			return helper.GetResponse(err.Error(), 500, true)
+		}
+
+		url, err := helper.UploadImageFile(file)
+		if err != nil {
+			return helper.GetResponse(err.Error(), 500, true)
+		}
+		imageUrl = url
+	}
+
 	data := response.User{
 		FullName:   user.FullName,
 		Username:   dataUser.Username,
 		Password:   hashPassword,
 		Email:      dataUser.Email,
-		ImageUrl:   user.Image,
+		ImageUrl:   imageUrl,
 		IsVerified: dataUser.IsVerified,
 	}
 
