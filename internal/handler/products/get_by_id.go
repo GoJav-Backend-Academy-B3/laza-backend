@@ -7,7 +7,7 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-func (h *productHandler) getProductById(c *gin.Context) {
+func (h *productHandler) getById(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
 		helper.GetResponse("missing 'id' path params", 400, true).Send(c)
