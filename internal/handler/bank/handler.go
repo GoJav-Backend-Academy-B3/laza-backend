@@ -3,6 +3,7 @@ package bank
 import (
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/domain/usecases/bank"
 )
@@ -13,6 +14,7 @@ type bankHandler struct {
 	insertBank  bank.InsertBankUsecase
 	updateBank  bank.UpdateBankUsecase
 	deleteBank  bank.DeleteBankUsecase
+	validate    *validator.Validate
 }
 
 func NewBankHandler(
@@ -21,6 +23,7 @@ func NewBankHandler(
 	insertBank bank.InsertBankUsecase,
 	updateBank bank.UpdateBankUsecase,
 	deleteBank bank.DeleteBankUsecase,
+	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &bankHandler{
 		getAllBank:  getAllBank,
@@ -28,6 +31,7 @@ func NewBankHandler(
 		insertBank:  insertBank,
 		updateBank:  updateBank,
 		deleteBank:  deleteBank,
+		validate:    validate,
 	}
 }
 

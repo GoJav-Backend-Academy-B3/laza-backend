@@ -9,3 +9,7 @@ type Size struct {
 func (Size) TableName() string {
 	return "size"
 }
+
+func (s *Size) Update(e Size) {
+	s.Size = e.Size
+}
