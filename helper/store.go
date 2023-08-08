@@ -4,7 +4,7 @@ import "github.com/gorilla/sessions"
 
 func GetStore() *sessions.CookieStore {
 	key := "_gothic_session"
-	maxAge := 60 // 30 days
+	maxAge := 86400 * 30 // 30 days
 	// isProd := true
 
 	store := sessions.NewCookieStore([]byte(key))
