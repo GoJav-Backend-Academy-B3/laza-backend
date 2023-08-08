@@ -16,12 +16,6 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 		response.Send(c)
 	}
 
-	err = h.validate.Struct(orderRequest)
-	if err != nil {
-		helper.GetResponse(err.Error(), 400, true).Send(c)
-		return
-	}
-
 	userId := c.MustGet("userId").(uint64)
 
 	order, gopay, err := h.createOrderWithGopayUsecase.Execute(userId, orderRequest.AddressId, orderRequest.CallbackUrl, orderRequest.Products)

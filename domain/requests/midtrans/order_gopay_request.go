@@ -1,4 +1,4 @@
-package requests
+package midtrans
 
 type ChargeGopay struct {
 	PaymentType        string            `json:"payment_type"`
