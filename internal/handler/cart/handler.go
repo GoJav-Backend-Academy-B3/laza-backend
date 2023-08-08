@@ -8,32 +8,33 @@ import (
 )
 
 type CartHandler struct {
-	insertCartUc  uc.InsertCartUsecase
-	deleteCartUc  uc.DeleteCartUsecase
-	updateCartUc  uc.UpdateCartUsecase
-	getCartByIdUc uc.GetCartByIdUsecase
+	insertCartUc   uc.InsertCartUsecase
+	deleteCartUc   uc.DeleteCartUsecase
+	updateCartUc   uc.UpdateCartUsecase
+	getCartByIdUc  uc.GetCartByIdUsecase
+	getCartOrderUc uc.GetCartOrderInfoUsecase
 }
 
 func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
 	h = append(h,
 		hd.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/product/:productId/cart",
+			Path:        "/products/:id/carts",
 			HandlerFunc: ch.post,
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodDelete,
-			Path:        "/product/:productId/cart",
+			Path:        "/products/:id/carts",
 			HandlerFunc: ch.Delete,
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/product/:productId/cart",
+			Path:        "/products/:id/carts",
 			HandlerFunc: ch.Update,
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        "/cart",
+			Path:        "/carts",
 			HandlerFunc: ch.GetById,
 		},
 	)

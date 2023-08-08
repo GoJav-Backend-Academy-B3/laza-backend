@@ -29,6 +29,7 @@ import (
 // @name                        X-Auth-Token
 // @description	How to input in swagger : 'Bearer <insert_your_token_here>'
 func NewServerGin() *gin.Engine {
+
 	r := gin.Default()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
@@ -44,6 +45,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewReviewHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
+		provider.NewtwitterAuthHandler(),
 		provider.NewAddressesHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
