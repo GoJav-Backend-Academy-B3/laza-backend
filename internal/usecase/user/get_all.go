@@ -25,7 +25,7 @@ func (uc *GetAllUserUsecase) Execute() *helper.Response {
 
 	var result []response.User
 	for _, v := range res {
-		result = append(result, response.UserModelResponse(v))
+		result = append(result, *response.UserModelResponse(v))
 	}
 	return helper.GetResponse(result, 200, false)
 }

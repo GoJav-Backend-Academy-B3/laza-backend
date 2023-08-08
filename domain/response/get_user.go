@@ -18,8 +18,8 @@ type User struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
-func UserModelResponse(data model.User) User {
-	return User{
+func UserModelResponse(data model.User) *User {
+	return &User{
 		Id:         data.Id,
 		FullName:   data.FullName,
 		Username:   data.Username,
