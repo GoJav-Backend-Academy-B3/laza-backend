@@ -42,13 +42,8 @@ func (h *userHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/user", HandlerFunc: h.get},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/user/profile", HandlerFunc: h.getById},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/user/", HandlerFunc: h.getWithLimit},
-
-		handlers.HandlerStruct{Method: http.MethodPut, Path: "/user/:id", HandlerFunc: h.update},
-		handlers.HandlerStruct{Method: http.MethodDelete, Path: "/user/:id", HandlerFunc: h.delete},
-
 		handlers.HandlerStruct{Method: http.MethodPut, Path: "/user/update", HandlerFunc: h.update},
 		handlers.HandlerStruct{Method: http.MethodDelete, Path: "/user/delete", HandlerFunc: h.delete},
-
 	)
 	return
 }

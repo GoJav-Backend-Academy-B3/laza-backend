@@ -58,11 +58,7 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 	}
 
 	response := map[string]string{
-
-		"message": "successfully verify email",
-
 		"message": "successfully verification email",
-
 	}
 
 	return helper.GetResponse(response, 200, false)

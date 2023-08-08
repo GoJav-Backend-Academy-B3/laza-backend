@@ -9,7 +9,7 @@ type Address struct {
 	IsPrimary    bool    `json:"is_primary,omitempty"`
 	UserId       uint64  `json:"user_id,omitempty"`
 	Orders       []Order `json:"orders,omitempty" gorm:"foreignkey:Id"`
-	User         User    `json:"user,omitempty"`
+	User         User    `json:"user,omitempty" gorm:"foreignkey:UserId"`
 }
 
 func (Address) TableName() string {

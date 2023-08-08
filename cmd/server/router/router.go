@@ -1,33 +1,50 @@
 package router
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/cmd/server/provider"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
-	"strings"
+
+	_ "github.com/phincon-backend/laza/docs"
+
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	swaggerfiles "github.com/swaggo/files"
 )
 
+// @title Laza
+// @version 1.0
+// @description This is a Final Project
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email soberkoder@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:8080
+// @securitydefinitions.apikey  JWT
+// @in                          header
+// @name                        X-Auth-Token
+// @description	How to input in swagger : 'Bearer <insert_your_token_here>'
 func NewServerGin() *gin.Engine {
 	r := gin.Default()
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	var server []handlers.HandlerInterface
 	server = append(server,
 		provider.NewHomeHandler(),
 		provider.NewAuthHandler(),
 		provider.NewUserHandler(),
-		provider.NewBankHandler(),
 		provider.NewProductsHandler(),
-
-		// // provider.NewWishListsHandler(),
-
-		provider.NewReviewHandler(),
-
 		provider.NewWishListsHandler(),
-
 		provider.NewCartHandler(),
+		provider.NewBankHandler(),
+		provider.NewReviewHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
+		provider.NewAddressesHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {
