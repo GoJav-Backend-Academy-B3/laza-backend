@@ -2,13 +2,9 @@ package category
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/request"
-	"github.com/phincon-backend/laza/helper"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
+	"net/http"
 )
 
 // PostCategory godoc
