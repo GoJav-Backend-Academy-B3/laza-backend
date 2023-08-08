@@ -22,7 +22,7 @@ func NewWishListsHandler() d.HandlerInterface {
 	wishlistRepo := r.NewWishList(gorm)
 	productRepo := p.NewProductRepo(gorm)
 
-	wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo)
+	wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo, productRepo)
 	wistlistGet := u.NewgetWishlistUsecase(wishlistRepo, productRepo)
 	wishlistGetLimit := u.NewgetWishlistLimitUsecase(wishlistRepo, wishlistRepo)
 	return h.NewgetWishlistHandler(wishlistUpdate, wistlistGet, wishlistGetLimit)

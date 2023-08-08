@@ -8,7 +8,7 @@ import (
 )
 
 func (h *getWishlistHandler) getByLimit(c *gin.Context) {
-	userId := uint64(1)
+	userId := c.MustGet("userId").(uint64)
 
 	// Get limit and offset query string
 	limit_q := c.DefaultQuery(QUERY_LIMIT, defaults.Query.LimitString())
