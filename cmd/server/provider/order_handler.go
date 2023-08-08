@@ -11,6 +11,7 @@ import (
 	midtrans "github.com/phincon-backend/laza/internal/repo/midtrans_repo"
 	orderRepo "github.com/phincon-backend/laza/internal/repo/order"
 	productRepo "github.com/phincon-backend/laza/internal/repo/product"
+	productOrderRepo "github.com/phincon-backend/laza/internal/repo/product_order"
 	orderUsecase "github.com/phincon-backend/laza/internal/usecase/order"
 )
 
@@ -24,11 +25,12 @@ func NewOrderHandler() domain.HandlerInterface {
 	addressRepo := addressRepo.NewAddressRepo(gorm)
 	gopayRepo := gopayRepo.NewGopayRepo(gorm)
 	productRepo := productRepo.NewProductRepo(gorm)
+	productOrderRepo := productOrderRepo.NewProductOrderRepo(gorm)
 	midtransRepo := midtrans.NewMidtransRepo(midtransCore)
 
 	validate := validator.New()
 
-	createOrderWithGopay := orderUsecase.NewCreateOrderWithGopayUsecase(orderRepo, addressRepo, midtransRepo, gopayRepo, orderRepo, productRepo, productRepo)
+	createOrderWithGopay := orderUsecase.NewCreateOrderWithGopayUsecase(orderRepo, addressRepo, midtransRepo, gopayRepo, orderRepo, productRepo, productOrderRepo)
 
 	return handler.NewOrderHandler(createOrderWithGopay, validate)
 
