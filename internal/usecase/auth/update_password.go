@@ -3,23 +3,23 @@ package auth
 import (
 	"time"
 
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	actionUser "github.com/phincon-backend/laza/domain/repositories/user"
 	actionCode "github.com/phincon-backend/laza/domain/repositories/verification_code"
 	"github.com/phincon-backend/laza/domain/requests"
-	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type UpdatePasswordUserUsecase struct {
-	updateAction repositories.UpdateAction[response.User]
+	updateAction repositories.UpdateAction[model.User]
 	emailAction  actionUser.FindByEmail
 	codeAction   actionCode.FindByCode
 }
 
 func NewUpdatePasswordUserUsecase(
-	repo repositories.UpdateAction[response.User],
+	repo repositories.UpdateAction[model.User],
 	emailAction actionUser.FindByEmail,
 	codeAction actionCode.FindByCode,
 ) auth.UpdatePasswordUserUsecase {
@@ -59,10 +59,10 @@ func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.U
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	data := response.User{
+	dao := model.User{
 		Password: hashPassword,
 	}
-	_, err = uc.updateAction.Update(dataUser.Id, data)
+	_, err = uc.updateAction.Update(dataUser.Id, dao)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 401, true)
 	}

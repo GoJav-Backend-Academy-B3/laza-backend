@@ -13,15 +13,18 @@ import (
 )
 
 type InsertUserUsecase struct {
-	insertUserAction     repositories.InsertAction[response.User]
+	insertUserAction     repositories.InsertAction[model.User]
 	insertTokenAction    repositories.InsertAction[model.VerificationToken]
 	emailExistsAction    action.ExistsEmail
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewInsertUserUsecase(repoUser repositories.InsertAction[response.User],
-	repoToken repositories.InsertAction[model.VerificationToken], repoExistsEmail action.ExistsEmail,
-	repoExistsUsername action.ExistsUsername) user.InsertUserUsecase {
+func NewInsertUserUsecase(
+	repoUser repositories.InsertAction[model.User],
+	repoToken repositories.InsertAction[model.VerificationToken],
+	repoExistsEmail action.ExistsEmail,
+	repoExistsUsername action.ExistsUsername,
+) user.InsertUserUsecase {
 	return &InsertUserUsecase{
 		insertUserAction:     repoUser,
 		insertTokenAction:    repoToken,
@@ -51,15 +54,16 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}
+		defer file.Close()
 
-		url, err := helper.UploadImageFile(file)
+		url, err := helper.UploadImageFile("user", file)
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}
 		imageUrl = url
 	}
 
-	data := response.User{
+	dao := model.User{
 		FullName: user.FullName,
 		Username: user.Username,
 		Password: hashPassword,
@@ -67,7 +71,7 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		ImageUrl: imageUrl,
 	}
 
-	result, err := uc.insertUserAction.Insert(data)
+	res, err := uc.insertUserAction.Insert(dao)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
@@ -77,7 +81,7 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 	daoToken := model.VerificationToken{
 		Token:      codeVerify,
 		ExpiryDate: expiryDate,
-		UserId:     uint64(result.Id),
+		UserId:     uint64(res.Id),
 	}
 
 	_, err = uc.insertTokenAction.Insert(daoToken)
@@ -86,8 +90,8 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 	}
 
 	configMail := helper.DataMail{
-		Username: result.Username,
-		Email:    result.Email,
+		Username: res.Username,
+		Email:    res.Email,
 		Token:    codeVerify,
 		Subject:  "Your verification account",
 	}
@@ -97,5 +101,6 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	result := response.UserModelResponse(res)
 	return helper.GetResponse(result, 201, false)
 }

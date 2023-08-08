@@ -2,6 +2,8 @@ package facebook_auth
 
 import (
 	"errors"
+
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/response"
@@ -12,12 +14,12 @@ import (
 )
 
 type facebookAuthUsecaseImpl struct {
-	insertUserAction repositories.InsertAction[response.User]
+	insertUserAction repositories.InsertAction[model.User]
 	findByEmail      action.FindByEmail
 }
 
 func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (accessToken string, err error) {
-	var userDTO = new(response.User)
+	var userDTO = new(model.User)
 	userDTO.Email = fbResponse.Email
 	userDTO.Username = helper.ExtractUsernameFromEmail(fbResponse.Email)
 	userDTO.FullName = fbResponse.Name
