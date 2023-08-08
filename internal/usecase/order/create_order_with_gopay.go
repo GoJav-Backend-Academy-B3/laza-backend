@@ -2,7 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -45,13 +44,10 @@ func NewCreateOrderWithGopayUsecase(
 
 func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, callbackUrl string, products []request.ProductOrder) (*model.Order, *model.Gopay, error) {
 	// Check if address exists
-	addr, err := uc.getAddressById.GetById(addressId)
+	_, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println("address: ", addr)
-
-	// Search user
 
 	// Generate order number
 	var orderNumber string
@@ -62,8 +58,6 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 			break
 		}
 	}
-
-	fmt.Println("order number: ", orderNumber)
 
 	// count gross amount
 	var grossAmount float64 = 0
@@ -85,7 +79,6 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 
 		grossAmount += productTemp.Price * float64(product.Quantity)
 	}
-	fmt.Println("products : ", products, grossAmount)
 
 	// Charge gopay to midtrans
 	paymentReq := coreapi.ChargeReq{
@@ -99,9 +92,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 			CallbackUrl:    callbackUrl,
 		},
 	}
-	fmt.Println("Midtrans Core: ", paymentReq)
 	gopayRespondMd, err := uc.chargeGopay.ChargeMidtrans(&paymentReq)
-	fmt.Println("Gopay Respond: ", gopayRespondMd)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -124,8 +115,8 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		Amount:        int64(grossAmount),
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
-		UserId:        uint64(userId),
-		OrderStatusId: uint64(1),
+		UserId:        userId,
+		OrderStatusId: 1,
 		AddressId:     uint64(addressId),
 		GopayId: sql.NullInt64{
 			Int64: int64(gopayRespond.Id),
