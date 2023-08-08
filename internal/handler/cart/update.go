@@ -9,9 +9,8 @@ import (
 )
 
 func (h *CartHandler) Update(ctx *gin.Context) {
-	//userId := ctx.MustGet("userId").(uint64)
+	userId := ctx.MustGet("userId").(uint64)
 
-	userId := uint64(1)
 	productId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
 	if err != nil {
 		helper.GetResponse(err.Error(), http.StatusInternalServerError, true)

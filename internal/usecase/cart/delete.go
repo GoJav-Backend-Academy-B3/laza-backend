@@ -21,7 +21,7 @@ func (us *deleteCartUsecase) Execute(userId, productId uint64) *helper.Response 
 
 	tf := us.isCartRepo.IsCart(model.Cart{UserId: userId, ProductId: productId})
 	if !tf {
-		return helper.GetResponse(errors.New("There are no products in the cart").Error(), http.StatusNotFound, false)
+		return helper.GetResponse(errors.New("there are no products in the cart").Error(), http.StatusNotFound, false)
 	}
 
 	id := map[string]uint64{"userId": userId, "productId": productId}
