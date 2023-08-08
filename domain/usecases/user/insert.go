@@ -6,5 +6,5 @@ import (
 )
 
 type InsertUserUsecase interface {
-	Execute(user requests.User) *helper.Response
+	Execute(user requests.Register) *helper.Response
 }

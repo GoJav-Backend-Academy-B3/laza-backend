@@ -31,6 +31,14 @@ func NewVerifyEmailUserUsecase(
 
 // Execute implements auth.VerifyEmailUserUsecase.
 func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response {
+	if email == "" && token == "" {
+		return helper.GetResponse("email and token are both empty", 400, true)
+	} else if email == "" {
+		return helper.GetResponse("email empty", 400, true)
+	} else if token == "" {
+		return helper.GetResponse("token empty", 400, true)
+	}
+
 	dataUser, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
 		return helper.GetResponse("email is not exist", 500, true)

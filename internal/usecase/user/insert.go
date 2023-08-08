@@ -34,7 +34,7 @@ func NewInsertUserUsecase(
 }
 
 // Excute implements user.InsertUserUsecase.
-func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
+func (uc *InsertUserUsecase) Execute(user requests.Register) *helper.Response {
 	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
 		return helper.GetResponse("username is already registered", 500, true)
 	}

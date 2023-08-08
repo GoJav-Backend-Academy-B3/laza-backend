@@ -26,7 +26,7 @@ func (h *userHandler) update(c *gin.Context) {
 
 	userId := c.MustGet("userId").(uint64)
 
-	var request requests.User
+	var request requests.UpdateUser
 	if err := c.Bind(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return

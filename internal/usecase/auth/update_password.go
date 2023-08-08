@@ -32,6 +32,14 @@ func NewUpdatePasswordUserUsecase(
 
 // Execute implements auth.UpdatePasswordUserUsecase.
 func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.UpdatePassword) *helper.Response {
+	if email == "" && code == "" {
+		return helper.GetResponse("email and code are both empty", 400, true)
+	} else if email == "" {
+		return helper.GetResponse("email empty", 400, true)
+	} else if code == "" {
+		return helper.GetResponse("code empty", 400, true)
+	}
+
 	if user.NewPassword != user.RePassword {
 		return helper.GetResponse("passwords do not match. please try again.", 401, true)
 	}

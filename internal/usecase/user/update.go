@@ -32,7 +32,7 @@ func NewUpdateUserUsecase(
 }
 
 // Excute implements user.UpdateUserUsecase.
-func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Response {
+func (uc *UpdateUserUsecase) Execute(id uint64, user requests.UpdateUser) *helper.Response {
 	data, err := uc.getByIdAction.GetById(id)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
@@ -54,11 +54,6 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 		data.Username = user.Username
 	}
 
-	hashPassword, err := helper.HashPassword(user.Password)
-	if err != nil {
-		return helper.GetResponse(err.Error(), 500, true)
-	}
-
 	var imageUrl = helper.DefaultImageProfileUrl
 	if user.Image != nil {
 		file, err := user.Image.Open()
@@ -77,7 +72,6 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 	dao := model.User{
 		FullName:   user.FullName,
 		Username:   data.Username,
-		Password:   hashPassword,
 		Email:      data.Email,
 		ImageUrl:   imageUrl,
 		IsVerified: data.IsVerified,
