@@ -16,7 +16,8 @@ func NewReviewHandler() domain.HandlerInterface {
 	reviewrepo := repo.NewReviewRepo(gorm)
 	getAllReviewByProduct := usecase.NewGetAllReviewUsecase(reviewrepo)
 	insertReview := usecase.NewinsertReviewUsecase(reviewrepo)
+	getWithLimitReview := usecase.NewGetWithLimitReviewUsecase(reviewrepo)
 
-	return handler.NewReviewHandler(getAllReviewByProduct, insertReview)
+	return handler.NewReviewHandler(getAllReviewByProduct, insertReview, getWithLimitReview)
 
 }
