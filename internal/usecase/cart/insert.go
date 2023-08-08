@@ -6,7 +6,6 @@ import (
 
 	m "github.com/phincon-backend/laza/domain/model"
 	d "github.com/phincon-backend/laza/domain/repositories"
-	action "github.com/phincon-backend/laza/domain/repositories/product"
 	usecase "github.com/phincon-backend/laza/domain/usecases/cart"
 	"github.com/phincon-backend/laza/helper"
 	"gorm.io/gorm"
@@ -16,12 +15,12 @@ import (
 
 type insertCartUsecase struct {
 	insertCartRepo       d.InsertAction[m.Cart]
-	getProductByIdAction action.GetProductByIdAction[m.Product]
+	getProductByIdAction d.GetByIdAction[m.Product]
 }
 
 func (uc *insertCartUsecase) Execute(userId uint64, productId uint64) *h.Response {
 
-	_, err := uc.getProductByIdAction.GetProductById(productId)
+	_, err := uc.getProductByIdAction.GetById(productId)
 
 	if err == gorm.ErrRecordNotFound {
 		return helper.GetResponse(errors.New("product not found").Error(), http.StatusNotFound, true)
@@ -46,7 +45,7 @@ func (uc *insertCartUsecase) Execute(userId uint64, productId uint64) *h.Respons
 
 func NewinsertCartUsecase(
 	icp d.InsertAction[m.Cart],
-	gpi action.GetProductByIdAction[m.Product],
+	gpi d.GetByIdAction[m.Product],
 ) usecase.InsertCartUsecase {
 	return &insertCartUsecase{
 		insertCartRepo:       icp,

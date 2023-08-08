@@ -6,7 +6,6 @@ import (
 
 	m "github.com/phincon-backend/laza/domain/model"
 	d "github.com/phincon-backend/laza/domain/repositories"
-	action "github.com/phincon-backend/laza/domain/repositories/product"
 	p "github.com/phincon-backend/laza/domain/usecases/wishlist"
 	"gorm.io/gorm"
 
@@ -15,11 +14,11 @@ import (
 
 type UpdateWishListUsecaseImpl struct {
 	updateWishlist       d.UpdateAction[m.Wishlist]
-	getProductByIdAction action.GetProductByIdAction[m.Product]
+	getProductByIdAction d.GetByIdAction[m.Product]
 }
 
 func (u *UpdateWishListUsecaseImpl) Execute(userId, productId uint64) *helper.Response {
-	_, err := u.getProductByIdAction.GetProductById(productId)
+	_, err := u.getProductByIdAction.GetById(productId)
 
 	if err == gorm.ErrRecordNotFound {
 		return helper.GetResponse(errors.New("product not found").Error(), http.StatusNotFound, true)
@@ -36,7 +35,7 @@ func (u *UpdateWishListUsecaseImpl) Execute(userId, productId uint64) *helper.Re
 
 func NewUpdateWishListUsecaseImpl(
 	uw d.UpdateAction[m.Wishlist],
-	gpi action.GetProductByIdAction[m.Product],
+	gpi d.GetByIdAction[m.Product],
 ) p.UpdateWishListUsecase {
 	return &UpdateWishListUsecaseImpl{
 		updateWishlist:       uw,
