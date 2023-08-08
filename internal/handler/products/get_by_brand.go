@@ -5,10 +5,24 @@ import (
 	"github.com/phincon-backend/laza/defaults"
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/mapper"
 	"net/http"
 	"strconv"
 )
 
+// FindProductByBrand godoc
+// @Summary Find product by brand
+// @Description It returns a list of products of a brand
+// @Tags product
+// @Accept json
+// @Produce json
+// @Security JWT
+// @Param name query string true "Brand name"
+// @Param limit query int false "limit for pagination"
+// @Param  offset query int false "offset for pagination"
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=[]response.Product}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /products/brand [get]
 func (pb *viewProductByBrandHandler) get(c *gin.Context) {
 
 	// Get limit and offset query string
@@ -32,20 +46,15 @@ func (pb *viewProductByBrandHandler) get(c *gin.Context) {
 
 	products, err := pb.viewProductByBrandUsecase.Execute(brand, offset, limit)
 	if err != nil {
-		response := helper.GetResponse(err, http.StatusInternalServerError, 1 == 1)
-		c.JSON(http.StatusInternalServerError, response)
+		helper.GetResponse(err, http.StatusInternalServerError, true).Send(c)
 		return
 	}
 
 	productsResponse := make([]response.Product, 0)
-	for _, each := range products {
-		var product response.Product
-		product.FillFromEntity(each)
-		productsResponse = append(productsResponse, product)
+	for _, item := range products {
+		productsResponse = append(productsResponse, mapper.ProductModelToProductResponse(item))
 	}
-	results := helper.GetResponse(productsResponse, 200, false)
-
-	c.JSON(results.Code, results)
+	helper.GetResponse(productsResponse, 200, false).Send(c)
 	return
 
 }

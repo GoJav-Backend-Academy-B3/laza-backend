@@ -9,6 +9,19 @@ import (
 	"strconv"
 )
 
+// Get Category By Id godoc
+// @Summary Get category by id
+// @Description Get category by its id
+// @Tags category
+// @Accept json
+// @Produce json
+// @Security JWT
+// @Param id path int true "Category ID"
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=response.CategorySimpleResponse}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 404 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /category/:id [get]
 func (ch *categoryHandler) getById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
