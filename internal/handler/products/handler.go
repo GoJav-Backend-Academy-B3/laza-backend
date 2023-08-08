@@ -29,7 +29,7 @@ func (h *productHandler) GetHandlers() (hs []hd.HandlerStruct) {
 	hs = append(hs, hd.HandlerStruct{
 		Method:      http.MethodGet,
 		Path:        h.path + "/:id",
-		HandlerFunc: h.getProductById,
+		HandlerFunc: h.getById,
 	})
 	hs = append(hs, hd.HandlerStruct{
 		Method:      http.MethodPost,
@@ -55,7 +55,8 @@ func NewProductHandler(
 	viewProductUsecase uc.ViewProductUsecase,
 	deleteProductUsecase uc.DeleteProductUsecase,
 	searchProductByNameUsecase uc.SearchProductByNameUsecase,
-	GetByIdProductUsecase uc.GetByIdProductUsecase) hd.HandlerInterface {
+	GetByIdProductUsecase uc.GetByIdProductUsecase,
+) hd.HandlerInterface {
 	return &productHandler{
 		path:                       path,
 		createProductUsecase:       createProductUsecase,
