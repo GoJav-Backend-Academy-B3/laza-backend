@@ -1,10 +1,12 @@
 package order
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
-	"net/http"
 )
 
 func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
@@ -25,8 +27,13 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 
 	result := make(map[string]any)
 
-	result["order"] = order
-	result["gopay"] = gopay
+	orderResponse := &response.GopayOrderResponse{}
+	orderResponse.FillFromEntity(order)
+
+	gopayPaymentResponse := &response.GopayPaymentResponse{}
+	gopayPaymentResponse.FillFromEntity(gopay)
+	result["order"] = orderResponse
+	result["gopay"] = gopayPaymentResponse
 
 	response := helper.GetResponse(result, http.StatusOK, false)
 	response.Send(c)
