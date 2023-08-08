@@ -2,7 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -76,9 +75,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 			Quantity:  uint16(product.Quantity),
 			Price:     productTemp.Price * float64(product.Quantity),
 		}
-
 		productOrders = append(productOrders, productOrderTemp)
-
 		grossAmount += productTemp.Price * float64(product.Quantity)
 	}
 
@@ -86,13 +83,13 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 	var paymentReq coreapi.ChargeReq
 	if strings.ToLower(bank) == "mandiri" {
 		paymentReq = coreapi.ChargeReq{
-			PaymentType: "bank_transfer",
+			PaymentType: "echannel",
 			TransactionDetails: midtrans.TransactionDetails{
 				OrderID:  orderNumber,
 				GrossAmt: int64(grossAmount),
 			},
 			EChannel: &coreapi.EChannelDetail{
-				BillInfo1: "Payment For:",
+				BillInfo1: "Payment ",
 				BillInfo2: "Laza with order ID: " + orderNumber,
 			},
 		}
@@ -103,14 +100,12 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 				OrderID:  orderNumber,
 				GrossAmt: int64(grossAmount),
 			},
-			EChannel: &coreapi.EChannelDetail{
-				BillInfo1: "Payment For:",
-				BillInfo2: "Laza with order ID: " + orderNumber,
+			BankTransfer: &coreapi.BankTransferDetails{
+				Bank: midtrans.Bank(bank),
 			},
 		}
 	}
 	RespondMd, err := uc.chargeMidtrans.ChargeMidtrans(&paymentReq)
-	fmt.Println("Bank Respond: ", RespondMd)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -119,19 +114,23 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 	var transactionBankModel model.TransactionBank
 	if strings.ToLower(bank) == "mandiri" {
 		transactionBankModel = model.TransactionBank{
-			BankCode:   RespondMd.Bank,
-			BillerCode: "",
-			VANumber:   RespondMd.VaNumbers[0].VANumber,
-		}
-	} else {
-		transactionBankModel = model.TransactionBank{
-			BankCode:   RespondMd.Bank,
+			BankCode:   bank,
 			BillerCode: RespondMd.BillerCode,
 			VANumber:   RespondMd.BillKey,
 		}
+	} else if strings.ToLower(bank) == "permata" {
+		transactionBankModel = model.TransactionBank{
+			BankCode: bank,
+			VANumber: RespondMd.PermataVaNumber,
+		}
+	} else {
+		transactionBankModel = model.TransactionBank{
+			BankCode: bank,
+			VANumber: RespondMd.VaNumbers[0].VANumber,
+		}
 	}
 	insertRes, err := uc.insertTransactionBank.Insert(transactionBankModel)
-	fmt.Println("insert result:", insertRes)
+	transactionBankModel.Id = insertRes.Id
 	if err != nil {
 		return nil, nil, err
 	}

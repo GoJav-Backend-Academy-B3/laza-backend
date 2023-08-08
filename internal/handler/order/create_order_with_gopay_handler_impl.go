@@ -16,12 +16,15 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 	if err != nil {
 		response := helper.GetResponse(err, http.StatusBadRequest, true)
 		response.Send(c)
+		return
 	}
 
 	userId := c.MustGet("userId").(uint64)
 
 	order, gopay, err := h.createOrderWithGopayUsecase.Execute(userId, orderRequest.AddressId, orderRequest.CallbackUrl, orderRequest.Products)
 	if err != nil {
+		response := helper.GetResponse(err, http.StatusInternalServerError, true)
+		response.Send(c)
 		return
 	}
 

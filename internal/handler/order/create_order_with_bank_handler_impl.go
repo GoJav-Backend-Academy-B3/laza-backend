@@ -14,14 +14,16 @@ func (h *orderHandler) CreateOrderWithBank(c *gin.Context) {
 	if err != nil {
 		response := helper.GetResponse(err, http.StatusBadRequest, true)
 		response.Send(c)
+		return
 	}
 
 	userId := c.MustGet("userId").(uint64)
 
 	order, bankDetails, err := h.createOrderWithBankUsecase.Execute(userId, orderRequest.AddressId, orderRequest.Bank, orderRequest.Products)
 	if err != nil {
-		response := helper.GetResponse(err, http.StatusBadRequest, true)
+		response := helper.GetResponse(err, http.StatusInternalServerError, true)
 		response.Send(c)
+		return
 	}
 
 	result := make(map[string]any)

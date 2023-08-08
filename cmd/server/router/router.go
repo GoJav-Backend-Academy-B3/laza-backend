@@ -8,8 +8,6 @@ import (
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
 
-	_ "github.com/phincon-backend/laza/docs"
-
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	swaggerfiles "github.com/swaggo/files"
