@@ -8,6 +8,18 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// Register godoc
+// @Summary Register
+// @Description Register for user
+// @Tags auth
+// @Accept multipart/form-data
+// @Produce json
+// @Param user formData requests.User true "user"
+// @Param image formData file false "user"
+// @Success 201 {object} helper.Response{code=string,isError=bool,status=string,data=response.User}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /register [post]
 func (h *authHandler) register(c *gin.Context) {
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 2*1024*1024)
 
