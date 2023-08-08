@@ -33,11 +33,11 @@ func NewInsertUserUsecase(repoUser repositories.InsertAction[response.User],
 // Excute implements user.InsertUserUsecase.
 func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-		return helper.GetResponse("username is already registered", 401, true)
+		return helper.GetResponse("username is already registered", 500, true)
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-		return helper.GetResponse("email is already registered", 401, true)
+		return helper.GetResponse("email is already registered", 500, true)
 	}
 
 	hashPassword, err := helper.HashPassword(user.Password)
@@ -83,5 +83,5 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	return helper.GetResponse(result, 200, false)
+	return helper.GetResponse(result, 201, false)
 }
