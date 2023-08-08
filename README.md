@@ -66,7 +66,7 @@ BASE_URL=
 
 ```
 
-9. Run Swagoo init asdkhgasdvoijsd
+9. Run Swaggo init to generate documentation
 ```
 swag init -g cmd/server/router/router.go
 ```

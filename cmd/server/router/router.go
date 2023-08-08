@@ -45,6 +45,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewFacebookAuthHandler(),
 		provider.NewtwitterAuthHandler(),
 		provider.NewAddressesHandler(),
+		provider.NewOrderHandler(),
 		provider.NewCategoryHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
