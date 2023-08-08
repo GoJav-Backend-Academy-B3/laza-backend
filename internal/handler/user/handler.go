@@ -9,11 +9,12 @@ import (
 )
 
 type userHandler struct {
-	getAllUser       user.GetAllUserUsecase
-	getByIdUser      user.GetByIdUserUsecase
-	getWithLimitUser user.GetWithLimitUserUsecase
-	updateUser       user.UpdateUserUsecase
-	deleteUser       user.DeleteUserUsecase
+	getAllUser         user.GetAllUserUsecase
+	getByIdUser        user.GetByIdUserUsecase
+	getWithLimitUser   user.GetWithLimitUserUsecase
+	updateUser         user.UpdateUserUsecase
+	changePasswordUser user.ChangePasswordUserUsecase
+	deleteUser         user.DeleteUserUsecase
 
 	validate *validator.Validate
 }
@@ -23,16 +24,18 @@ func NewUserHandler(
 	getByIdUser user.GetByIdUserUsecase,
 	getWithLimitUser user.GetWithLimitUserUsecase,
 	updateUser user.UpdateUserUsecase,
+	changePasswordUser user.ChangePasswordUserUsecase,
 	deleteUser user.DeleteUserUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &userHandler{
-		getAllUser:       getAllUser,
-		getByIdUser:      getByIdUser,
-		getWithLimitUser: getWithLimitUser,
-		updateUser:       updateUser,
-		deleteUser:       deleteUser,
-		validate:         validate,
+		getAllUser:         getAllUser,
+		getByIdUser:        getByIdUser,
+		getWithLimitUser:   getWithLimitUser,
+		updateUser:         updateUser,
+		changePasswordUser: changePasswordUser,
+		deleteUser:         deleteUser,
+		validate:           validate,
 	}
 }
 
@@ -43,6 +46,7 @@ func (h *userHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/user/profile", HandlerFunc: h.getById},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/user/", HandlerFunc: h.getWithLimit},
 		handlers.HandlerStruct{Method: http.MethodPut, Path: "/user/update", HandlerFunc: h.update},
+		handlers.HandlerStruct{Method: http.MethodPut, Path: "/user/change-password", HandlerFunc: h.changePassword},
 		handlers.HandlerStruct{Method: http.MethodDelete, Path: "/user/delete", HandlerFunc: h.delete},
 	)
 	return

@@ -31,22 +31,22 @@ func NewVerifyEmailUserUsecase(repo repositories.UpdateAction[response.User],
 func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response {
 	user, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
-		return helper.GetResponse("email is not exist", 401, true)
+		return helper.GetResponse("email is not exist", 500, true)
 	}
 
 	dataToken, err := uc.tokenAction.FindByToken(uint64(user.Id), token)
 	if err != nil {
-		return helper.GetResponse("failed to verify email", 401, true)
+		return helper.GetResponse("failed to verify email", 500, true)
 	}
 
 	location, _ := time.LoadLocation("Asia/Jakarta")
 
 	if user.IsVerified {
-		return helper.GetResponse("already registered, you can login", 401, true)
+		return helper.GetResponse("already registered, you can login", 500, true)
 	} else if dataToken.Token != token {
-		return helper.GetResponse("failed to verify email", 401, true)
+		return helper.GetResponse("failed to verify email", 500, true)
 	} else if dataToken.ExpiryDate.In(location).Add(-7 * time.Hour).Before(time.Now().In(location)) {
-		return helper.GetResponse("expired verify email, please resend verify again!", 401, true)
+		return helper.GetResponse("expired verify email, please resend verify again!", 500, true)
 	}
 
 	data := response.User{
@@ -54,7 +54,7 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 	}
 	_, err = uc.updateAction.Update(user.Id, data)
 	if err != nil {
-		return helper.GetResponse(err.Error(), 401, true)
+		return helper.GetResponse(err.Error(), 500, true)
 	}
 
 	response := map[string]string{

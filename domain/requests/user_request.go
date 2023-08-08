@@ -18,6 +18,12 @@ type Email struct {
 }
 
 type UpdatePassword struct {
-	Password   string `json:"password" validate:"required,min=8"`
-	RePassword string `json:"re_password" validate:"required,min=8"`
+	NewPassword string `json:"new_password" validate:"required,min=8"`
+	RePassword  string `json:"re_password" validate:"required,min=8"`
+}
+
+type ChangePassword struct {
+	OldPassword string `json:"old_password" validate:"required,min=8"`
+	NewPassword string `json:"new_password" validate:"required,min=8"`
+	RePassword  string `json:"re_password" validate:"required,min=8"`
 }
