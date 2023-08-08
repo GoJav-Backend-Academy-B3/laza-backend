@@ -32,7 +32,7 @@ func NewUpdatePasswordUserUsecase(
 
 // Execute implements auth.UpdatePasswordUserUsecase.
 func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.UpdatePassword) *helper.Response {
-	if user.Password != user.RePassword {
+	if user.NewPassword != user.RePassword {
 		return helper.GetResponse("passwords do not match. please try again.", 401, true)
 	}
 
@@ -54,7 +54,7 @@ func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.U
 		return helper.GetResponse("expired verify email, please resend verify again!", 401, true)
 	}
 
-	hashPassword, err := helper.HashPassword(user.Password)
+	hashPassword, err := helper.HashPassword(user.NewPassword)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
