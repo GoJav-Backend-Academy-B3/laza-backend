@@ -66,6 +66,11 @@ BASE_URL=
 
 ```
 
+9. Run Swaggo init to generate documentation
+```
+swag init -g cmd/server/router/router.go
+```
+
 4. Run the app
 
 ```bash

@@ -6,6 +6,19 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// UpdatePassword godoc
+// @Summary Update Password For User
+// @Description Update password for user
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param code query string true "Query Code"
+// @Param email query string true "Query Email "
+// @Param auth body requests.UpdatePassword true "Update Password"
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /auth/update-password/ [post]
 func (h *authHandler) updatePassword(c *gin.Context) {
 	email := c.Query("email")
 	code := c.Query("code")

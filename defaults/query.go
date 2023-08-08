@@ -21,3 +21,11 @@ func (q query) Offset() uint64 {
 func (q query) OffsetString() string {
 	return fmt.Sprint(q.Offset())
 }
+
+func (q query) Id() uint64 {
+	return 1
+}
+
+func (q query) IdString() string {
+	return fmt.Sprint(q.Id())
+}

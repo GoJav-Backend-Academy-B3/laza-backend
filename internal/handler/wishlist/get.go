@@ -3,6 +3,7 @@ package wishlist
 import "github.com/gin-gonic/gin"
 
 func (h *getWishlistHandler) get(ctx *gin.Context) {
-	userId := uint64(1)
+	userId := ctx.MustGet("userId").(uint64)
+
 	h.getWishlistUsecase.Execute(userId).Send(ctx)
 }
