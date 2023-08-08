@@ -3,7 +3,7 @@ package helper
 import "github.com/gorilla/sessions"
 
 func GetStore() *sessions.CookieStore {
-	key := "SAgn9qi1Zt3OV8xfDaMRiBQvK"
+	key := "_gothic_session"
 	maxAge := 60 // 30 days
 	// isProd := true
 

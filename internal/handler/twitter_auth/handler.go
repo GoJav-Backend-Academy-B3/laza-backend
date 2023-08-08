@@ -4,12 +4,13 @@ import (
 	"net/http"
 
 	handler "github.com/phincon-backend/laza/domain/handlers"
+	uc "github.com/phincon-backend/laza/domain/usecases/twitter_auth"
 )
 
 type twitterAuthHandler struct {
-	path         string
-	pathCallback string
-	// useCaseTwitter uc.TwitterAuthUsecase
+	path           string
+	pathCallback   string
+	useCaseTwitter uc.TwitterAuthUsecase
 }
 
 func (h *twitterAuthHandler) GetHandlers() (hs []handler.HandlerStruct) {
@@ -28,12 +29,15 @@ func (h *twitterAuthHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	return hs
 }
 
-func NewtwitterAuthHandler(path string,
+func NewtwitterAuthHandler(
+	path string,
 	pathCallback string,
+	useCaseTwitter uc.TwitterAuthUsecase,
+
 ) handler.HandlerInterface {
 	return &twitterAuthHandler{
-		path:         path,
-		pathCallback: pathCallback,
-		//useCaseTwitter: useCaseTwitter,
+		path:           path,
+		pathCallback:   pathCallback,
+		useCaseTwitter: useCaseTwitter,
 	}
 }

@@ -10,6 +10,7 @@ import (
 )
 
 func NewServerGin() *gin.Engine {
+
 	r := gin.Default()
 
 	var server []handlers.HandlerInterface

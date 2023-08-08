@@ -6,5 +6,5 @@ import (
 )
 
 type TwitterAuthUsecase interface {
-	Execute(rp.TwitterResponse) *helper.Response
+	Execute(rp.TwitterFieldResponse) *helper.Response
 }

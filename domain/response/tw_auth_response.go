@@ -76,3 +76,19 @@ type TwitterResponse struct {
 	IsError bool   `json:"isError"`
 	Data    Data   `json:"data"`
 }
+
+type TwitterFieldResponse struct {
+	Email    string `json:"Email"`
+	Name     string `json:"Name"`
+	NickName string `json:"NickName"`
+	ImageUrl string `json:"image_url"`
+}
+
+func FillFromTwitter(email, name, username, image_url string) TwitterFieldResponse {
+	return TwitterFieldResponse{
+		Email:    email,
+		Name:     name,
+		NickName: username,
+		ImageUrl: image_url,
+	}
+}

@@ -17,15 +17,15 @@ type twitterAuthUsecase struct {
 	findByEmailAction     action.FindByEmail
 }
 
-func (uc *twitterAuthUsecase) Execute(rp response.TwitterResponse) *helper.Response {
+func (uc *twitterAuthUsecase) Execute(rp response.TwitterFieldResponse) *helper.Response {
 	var userDAO = new(response.User)
 	response := map[string]string{}
 
-	if exist := uc.existByUsernameAction.ExistsUsername(rp.Data.NickName); !exist {
-		userDAO.FullName = rp.Data.Name
-		userDAO.Email = rp.Data.Name
-		userDAO.Username = rp.Data.NickName
-		userDAO.ImageUrl = rp.Data.RawData.ProfileImageURLHTTPS
+	if exist := uc.existByUsernameAction.ExistsUsername(rp.NickName); !exist {
+		userDAO.FullName = rp.Name
+		userDAO.Email = rp.Name
+		userDAO.Username = rp.NickName
+		userDAO.ImageUrl = rp.ImageUrl
 		userDAO.IsAdmin = false
 		userDAO.IsVerified = true
 
@@ -45,7 +45,7 @@ func (uc *twitterAuthUsecase) Execute(rp response.TwitterResponse) *helper.Respo
 		return helper.GetResponse(response, http.StatusOK, false)
 	}
 
-	user, err := uc.findByEmailAction.FindByEmail(rp.Data.Email)
+	user, err := uc.findByEmailAction.FindByEmail(rp.Email)
 
 	if err != nil {
 		return helper.GetResponse("user is not exist", 401, true)
