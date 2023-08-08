@@ -66,6 +66,11 @@ BASE_URL=
 
 ```
 
+9. Run Swagoo init asdkhgasdvoijsd
+```
+swag init -g cmd/server/router/router.go
+```
+
 4. Run the app
 
 ```bash
