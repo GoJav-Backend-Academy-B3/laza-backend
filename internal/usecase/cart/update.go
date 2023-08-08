@@ -21,7 +21,7 @@ func (uc *updateCartUsecase) Execute(userId, productId uint64) *helper.Response 
 	md := model.Cart{UserId: userId, ProductId: productId}
 
 	if bl := uc.isCartRepo.IsCart(md); !bl {
-		return helper.GetResponse(errors.New("There are no products in the cart").Error(), http.StatusNotFound, true)
+		return helper.GetResponse(errors.New("there are no products in the cart").Error(), http.StatusNotFound, true)
 	}
 
 	rs, err := uc.updateCartRepo.Update("", md)

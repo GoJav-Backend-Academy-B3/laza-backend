@@ -1,11 +1,14 @@
 package response
 
-import "time"
+import (
+	"github.com/phincon-backend/laza/domain/model"
+)
 
-type Review struct {
-	Id        uint      `json:"id" gorm:"primarykey"`
-	Comment   string    `json:"comment"`
-	Rating    float32   `json:"rating"`
-	Namauser  string    `json:"nama_user"`
-	CreatedAt time.Time `json:"created_at"`
+type ReqReview struct {
+	Products []model.ProductReview `json:"products"`
+	Result   []model.ProductReview `json:"result"`
+}
+
+func (ReqReview) TableName() string {
+	return "review"
 }

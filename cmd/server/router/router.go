@@ -29,6 +29,7 @@ import (
 // @name                        X-Auth-Token
 // @description	How to input in swagger : 'Bearer <insert_your_token_here>'
 func NewServerGin() *gin.Engine {
+
 	r := gin.Default()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
@@ -45,7 +46,9 @@ func NewServerGin() *gin.Engine {
 		provider.NewReviewHandler(),
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
+		provider.NewtwitterAuthHandler(),
 		provider.NewAddressesHandler(),
+		provider.NewCategoryHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {
@@ -77,6 +80,7 @@ func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/products/:id")
 	noAuthList = append(noAuthList, "/size")
 	noAuthList = append(noAuthList, "/size/:id")
+	noAuthList = append(noAuthList, "/category")
 	for _, item := range noAuthList {
 		if strings.EqualFold(item, url) {
 			return true
