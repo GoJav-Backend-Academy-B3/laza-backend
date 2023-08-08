@@ -1,4 +1,4 @@
-package request
+package requests
 
 type POSTSizeRequest struct {
 	Sizes []string `json:"sizes"`
