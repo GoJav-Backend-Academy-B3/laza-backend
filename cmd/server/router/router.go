@@ -45,6 +45,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewViewProductByBrandHandler(),
 		provider.NewFacebookAuthHandler(),
 		provider.NewAddressesHandler(),
+		provider.NewOrderHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {

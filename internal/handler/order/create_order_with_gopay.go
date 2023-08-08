@@ -22,7 +22,7 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 		return
 	}
 
-	userId := c.MustGet("authID").(uint64)
+	userId := c.MustGet("userId").(uint64)
 
 	order, gopay, err := h.createOrderWithGopayUsecase.Execute(userId, orderRequest.AddressId, orderRequest.CallbackUrl, orderRequest.Products)
 	if err != nil {
@@ -32,7 +32,7 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 	result := make(map[string]any)
 
 	result["order"] = order
-	result["gopay_details"] = gopay
+	result["gopay"] = gopay
 
 	response := helper.GetResponse(result, http.StatusOK, false)
 	response.Send(c)

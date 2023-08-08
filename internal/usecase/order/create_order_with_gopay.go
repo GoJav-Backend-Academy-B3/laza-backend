@@ -1,6 +1,8 @@
 package order
 
 import (
+	"database/sql"
+	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -43,43 +45,47 @@ func NewCreateOrderWithGopayUsecase(
 
 func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, callbackUrl string, products []request.ProductOrder) (*model.Order, *model.Gopay, error) {
 	// Check if address exists
-	_, err := uc.getAddressById.GetById(addressId)
+	addr, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
 		return nil, nil, err
 	}
+	fmt.Println("address: ", addr)
+
+	// Search user
 
 	// Generate order number
 	var orderNumber string
 	for true {
 		orderNumber = helper.GenerateOrderNumber()
 		_, err := uc.getOrder.GetById(orderNumber)
-		if err == nil {
+		if err != nil {
 			break
 		}
 	}
 
+	fmt.Println("order number: ", orderNumber)
+
 	// count gross amount
 	var grossAmount float64 = 0
+	var productOrders = make([]model.ProductOrder, 0)
 	for _, product := range products {
 		productTemp, err := uc.getProduct.GetById(product.Id)
 		if err != nil {
 			return nil, nil, err
 		}
 
-		productOrder := model.ProductOrder{
+		productOrderTemp := model.ProductOrder{
 			ProductId: productTemp.Id,
 			OrderId:   orderNumber,
 			Quantity:  uint16(product.Quantity),
 			Price:     productTemp.Price * float64(product.Quantity),
 		}
 
-		_, err = uc.insertProductOrder.Insert(productOrder)
-		if err != nil {
-			return nil, nil, err
-		}
+		productOrders = append(productOrders, productOrderTemp)
 
 		grossAmount += productTemp.Price * float64(product.Quantity)
 	}
+	fmt.Println("products : ", products, grossAmount)
 
 	// Charge gopay to midtrans
 	paymentReq := coreapi.ChargeReq{
@@ -93,16 +99,20 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 			CallbackUrl:    callbackUrl,
 		},
 	}
+	fmt.Println("Midtrans Core: ", paymentReq)
 	gopayRespondMd, err := uc.chargeGopay.ChargeMidtrans(&paymentReq)
+	fmt.Println("Gopay Respond: ", gopayRespondMd)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	// insert gopay to db
 	gopayRespond, err := uc.insertGopay.Insert(model.Gopay{
-		DeepLink:      gopayRespondMd.RedirectURL,
-		QRCode:        gopayRespondMd.QRString,
+		QRCode:        gopayRespondMd.Actions[0].URL,
+		Deeplink:      gopayRespondMd.Actions[1].URL,
 		GetStatusLink: gopayRespondMd.Actions[2].URL,
 		CancelLink:    gopayRespondMd.Actions[3].URL,
-		ExpiryDate:    time.Now(),
-		Orders:        nil,
+		ExpiryTime:    time.Now(),
 	})
 	if err != nil {
 		return nil, nil, err
@@ -110,17 +120,37 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 
 	// insert order to db
 	order := model.Order{
-		Amount:      grossAmount,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-		UserId:      userId,
-		OrderStatus: 1,
-		AddressId:   uint64(addressId),
-		GopayId:     gopayRespond.Id,
+		Id:        orderNumber,
+		Amount:    int64(grossAmount),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserId: sql.NullInt64{
+			Int64: int64(userId),
+			Valid: true,
+		},
+		OrderStatusId: sql.NullInt64{
+			Int64: 1,
+			Valid: true,
+		},
+		AddressId: sql.NullInt64{
+			Int64: int64(addressId),
+			Valid: true,
+		},
+		GopayId: sql.NullInt64{
+			Int64: int64(gopayRespond.Id),
+			Valid: true,
+		},
 	}
 	orderRespond, err := uc.insertOrder.Insert(order)
 	if err != nil {
 		return nil, nil, err
+	}
+
+	for _, productOrder := range productOrders {
+		_, err = uc.insertProductOrder.Insert(productOrder)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
 
 	return &orderRespond, &gopayRespond, nil

@@ -6,4 +6,5 @@ import (
 
 type ChargeMidtransAction interface {
 	ChargeMidtrans(req *coreapi.ChargeReq) (coreapi.ChargeResponse, error)
+	//ChargeGopay(req requests.ChargeGopay) (coreapi.ChargeResponse, error)
 }
