@@ -1,5 +1,9 @@
 ### dotenv ###
 .env
+docs/
+.local.env
+.stage.env
+.supa.env
 
 
 ### Go ###
@@ -196,4 +200,3 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
-/docs

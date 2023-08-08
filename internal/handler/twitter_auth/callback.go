@@ -10,7 +10,7 @@ import (
 )
 
 func (h *twitterAuthHandler) twitterCallBack(c *gin.Context) {
-	gothic.Store = helper.GetStore()
+	// gothic.Store = helper.GetStore()
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 	if err != nil {
 		helper.GetResponse(err.Error(), http.StatusUnauthorized, true).Send(c)
