@@ -24,7 +24,7 @@ func (uc *UpdateBankUsecase) Execute(id uint64, request requests.BankRequest) *h
 	}
 	defer file.Close()
 
-	url, err := helper.UploadImageFile(file)
+	url, err := helper.UploadImageFile("bank", file)
 	if err != nil {
 		// TODO: Should return error here
 		return helper.GetResponse(err.Error(), 500, true)
