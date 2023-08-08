@@ -60,8 +60,9 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}
+		defer file.Close()
 
-		url, err := helper.UploadImageFile(file)
+		url, err := helper.UploadImageFile("user", file)
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}

@@ -51,8 +51,9 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}
+		defer file.Close()
 
-		url, err := helper.UploadImageFile(file)
+		url, err := helper.UploadImageFile("user", file)
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}

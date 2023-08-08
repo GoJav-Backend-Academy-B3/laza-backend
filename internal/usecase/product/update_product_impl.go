@@ -72,7 +72,7 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request request.ProductReq
 		// TODO: Should return error here
 		return
 	}
-	url, err := helper.UploadImageFile(file)
+	url, err := helper.UploadImageFile("product", file)
 	if err != nil {
 		// TODO: Should return error here
 		return
