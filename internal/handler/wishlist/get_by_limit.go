@@ -7,7 +7,18 @@ import (
 	"github.com/phincon-backend/laza/defaults"
 )
 
+// Get Wishlist godoc
+// @Summary Get Wishlist
+// @Description Get Wishlist
+// @Tags wishlist
+// @Accept json
+// @Produce json
+// @Security JWT
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=response.WishListProductLimit}
+// @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
+// @Router /wishlists [GET]
 func (h *getWishlistHandler) getByLimit(c *gin.Context) {
+
 	userId := c.MustGet("userId").(uint64)
 
 	// Get limit and offset query string

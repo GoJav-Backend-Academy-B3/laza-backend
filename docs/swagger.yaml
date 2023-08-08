@@ -31,6 +31,19 @@ definitions:
       user_id:
         type: integer
     type: object
+  model.Cart:
+    properties:
+      created_at:
+        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
   model.Category:
     properties:
       category:
@@ -264,6 +277,15 @@ definitions:
       user_id:
         type: integer
     type: object
+  model.Wishlist:
+    properties:
+      is_liked:
+        type: boolean
+      product_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
   requests.AddressRequest:
     properties:
       city:
@@ -315,6 +337,39 @@ definitions:
     - new_password
     - re_password
     type: object
+  response.CartInfo:
+    properties:
+      order_info:
+        $ref: '#/definitions/response.CartOrderInfo'
+      products:
+        items:
+          $ref: '#/definitions/response.CartPorduct'
+        type: array
+    type: object
+  response.CartOrderInfo:
+    properties:
+      shipping_cost:
+        type: number
+      sub_total:
+        type: number
+      total:
+        type: number
+    type: object
+  response.CartPorduct:
+    properties:
+      brand_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      price:
+        type: number
+      product_name:
+        type: string
+      quantity:
+        type: integer
+    type: object
   response.User:
     properties:
       created_at:
@@ -335,6 +390,28 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  response.WishListProductLimit:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/response.WishProduct'
+        type: array
+      total:
+        type: integer
+    type: object
+  response.WishProduct:
+    properties:
+      brand_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
     type: object
 host: localhost:8080
 info:
@@ -967,6 +1044,267 @@ paths:
       summary: Login
       tags:
       - auth
+  /products/{id}/carts:
+    delete:
+      consumes:
+      - application/json
+      description: Delete cart with product id
+      parameters:
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Delete Cart
+      tags:
+      - cart
+    get:
+      consumes:
+      - application/json
+      description: Get cart
+      parameters:
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CartInfo'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get Cart
+      tags:
+      - cart
+    post:
+      consumes:
+      - application/json
+      description: Add cart
+      parameters:
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Cart'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Add Cart
+      tags:
+      - cart
+    put:
+      consumes:
+      - application/json
+      description: Update cart
+      parameters:
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Cart'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Update Cart
+      tags:
+      - cart
+  /products/{id}/wishlists:
+    put:
+      consumes:
+      - application/json
+      description: Update wish Wishlist
+      parameters:
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Wishlist'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Update Wishlist
+      tags:
+      - wishlist
   /register:
     post:
       consumes:
@@ -1176,8 +1514,6 @@ paths:
             allOf:
             - $ref: '#/definitions/helper.Response'
             - properties:
-                code:
-                  type: string
                 data:
                   additionalProperties:
                     type: string
@@ -1193,12 +1529,12 @@ paths:
             allOf:
             - $ref: '#/definitions/helper.Response'
             - properties:
-                code:
-                  type: integer
                 description:
                   type: string
                 isError:
                   type: boolean
+                status:
+                  type: string
               type: object
         "500":
           description: Internal Server Error
@@ -1206,12 +1542,12 @@ paths:
             allOf:
             - $ref: '#/definitions/helper.Response'
             - properties:
-                code:
-                  type: integer
                 description:
                   type: string
                 isError:
                   type: boolean
+                status:
+                  type: string
               type: object
       security:
       - JWT: []
@@ -1406,6 +1742,45 @@ paths:
       summary: Update User
       tags:
       - user
+  /wishlists:
+    get:
+      consumes:
+      - application/json
+      description: Get Wishlist
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.WishListProductLimit'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get Wishlist
+      tags:
+      - wishlist
 securityDefinitions:
   JWT:
     description: 'How to input in swagger : ''Bearer <insert_your_token_here>'''
