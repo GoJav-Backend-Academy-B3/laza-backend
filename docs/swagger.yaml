@@ -312,6 +312,59 @@ info:
   version: "1.0"
 paths:
   /address:
+    get:
+      consumes:
+      - application/json
+      description: Get all Address
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Address'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All Address
+      tags:
+      - address
     post:
       consumes:
       - application/json
@@ -370,60 +423,6 @@ paths:
       security:
       - JWT: []
       summary: Post Details
-      tags:
-      - address
-  /address/:
-    get:
-      consumes:
-      - application/json
-      description: Get all Address
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/helper.Response'
-            - properties:
-                code:
-                  type: string
-                data:
-                  $ref: '#/definitions/model.Address'
-                isError:
-                  type: boolean
-                status:
-                  type: string
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            allOf:
-            - $ref: '#/definitions/helper.Response'
-            - properties:
-                code:
-                  type: integer
-                description:
-                  type: string
-                isError:
-                  type: boolean
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            allOf:
-            - $ref: '#/definitions/helper.Response'
-            - properties:
-                code:
-                  type: integer
-                description:
-                  type: string
-                isError:
-                  type: boolean
-              type: object
-      security:
-      - JWT: []
-      summary: Get All Address
       tags:
       - address
   /address/{id}:
@@ -611,6 +610,59 @@ paths:
       tags:
       - address
   /bank:
+    get:
+      consumes:
+      - application/json
+      description: Get all Bank
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All Bank
+      tags:
+      - bank
     post:
       consumes:
       - multipart/form-data
@@ -676,6 +728,197 @@ paths:
       security:
       - JWT: []
       summary: Post Details
+      tags:
+      - bank
+  /bank/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete details of bank corresponding is the input Id
+      parameters:
+      - description: ID of the bank
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete Details for a given id
+      tags:
+      - bank
+    get:
+      consumes:
+      - application/json
+      description: get the bank corresponding to the input Id
+      parameters:
+      - description: ID of the bank
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get bank identified by the given id
+      tags:
+      - bank
+    put:
+      consumes:
+      - multipart/form-data
+      description: put details of address
+      parameters:
+      - description: ID of the bank
+        in: path
+        name: id
+        required: true
+        type: integer
+      - in: formData
+        name: bank_code
+        required: true
+        type: string
+      - in: formData
+        name: bank_name
+        required: true
+        type: string
+      - description: bank
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: put Details
       tags:
       - bank
 securityDefinitions:

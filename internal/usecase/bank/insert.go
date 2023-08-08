@@ -26,11 +26,12 @@ func (uc *InsertBanksUsecase) Execute(request requests.BankRequest) *helper.Resp
 	}
 
 	file, err := request.LogoUrl.Open()
-	defer file.Close()
 	if err != nil {
 		// TODO: Should return error here
 		return helper.GetResponse(err.Error(), 500, true)
 	}
+	defer file.Close()
+
 	url, err := helper.UploadImageFile(file)
 	if err != nil {
 		// TODO: Should return error here
@@ -48,5 +49,5 @@ func (uc *InsertBanksUsecase) Execute(request requests.BankRequest) *helper.Resp
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	return helper.GetResponse(result, 200, true)
+	return helper.GetResponse(result, 201, true)
 }

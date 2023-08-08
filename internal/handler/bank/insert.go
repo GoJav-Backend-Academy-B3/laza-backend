@@ -15,7 +15,7 @@ import (
 // @Tags bank
 // @Accept multipart/form-data
 // @Produce json
-// @Param bank formData requests.BankRequest true "bank"
+// @Param bank formData requests.BankRequest true "create bank"
 // @Param image formData file true "bank"
 // @Security JWT
 // @Success 201 {object} helper.Response{code=string,isError=bool,status=string,data=model.Bank}
