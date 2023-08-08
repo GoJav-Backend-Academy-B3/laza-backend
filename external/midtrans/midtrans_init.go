@@ -8,8 +8,9 @@ import (
 
 var MidtransCore coreapi.Client
 
-func init() {
+func Init() *coreapi.Client {
 	MidtransCore.ServerKey = consts.MidtransSandBoxServerKey
 	MidtransCore.ClientKey = consts.MidtransSandBoxClientKey
 	MidtransCore.Env = midtrans.Sandbox
+	return &MidtransCore
 }
