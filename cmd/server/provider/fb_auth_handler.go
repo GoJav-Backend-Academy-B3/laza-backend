@@ -4,9 +4,11 @@ import (
 	domain "github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/internal/db"
 	repoUser "github.com/phincon-backend/laza/internal/repo/user"
+
+	handler "github.com/phincon-backend/laza/internal/handler/facebook_auth"
+
+	uc "github.com/phincon-backend/laza/internal/usecase/facebook_auth"
 )
-import handler "github.com/phincon-backend/laza/internal/handler/facebook_auth"
-import uc "github.com/phincon-backend/laza/internal/usecase/facebook_auth"
 
 func NewFacebookAuthHandler() domain.HandlerInterface {
 	dbs := db.GetPostgreSQLConnection()

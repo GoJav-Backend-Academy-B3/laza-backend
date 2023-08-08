@@ -6,3 +6,6 @@ type GetReviewByProduct interface {
 	GetProductById(productID uint64) ([]model.ProductReview, error)
 	GetReviewStatsByProduct(productID uint64) (float64, int, error)
 }
+type GetWithLimitReviewsAction interface {
+	GetWithLimit(ffset, limit uint64, productID uint64) ([]model.ProductReview, error)
+}

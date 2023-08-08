@@ -284,6 +284,58 @@ definitions:
     - phone_number
     - receiver_name
     type: object
+  requests.Email:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  requests.Login:
+    properties:
+      password:
+        minLength: 8
+        type: string
+      username:
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  requests.UpdatePassword:
+    properties:
+      new_password:
+        minLength: 8
+        type: string
+      re_password:
+        minLength: 8
+        type: string
+    required:
+    - new_password
+    - re_password
+    type: object
+  response.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      is_admin:
+        type: boolean
+      is_verified:
+        type: boolean
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -340,6 +392,19 @@ paths:
                 isError:
                   type: boolean
               type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
       security:
       - JWT: []
       summary: Post Details
@@ -370,6 +435,19 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -428,6 +506,19 @@ paths:
                 isError:
                   type: boolean
               type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
       security:
       - JWT: []
       summary: Delete address identified by the given id
@@ -463,6 +554,19 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -526,11 +630,782 @@ paths:
                 isError:
                   type: boolean
               type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
       security:
       - JWT: []
       summary: put Details
       tags:
       - address
+  /auth/forget-password:
+    post:
+      consumes:
+      - application/json
+      description: Forget password for user
+      parameters:
+      - description: Forget Password
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Email'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Forget Password For User
+      tags:
+      - auth
+  /auth/resend-verify:
+    post:
+      consumes:
+      - application/json
+      description: Resend Email for verify email user
+      parameters:
+      - description: Resend Email
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Email'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Resend Email For Verify Email User
+      tags:
+      - auth
+  /auth/update-password/:
+    post:
+      consumes:
+      - application/json
+      description: Update password for user
+      parameters:
+      - description: Query Code
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: 'Query Email '
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Update Password
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdatePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Update Password For User
+      tags:
+      - auth
+  /auth/verify-email/:
+    get:
+      consumes:
+      - application/json
+      description: Verify email for user
+      parameters:
+      - description: Query Token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 'Query Email '
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Verify Email For User
+      tags:
+      - auth
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login for user
+      parameters:
+      - description: Login
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Login
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Register for user
+      parameters:
+      - in: formData
+        name: email
+        required: true
+        type: string
+      - in: formData
+        minLength: 3
+        name: full_name
+        required: true
+        type: string
+      - in: formData
+        minLength: 8
+        name: password
+        required: true
+        type: string
+      - in: formData
+        minLength: 3
+        name: username
+        required: true
+        type: string
+      - description: user
+        in: formData
+        name: image
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Register
+      tags:
+      - auth
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All User
+      tags:
+      - user
+  /user/:
+    get:
+      consumes:
+      - application/json
+      description: Get user all with limit
+      parameters:
+      - description: Query Page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 'Query Perpage '
+        in: query
+        name: perpage
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All User With Limit
+      tags:
+      - user
+  /user/change-password:
+    put:
+      consumes:
+      - application/json
+      description: Change passsword user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Change Password User
+      tags:
+      - user
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete User
+      tags:
+      - user
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      description: Profile user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Profile User
+      tags:
+      - user
+  /user/update:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update for user
+      parameters:
+      - in: formData
+        name: email
+        required: true
+        type: string
+      - in: formData
+        minLength: 3
+        name: full_name
+        required: true
+        type: string
+      - in: formData
+        minLength: 8
+        name: password
+        required: true
+        type: string
+      - in: formData
+        minLength: 3
+        name: username
+        required: true
+        type: string
+      - description: user
+        in: formData
+        name: image
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Update User
+      tags:
+      - user
 securityDefinitions:
   JWT:
     description: 'How to input in swagger : ''Bearer <insert_your_token_here>'''

@@ -33,7 +33,7 @@ func NewLoginGoogleUserUsecase(
 func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper.Response {
 	username := helper.ExtractUsernameFromEmail(user.Email)
 	if userExists := uc.usernameExistsAction.ExistsUsername(username); userExists {
-		return helper.GetResponse("username is already registered", 401, true)
+		return helper.GetResponse("username is already registered", 500, true)
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); !emailExists {
@@ -67,7 +67,7 @@ func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper
 
 	result, err := uc.findByEmailAction.FindByEmail(user.Email)
 	if err != nil {
-		return helper.GetResponse("user is not exist", 401, true)
+		return helper.GetResponse("user is not exist", 500, true)
 	}
 
 	jwt := helper.NewToken(uint64(result.Id), result.IsAdmin)

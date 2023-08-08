@@ -29,7 +29,7 @@ func NewResendEmailUserUsecase(repo repositories.UpdateAction[model.Verification
 // Execute implements auth.ResendEmailUserUsecase.
 func (uc *ResendEmailUserUsecase) Execute(email string) *helper.Response {
 	if emailExists := uc.emailExistsAction.ExistsEmail(email); !emailExists {
-		return helper.GetResponse("email is not registered", 401, true)
+		return helper.GetResponse("email is not registered", 500, true)
 	}
 
 	data, err := uc.emailAction.FindByEmail(email)

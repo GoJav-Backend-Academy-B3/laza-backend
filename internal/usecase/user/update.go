@@ -36,7 +36,7 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 
 	if dataUser.Email != user.Email {
 		if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-			return helper.GetResponse("email is already registered", 401, true)
+			return helper.GetResponse("email is already registered", 500, true)
 		}
 		dataUser.Email = user.Email
 		dataUser.IsVerified = false
@@ -44,7 +44,7 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 
 	if dataUser.Username != user.Username {
 		if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-			return helper.GetResponse("username is already registered", 401, true)
+			return helper.GetResponse("username is already registered", 500, true)
 		}
 		dataUser.Username = user.Username
 	}
@@ -54,12 +54,26 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	var imageUrl = helper.DefaultImageProfileUrl
+	if user.Image != nil {
+		file, err := user.Image.Open()
+		if err != nil {
+			return helper.GetResponse(err.Error(), 500, true)
+		}
+
+		url, err := helper.UploadImageFile(file)
+		if err != nil {
+			return helper.GetResponse(err.Error(), 500, true)
+		}
+		imageUrl = url
+	}
+
 	data := response.User{
 		FullName:   user.FullName,
 		Username:   dataUser.Username,
 		Password:   hashPassword,
 		Email:      dataUser.Email,
-		ImageUrl:   user.Image,
+		ImageUrl:   imageUrl,
 		IsVerified: dataUser.IsVerified,
 	}
 
