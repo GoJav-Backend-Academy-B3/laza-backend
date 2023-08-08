@@ -1,22 +1,22 @@
 package auth
 
 import (
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
-	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type LoginGoogleUserUsecase struct {
-	insertUserAction     repositories.InsertAction[response.User]
+	insertUserAction     repositories.InsertAction[model.User]
 	findByEmailAction    action.FindByEmail
 	emailExistsAction    action.ExistsEmail
 	usernameExistsAction action.ExistsUsername
 }
 
 func NewLoginGoogleUserUsecase(
-	insertUserAction repositories.InsertAction[response.User],
+	insertUserAction repositories.InsertAction[model.User],
 	findByEmailAction action.FindByEmail,
 	emailExistsAction action.ExistsEmail,
 	usernameExistsAction action.ExistsUsername,
@@ -37,7 +37,7 @@ func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); !emailExists {
-		data := response.User{
+		dao := model.User{
 			FullName:   user.Name,
 			Username:   username,
 			Email:      user.Email,
@@ -45,7 +45,7 @@ func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper
 			IsVerified: user.Verified_email,
 		}
 
-		result, err := uc.insertUserAction.Insert(data)
+		result, err := uc.insertUserAction.Insert(dao)
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
 		}
