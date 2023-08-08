@@ -6,23 +6,23 @@ type Category struct {
 	Products []Product `json:"products" gorm:"many2many:category_product"`
 }
 
-func (Category) TableName() string {
+func (*Category) TableName() string {
 	return "category"
 }
 
 // Update only update category's name.
-func (c Category) Update(other Category) {
+func (c *Category) Update(other Category) {
 	c.Category = other.Category
 }
 
-func (c Category) SetCategory(category string) {
+func (c *Category) SetCategory(category string) {
 	c.Category = category
 }
 
-func (c Category) GetCategory() string {
+func (c *Category) GetCategory() string {
 	return c.Category
 }
 
-func (c Category) SetId(id uint64) {
+func (c *Category) SetId(id uint64) {
 	c.Id = id
 }

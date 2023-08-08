@@ -5,6 +5,6 @@ type CategoryRequest struct {
 	Category string `json:"category" validate:"required"`
 }
 
-func (cr CategoryRequest) GetCategory() string {
+func (cr *CategoryRequest) GetCategory() string {
 	return cr.Category
 }

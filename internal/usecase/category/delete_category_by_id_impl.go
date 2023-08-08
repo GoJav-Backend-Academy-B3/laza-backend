@@ -10,8 +10,8 @@ type deleteCategoryByIdUsecaseImpl struct {
 	deleteCategoryAction category.DeleteByIdAction
 }
 
-func (d deleteCategoryByIdUsecaseImpl) Execute(categoryId uint64) (err error) {
-	err = d.deleteCategoryAction.DeleteById(categoryId)
+func (d deleteCategoryByIdUsecaseImpl) Execute(categoryId uint64) (rowAffected int64, err error) {
+	rowAffected, err = d.deleteCategoryAction.DeleteById(categoryId)
 	return
 }
 

@@ -1,12 +1,15 @@
 package category
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/request"
 	"github.com/phincon-backend/laza/domain/response"
 	usecase "github.com/phincon-backend/laza/domain/usecases/category"
 	"github.com/phincon-backend/laza/internal/repo/category"
+	"github.com/phincon-backend/laza/mapper"
+	"log"
 )
 
 type createCategoryUsecaseImpl struct {
@@ -14,10 +17,16 @@ type createCategoryUsecaseImpl struct {
 }
 
 func (cc *createCategoryUsecaseImpl) Execute(categoryRequest request.CategoryRequest) (result response.CategorySimpleResponse, err error) {
-	var category model.Category
-	category.SetCategory(categoryRequest.GetCategory())
+	var categoryModel = new(model.Category)
+	err = validator.New().Struct(categoryRequest)
+	if err != nil {
+		return
+	}
+	categoryModel.SetCategory(categoryRequest.GetCategory())
 
-	category, err = cc.insertCategoryAction.Insert(category)
+	log.Println("category--->>", categoryModel)
+	res, err := cc.insertCategoryAction.Insert(*categoryModel)
+	result = mapper.CategoryModelToSimpleResponse(res)
 	return
 }
 
