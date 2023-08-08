@@ -13,6 +13,16 @@ import (
 	"strings"
 )
 
+// FbCallback godoc
+// @Summary Facebook callback endpoint when login success.
+// @Description This endpoint is a callback endpoint for facebook login or sign up.
+// @Tags facebookauth
+// @Accept json
+// @Produce json
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
+// @Failure 405 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 403 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /auth/facebook/callback [get]
 func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 	// check is method is correct
 	if c.Request.Method != http.MethodGet {

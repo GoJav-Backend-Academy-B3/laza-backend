@@ -3,6 +3,7 @@ package twitterauth
 import (
 	"net/http"
 
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/response"
@@ -13,12 +14,12 @@ import (
 type twitterAuthUsecase struct {
 	existByUsernameAction action.ExistsUsername
 	existByEmailAction    action.ExistsEmail
-	insertUserAction      repositories.InsertAction[response.User]
+	insertUserAction      repositories.InsertAction[model.User]
 	findByEmailAction     action.FindByEmail
 }
 
 func (uc *twitterAuthUsecase) Execute(rp response.TwitterFieldResponse) *helper.Response {
-	var userDAO = new(response.User)
+	var userDAO = new(model.User)
 	response := map[string]string{}
 
 	if exist := uc.existByUsernameAction.ExistsUsername(rp.NickName); !exist {
@@ -66,7 +67,7 @@ func (uc *twitterAuthUsecase) Execute(rp response.TwitterFieldResponse) *helper.
 
 func NewtwitterAuthUsecase(
 	existByUsernameAction action.ExistsUsername,
-	insertUserAction repositories.InsertAction[response.User],
+	insertUserAction repositories.InsertAction[model.User],
 	findByEmailAction action.FindByEmail,
 	existByEmailAction action.ExistsEmail,
 

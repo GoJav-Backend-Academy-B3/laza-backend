@@ -30,7 +30,7 @@ func GetCloudinaryCredentials() CloudinaryCredentials {
 	}
 }
 
-func UploadImageFile(file multipart.File) (url string, err error) {
+func UploadImageFile(folder string, file multipart.File) (url string, err error) {
 	buff := make([]byte, 512)
 	_, err = file.Read(buff)
 	if err != nil {
@@ -56,7 +56,7 @@ func UploadImageFile(file multipart.File) (url string, err error) {
 	}
 
 	ctx := context.Background()
-	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: imageId})
+	result, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{Folder: folder, PublicID: imageId})
 	if err != nil {
 		return
 	}

@@ -38,6 +38,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewHomeHandler(),
 		provider.NewAuthHandler(),
 		provider.NewUserHandler(),
+		provider.NewSizeHandler(),
 		provider.NewProductsHandler(),
 		provider.NewWishListsHandler(),
 		provider.NewCartHandler(),
@@ -47,6 +48,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewFacebookAuthHandler(),
 		provider.NewtwitterAuthHandler(),
 		provider.NewAddressesHandler(),
+		provider.NewCategoryHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {
@@ -74,6 +76,11 @@ func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/register")
 	noAuthList = append(noAuthList, "/login-google")
 	noAuthList = append(noAuthList, "/login-google/callback")
+	noAuthList = append(noAuthList, "/products")
+	noAuthList = append(noAuthList, "/products/:id")
+	noAuthList = append(noAuthList, "/size")
+	noAuthList = append(noAuthList, "/size/:id")
+	noAuthList = append(noAuthList, "/category")
 	for _, item := range noAuthList {
 		if strings.EqualFold(item, url) {
 			return true

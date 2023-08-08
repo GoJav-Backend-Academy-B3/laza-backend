@@ -1,7 +1,9 @@
 package user
 
-import "github.com/phincon-backend/laza/domain/response"
+import (
+	"github.com/phincon-backend/laza/domain/model"
+)
 
 type FindByEmail interface {
-	FindByEmail(email string) (response.User, error)
+	FindByEmail(email string) (model.User, error)
 }
