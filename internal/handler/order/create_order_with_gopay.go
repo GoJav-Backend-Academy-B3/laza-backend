@@ -38,6 +38,7 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 	gopayPaymentResponse.FillFromEntity(gopay)
 	result["order"] = orderResponse
 	result["gopay"] = gopayPaymentResponse
+
 	response := helper.GetResponse(result, http.StatusOK, false)
 	response.Send(c)
 }
