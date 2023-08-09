@@ -28,6 +28,11 @@ type Login struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
+type VerificationCode struct {
+	Email string `json:"email" validate:"required,email"`
+	Code  string `json:"code" validate:"required,min=4"`
+}
+
 type ResetPassword struct {
 	NewPassword string `json:"new_password" validate:"required,min=8"`
 	RePassword  string `json:"re_password" validate:"required,min=8"`
