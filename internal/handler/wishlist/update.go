@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Param id path int true "ID of the product"
 // @Security JWT
-// @Success 200 {object} helper.Response{status=string,isError=bool,data=model.Wishlist}
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=string}
 // @Success 404 {object} helper.Response{status=string,isError=bool,data=string}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
 // @Router /products/{id}/wishlists [PUT]

@@ -10,6 +10,25 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// AddProduct godoc
+// @Summary Adds product to database
+// @Description Adds product to database with form-data as input
+// @Tags product
+// @Accept mpfd
+// @Produce json
+// @Param name formData string true "Product name"
+// @Param description formData string true "Product description"
+// @Param image formData file true "Product images"
+// @Param price formData number true "Product price"
+// @Param brand formData string true "Product brand (must exists in database)"
+// @Param category formData string true "Product category (must exists in database)"
+// TODO: Swagger not separating form value for []string
+// @Param sizes formData []string true "Product available sizes"
+// @Security JWT
+// @Success 201 {object} helper.Response{isError=bool,status=string,data=response.Product}
+// @Failure 422 {object} helper.Response{isError=bool,status=string,description=map[string]string}
+// @Failure 400 {object} helper.Response{isError=bool,status=string,description=map[string]string}
+// @Router /products [post]
 func (h *productHandler) post(c *gin.Context) {
 	request := requests.ProductRequest{}
 	err := c.ShouldBindWith(&request, binding.FormMultipart)

@@ -10,6 +10,17 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// GetProducts godoc
+// @Summary Gets all products
+// @Description Gets all products with the abilities to serch queries
+// @Tags products
+// @Produce json
+// @Param limit query int false "limit for pagination"
+// @Param  offset query int false "offset for pagination"
+// @Param search query string false "Search keyword for products"
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=[]response.ProductOverview}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /products [get]
 func (h *productHandler) get(c *gin.Context) {
 
 	// Get limit and offset query string

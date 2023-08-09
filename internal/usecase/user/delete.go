@@ -25,5 +25,8 @@ func (uc *DeleteUserUsecase) Execute(id uint64) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	return helper.GetResponse("successfully deleted data user", 200, false)
+	response := map[string]string{
+		"message": "successfully deleted data user",
+	}
+	return helper.GetResponse(response, 200, false)
 }

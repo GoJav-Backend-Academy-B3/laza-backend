@@ -6,22 +6,19 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-// ResetPassword godoc
-// @Summary Reset Password For User
-// @Description Reset password for user
+// VerificationCode godoc
+// @Summary Verification Email For User
+// @Description Verification email for user
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param email query string true "Query Email "
-// @Param auth body requests.ResetPassword true "Reset Password"
+// @Param auth body requests.VerificationCode true "Verification Code"
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
-// @Router /auth/reset-password/ [post]
-func (h *authHandler) resetPassword(c *gin.Context) {
-	email := c.Query("email")
-
-	var request requests.ResetPassword
+// @Router /auth/verification-code [post]
+func (h *authHandler) verificationCode(c *gin.Context) {
+	var request requests.VerificationCode
 	if err := c.ShouldBindJSON(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return
@@ -33,5 +30,5 @@ func (h *authHandler) resetPassword(c *gin.Context) {
 		return
 	}
 
-	h.resetPasswordUser.Execute(email, request).Send(c)
+	h.verificationCodeUser.Execute(request).Send(c)
 }

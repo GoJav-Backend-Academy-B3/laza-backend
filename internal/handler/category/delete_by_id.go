@@ -28,7 +28,7 @@ func (ch *categoryHandler) deleteById(c *gin.Context) {
 		return
 	}
 	rowAffected, err := ch.deleteCategoryByIdUsecase.Execute(uint64(id))
-	if err != nil {
+	if err != nil || rowAffected == 0 {
 		if rowAffected == 0 {
 			helper.GetResponse("no record found", http.StatusNotFound, true).Send(c)
 			return

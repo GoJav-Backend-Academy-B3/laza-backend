@@ -58,6 +58,5 @@ func (uc *ChangePasswordUserUsecase) Execute(id uint64, user requests.ChangePass
 	response := map[string]string{
 		"message": "successfully update password",
 	}
-
 	return helper.GetResponse(response, 200, false)
 }

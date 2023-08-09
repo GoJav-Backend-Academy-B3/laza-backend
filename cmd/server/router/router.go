@@ -1,8 +1,6 @@
 package router
 
 import (
-	"strings"
-
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/cmd/server/provider"
 	_ "github.com/phincon-backend/laza/docs"
@@ -27,7 +25,7 @@ import (
 // @description	How to input in swagger : 'Bearer <insert_your_token_here>'
 func NewServerGin() *gin.Engine {
 
-	r := gin.Default()
+	r := gin.New()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	var server []handlers.HandlerInterface
@@ -50,62 +48,15 @@ func NewServerGin() *gin.Engine {
 		provider.NewBrandHandler(),
 		provider.NewcreditCardHandler(),
 	)
-
-	auth := r.Group("").Use(middleware.AuthMiddleware())
-	adminAuth := r.Group("").Use(middleware.AuthMiddleware(), middleware.AdminRoleMiddleware())
+	r.Use(middleware.LoggerMiddleware())
 
 	for _, v := range server {
-		handlers := v.GetHandlers()
-		for _, handler := range handlers {
-			_, path, _ := handler.GinHandlerFunc()
-			if noAuth(path) {
-				r.Handle(handler.GinHandlerFunc())
-			} else if strings.Contains(path, "/auth") {
-				r.Handle(handler.GinHandlerFunc())
-			} else if roleAdmin(path) {
-				adminAuth.Handle(handler.GinHandlerFunc())
-			} else {
-				auth.Handle(handler.GinHandlerFunc())
-			}
+		handlersList := v.GetHandlers()
+		for _, handler := range handlersList {
+			method, path, handlerFunc := handler.GinHandlerFunc()
+			r.Handle(method, path, append(handler.GinMiddlewares(), handlerFunc)...)
 		}
 	}
 
 	return r
-}
-
-var noAuthList = make([]string, 0)
-
-func noAuth(url string) bool {
-	noAuthList = append(noAuthList, "/")
-	noAuthList = append(noAuthList, "/login")
-	noAuthList = append(noAuthList, "/register")
-	noAuthList = append(noAuthList, "/login-google")
-	noAuthList = append(noAuthList, "/login-google/callback")
-	noAuthList = append(noAuthList, "/products")
-	noAuthList = append(noAuthList, "/products/:id")
-	noAuthList = append(noAuthList, "/size")
-	noAuthList = append(noAuthList, "/size/:id")
-	noAuthList = append(noAuthList, "/category")
-	noAuthList = append(noAuthList, "/brand")
-	noAuthList = append(noAuthList, "/brand/:id")
-	noAuthList = append(noAuthList, "/brand/search")
-	for _, item := range noAuthList {
-		if strings.EqualFold(item, url) {
-			return true
-		}
-	}
-	return false
-}
-
-var roleAdminList = make([]string, 0)
-
-func roleAdmin(url string) bool {
-	roleAdminList = append(roleAdminList, "/user")
-	roleAdminList = append(roleAdminList, "/user/")
-	for _, item := range roleAdminList {
-		if strings.EqualFold(item, url) {
-			return true
-		}
-	}
-	return false
 }

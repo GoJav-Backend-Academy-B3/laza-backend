@@ -7,7 +7,6 @@ import (
 )
 
 func (r *UserRepo) ExistsEmail(email string) bool {
-	var data model.User
-	err := r.db.First(&data, "LOWER(email) = ?", strings.ToLower(email))
+	err := r.db.First(&model.User{}, "LOWER(email) = ?", strings.ToLower(email))
 	return err.Error == nil
 }

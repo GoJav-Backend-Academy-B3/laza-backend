@@ -18,6 +18,7 @@ import (
 // @Produce json
 // @Security JWT
 // @Param id path int true "Category ID"
+// @Param category body requests.CategoryRequest true "body category"
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=response.CategorySimpleResponse}
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Failure 404 {object} helper.Response{code=int,description=string,isError=bool}

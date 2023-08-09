@@ -12,11 +12,12 @@ import (
 // Add Credit Card godoc
 // @Summary Add Credit Card
 // @Description Credit Card
-// @Tags credit card
+// @Tags creditcard
 // @Accept json
 // @Produce json
+// @Param creditcard body requests.CreditCardRequest true "create credit card"
 // @Security JWT
-// @Success 201 {object} helper.Response{status=string,isError=bool,data=model.CreditCard}
+// @Success 201 {object} helper.Response{status=string,isError=bool,data=response.CreditCardResponse}
 // @Failure 400 {object} helper.Response{status=string,description=string,isError=bool}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
 // @Router /credit-card [POST]
