@@ -3,8 +3,10 @@ package cart
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	hd "github.com/phincon-backend/laza/domain/handlers"
 	uc "github.com/phincon-backend/laza/domain/usecases/cart"
+	"github.com/phincon-backend/laza/middleware"
 )
 
 type CartHandler struct {
@@ -21,21 +23,25 @@ func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
 			Method:      http.MethodPost,
 			Path:        "/products/:id/carts",
 			HandlerFunc: ch.post,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodDelete,
 			Path:        "/products/:id/carts",
 			HandlerFunc: ch.Delete,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodPut,
 			Path:        "/products/:id/carts",
 			HandlerFunc: ch.Update,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodGet,
 			Path:        "/carts",
 			HandlerFunc: ch.GetById,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 	)
 	return h
