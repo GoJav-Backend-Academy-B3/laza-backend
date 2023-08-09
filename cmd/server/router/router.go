@@ -49,6 +49,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewtwitterAuthHandler(),
 		provider.NewAddressesHandler(),
 		provider.NewCategoryHandler(),
+		provider.NewBrandHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {
@@ -81,6 +82,9 @@ func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/size")
 	noAuthList = append(noAuthList, "/size/:id")
 	noAuthList = append(noAuthList, "/category")
+	noAuthList = append(noAuthList, "/brand")
+	noAuthList = append(noAuthList, "/brand/:id")
+	noAuthList = append(noAuthList, "/brand/search")
 	for _, item := range noAuthList {
 		if strings.EqualFold(item, url) {
 			return true
