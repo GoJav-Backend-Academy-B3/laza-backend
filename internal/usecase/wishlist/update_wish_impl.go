@@ -29,8 +29,15 @@ func (u *UpdateWishListUsecaseImpl) Execute(userId, productId uint64) *helper.Re
 	}
 
 	wishlist, err := u.updateWishlist.Update("", m.Wishlist{UserId: userId, ProductId: productId})
+	if err != nil {
+		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+	}
 
-	return helper.GetResponse(wishlist, http.StatusOK, false)
+	if wishlist.ProductId == 0 && wishlist.UserId == 0 {
+		return helper.GetResponse("successfully deleted wishlist", http.StatusOK, false)
+	}
+
+	return helper.GetResponse("successfully add wishlist", http.StatusOK, false)
 }
 
 func NewUpdateWishListUsecaseImpl(

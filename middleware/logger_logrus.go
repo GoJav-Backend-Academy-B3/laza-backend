@@ -3,19 +3,15 @@ package middleware
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	"github.com/phincon-backend/laza/helper"
 	"io"
 	"net/url"
-	"os"
 	"time"
 )
 
 func LoggerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		logger := logrus.New()
-
-		logger.SetOutput(os.Stdout)
-		logger.SetLevel(logrus.InfoLevel)
+		logger := helper.GetLogrusLogger()
 		startTime := time.Now()
 
 		// Capture the request details
