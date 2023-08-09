@@ -4,6 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories/brand"
 	usecase "github.com/phincon-backend/laza/domain/usecases/brand"
+	repository "github.com/phincon-backend/laza/internal/repo/brand"
 )
 
 type searchBrandByNameUsecaseImpl struct {
@@ -20,6 +21,6 @@ func (u *searchBrandByNameUsecaseImpl) Execute(brandName string) (brands []model
 	return
 }
 
-func NewSearchBrandByNameUsecaseImpl(findByNameAction brand.FindByNameAction) usecase.SearchBrandByNameUsecase {
-	return &searchBrandByNameUsecaseImpl{findByNameAction: findByNameAction}
+func NewSearchBrandByNameUsecaseImpl(brandRepo repository.BrandRepo) usecase.SearchBrandByNameUsecase {
+	return &searchBrandByNameUsecaseImpl{findByNameAction: &brandRepo}
 }

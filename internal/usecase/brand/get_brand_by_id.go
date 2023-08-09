@@ -4,6 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/usecases/brand"
+	repository "github.com/phincon-backend/laza/internal/repo/brand"
 )
 
 type getBrandByIdUsecaseImpl struct {
@@ -20,6 +21,6 @@ func (u *getBrandByIdUsecaseImpl) Execute(brandId uint64) (brand model.Brand, er
 	return
 }
 
-func NewGetBrandByIdUsecaseImpl(getBrandByIdAction repositories.GetByIdAction[model.Brand]) brand.GetBrandByIdUsecase {
-	return &getBrandByIdUsecaseImpl{getBrandByIdAction: getBrandByIdAction}
+func NewGetBrandByIdUsecaseImpl(brandRepo repository.BrandRepo) brand.GetBrandByIdUsecase {
+	return &getBrandByIdUsecaseImpl{getBrandByIdAction: &brandRepo}
 }

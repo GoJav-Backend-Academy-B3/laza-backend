@@ -4,6 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/usecases/brand"
+	repository "github.com/phincon-backend/laza/internal/repo/brand"
 )
 
 type viewBrandUsecaseImpl struct {
@@ -20,6 +21,6 @@ func (u *viewBrandUsecaseImpl) Execute() (brands []model.Brand, err error) {
 	return
 }
 
-func NewViewBrandUsecaseImpl(findAllAction repositories.GetAllAction[model.Brand]) brand.ViewBrandUsecase {
-	return &viewBrandUsecaseImpl{findAllAction: findAllAction}
+func NewViewBrandUsecaseImpl(brandRepo repository.BrandRepo) brand.ViewBrandUsecase {
+	return &viewBrandUsecaseImpl{findAllAction: &brandRepo}
 }

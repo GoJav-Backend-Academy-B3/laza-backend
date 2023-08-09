@@ -4,6 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/usecases/brand"
+	repository "github.com/phincon-backend/laza/internal/repo/brand"
 )
 
 type deleteBrandUsecaseImpl struct {
@@ -20,6 +21,6 @@ func (u *deleteBrandUsecaseImpl) Execute(brandId uint64) (err error) {
 	return
 }
 
-func NewDeleteBrandUsecaseImpl(deleteBrandAction repositories.DeleteAction[model.Brand]) brand.DeleteBrandByIdUsecase {
-	return &deleteBrandUsecaseImpl{deleteBrandAction: deleteBrandAction}
+func NewDeleteBrandUsecaseImpl(brandRepo repository.BrandRepo) brand.DeleteBrandByIdUsecase {
+	return &deleteBrandUsecaseImpl{deleteBrandAction: &brandRepo}
 }
