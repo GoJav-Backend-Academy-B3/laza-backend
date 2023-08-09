@@ -5,6 +5,6 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-type ResetPasswordUserUsecase interface {
-	Execute(email string, user requests.ResetPassword) *helper.Response
+type VerificationCodeUserUsecase interface {
+	Execute(user requests.VerificationCode) *helper.Response
 }

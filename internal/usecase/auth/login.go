@@ -33,9 +33,7 @@ func (uc *LoginUserUsecase) Execute(user requests.Login) *helper.Response {
 		return helper.GetResponse("please verify your account", 500, true)
 	}
 
-	jwt := helper.NewToken(uint64(data.Id), data.IsAdmin)
-
-	accessToken, err := jwt.Create()
+	accessToken, err := helper.NewToken(uint64(data.Id), data.IsAdmin).Create()
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}

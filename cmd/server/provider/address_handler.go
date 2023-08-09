@@ -17,10 +17,10 @@ func NewAddressesHandler() handlers.HandlerInterface {
 
 	addressRepo := repository.NewAddressRepo(gorm)
 
-	deleteUsecase := usecase.NewDeleteAddressUsecase(addressRepo, addressRepo)
-	updateUsecase := usecase.NewUpdateAddressUsecase(addressRepo, addressRepo)
-	getUsecase := usecase.NewGetAddrressUsecase(addressRepo, addressRepo)
-	addUsecase := usecase.NewAddAddressUsecase(addressRepo, addressRepo)
+	deleteUsecase := usecase.NewDeleteAddressUsecase(*addressRepo)
+	updateUsecase := usecase.NewUpdateAddressUsecase(*addressRepo)
+	getUsecase := usecase.NewGetAddrressUsecase(*addressRepo)
+	addUsecase := usecase.NewAddAddressUsecase(*addressRepo)
 
 	return handler.NewAddressHandler(addUsecase, getUsecase, updateUsecase, deleteUsecase, validate)
 }

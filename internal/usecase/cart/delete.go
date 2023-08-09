@@ -31,7 +31,7 @@ func (us *deleteCartUsecase) Execute(userId, productId uint64) *helper.Response 
 		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
 	}
 
-	return helper.GetResponse("success", http.StatusOK, false)
+	return helper.GetResponse("successfully deleted product from cart", http.StatusOK, false)
 }
 
 func NewdeleteCartUsecase(deleteCartRepo d.DeleteAction[model.Cart], isCartRepo dc.IsCarttByIdAction) usecase.DeleteCartUsecase {

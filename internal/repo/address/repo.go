@@ -4,10 +4,10 @@ import (
 	"gorm.io/gorm"
 )
 
-type addressRepo struct {
+type AddressRepo struct {
 	db *gorm.DB
 }
 
-func NewAddressRepo(db *gorm.DB) *addressRepo {
-	return &addressRepo{db: db}
+func NewAddressRepo(db *gorm.DB) *AddressRepo {
+	return &AddressRepo{db: db}
 }

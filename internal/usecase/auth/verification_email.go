@@ -44,15 +44,14 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 
 	dataToken, err := uc.tokenAction.FindByToken(uint64(dataUser.Id), token)
 	if err != nil {
-		return helper.GetResponse("failed to verify email", 500, true)
+		return helper.GetResponse("token not found", 500, true)
 	}
 
 	location, _ := time.LoadLocation("Asia/Jakarta")
-
 	if dataUser.IsVerified {
 		return helper.GetResponse("already registered, you can login", 500, true)
 	} else if dataToken.Token != token {
-		return helper.GetResponse("failed to verify email", 500, true)
+		return helper.GetResponse("token is invalid", 500, true)
 	} else if dataToken.ExpiryDate.In(location).Add(-7 * time.Hour).Before(time.Now().In(location)) {
 		return helper.GetResponse("expired verify email, please resend verify again!", 500, true)
 	}
