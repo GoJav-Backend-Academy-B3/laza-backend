@@ -3,6 +3,7 @@ package products
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	handler "github.com/phincon-backend/laza/domain/handlers"
 	usecase "github.com/phincon-backend/laza/domain/usecases/product"
 )
@@ -17,7 +18,7 @@ func (h *productHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	hs = append(hs, handler.HandlerStruct{
 		Method:      http.MethodGet,
 		Path:        h.path,
-		HandlerFunc: h.get,
+		HandlerFunc: []gin.HandlerFunc{h.get},
 	})
 	return
 }
