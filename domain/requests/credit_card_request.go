@@ -14,3 +14,10 @@ func (cc CreditCardRequest) FilltoField(userId uint64, dt *model.CreditCard) {
 	dt.ExpiredMonth = cc.ExpiredMonth
 	dt.UserId = userId
 }
+
+func RequestFiledToCardOrder(userId uint64, rq CreditCardOrder, dt *model.CreditCard) {
+	dt.CardNumber = rq.CardNumber
+	dt.ExpiredYear = rq.ExpYear
+	dt.ExpiredMonth = rq.ExpMonth
+	dt.UserId = userId
+}
