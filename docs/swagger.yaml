@@ -150,6 +150,19 @@ definitions:
           $ref: '#/definitions/model.User'
         type: array
     type: object
+  model.ProductReview:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      rating:
+        type: number
+    type: object
   model.Review:
     properties:
       comment:
@@ -1292,6 +1305,64 @@ paths:
       summary: Login
       tags:
       - auth
+  /products/{id}/reviews/:
+    get:
+      consumes:
+      - application/json
+      description: get the bank corresponding to the input Id
+      parameters:
+      - description: ID of the Product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.ProductReview'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get bank identified by the given id
+      tags:
+      - ShowReviewLimit
   /register:
     post:
       consumes:

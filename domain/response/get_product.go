@@ -18,12 +18,41 @@ type Product struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
-type ProductReview struct {
-	Avrg_Rating float64               `json:"rating_avrg"`
-	Total       int                   `json:"total"`
-	Products    []model.ProductReview `json:"products"`
+
+type ProductDetail struct {
+	Id          uint64  `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	ImageUrl    string  `json:"image_url"`
+	Price       float64 `json:"price"`
+	BrandId     uint64  `json:"brand_id"`
+	// Sizes       []model.Size          `json:"size"`
+	Reviews []model.ProductReview `json:"reviews"`
+	// Categories  []model.Category      `json:"categories"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
+func (p ProductDetail) FillFromEntity(e model.Product) ProductDetail {
+	p.Id = e.Id
+	p.Name = e.Name
+	p.Description = e.Description
+	p.ImageUrl = e.ImageUrl
+	p.Price = e.Price
+	p.BrandId = e.BrandId
+	p.CreatedAt = e.CreatedAt
+	p.UpdatedAt = e.UpdatedAt
+	return ProductDetail{
+		Id:          e.Id,
+		Name:        e.Name,
+		Description: e.Description,
+		ImageUrl:    e.ImageUrl,
+		Price:       e.Price,
+		BrandId:     e.BrandId,
+		CreatedAt:   e.CreatedAt,
+		UpdatedAt:   e.UpdatedAt,
+	}
+}
 func (p *Product) FillFromEntity(e model.Product) {
 	p.Id = e.Id
 	p.Name = e.Name

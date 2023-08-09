@@ -2,17 +2,17 @@ package bank
 
 import (
 	"github.com/phincon-backend/laza/domain/model"
-	action "github.com/phincon-backend/laza/domain/repositories/bank"
+	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/bank"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type UpdateBankUsecase struct {
-	updateAction action.UpdateBank[model.Bank]
+	updateAction repositories.UpdateAction[model.Bank]
 }
 
-func NewUpdateBankUsecase(repo action.UpdateBank[model.Bank]) bank.UpdateBankUsecase {
+func NewUpdateBankUsecase(repo repositories.UpdateAction[model.Bank]) bank.UpdateBankUsecase {
 	return &UpdateBankUsecase{updateAction: repo}
 }
 

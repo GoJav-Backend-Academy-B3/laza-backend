@@ -1,19 +1,43 @@
 package review
 
 import (
-	"encoding/json"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/model"
+	"github.com/phincon-backend/laza/domain/requests"
+	"github.com/phincon-backend/laza/helper"
 )
 
 func (ct *reviewHandler) post(ctx *gin.Context) {
-	//userID := ctx.get("authID")
-	userId := uint64(3)
-	productId, _ := strconv.ParseUint(ctx.Param("id"), 10, 64)
-	var review model.Review
-	if err := json.NewDecoder(ctx.Request.Body).Decode(&review); err != nil {
+	// var request requests.ReviewRequest
+	// if err := ctx.ShouldBindJSON(&request); err != nil {
+	// 	helper.GetResponse(err.Error(), 400, true).Send(ctx)
+	// 	return
+	// }
+
+	// err := ct.validate.Struct(request)
+	// if err != nil {
+	// 	helper.GetResponse(err.Error(), 400, true).Send(ctx)
+	// 	return
+	// }
+	userId := ctx.MustGet("userId").(uint64)
+	// userId := uint64(3)
+	productId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+	if err != nil {
+		helper.GetResponse("Invalid product ID", http.StatusBadRequest, true).Send(ctx)
+		return
+	}
+
+	var review requests.ReviewRequest
+	if err := ctx.ShouldBindJSON(&review); err != nil {
+		helper.GetResponse("Invalid JSON data", http.StatusBadRequest, true).Send(ctx)
+		return
+	}
+
+	// Validate the review model
+	if err := ct.validate.Struct(review); err != nil {
+		helper.GetResponse(err.Error(), http.StatusBadRequest, true).Send(ctx)
 		return
 	}
 

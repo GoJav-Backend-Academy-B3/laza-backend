@@ -39,7 +39,7 @@ func NewBankHandler(
 func (h *bankHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/bank", HandlerFunc: h.get},
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/bank/:id", HandlerFunc: h.getBankById},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/bank/:id", HandlerFunc: h.getById},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/bank", HandlerFunc: h.insert},
 		handlers.HandlerStruct{Method: http.MethodPut, Path: "/bank/:id", HandlerFunc: h.update},
 		handlers.HandlerStruct{Method: http.MethodDelete, Path: "/bank/:id", HandlerFunc: h.delete},

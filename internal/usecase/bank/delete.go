@@ -2,16 +2,16 @@ package bank
 
 import (
 	"github.com/phincon-backend/laza/domain/model"
-	action "github.com/phincon-backend/laza/domain/repositories/bank"
+	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/usecases/bank"
 	"github.com/phincon-backend/laza/helper"
 )
 
 type DeleteBankUsecase struct {
-	deleteAction action.DeleteBank[model.Bank]
+	deleteAction repositories.DeleteAction[model.Bank]
 }
 
-func NewDeleteBankUsecase(repo action.DeleteBank[model.Bank]) bank.DeleteBankUsecase {
+func NewDeleteBankUsecase(repo repositories.DeleteAction[model.Bank]) bank.DeleteBankUsecase {
 	return &DeleteBankUsecase{deleteAction: repo}
 }
 
