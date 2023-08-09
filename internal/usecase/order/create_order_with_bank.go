@@ -7,7 +7,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 	"strings"
 	"time"
@@ -43,7 +43,7 @@ func NewCreateOrderWithBankUsecase(
 	}
 }
 
-func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank string, products []request.ProductOrder) (*model.Order, *model.TransactionBank, error) {
+func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank string, products []requests.ProductOrder) (*model.Order, *model.TransactionBank, error) {
 	// check if address exists
 	_, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
@@ -105,7 +105,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 			},
 		}
 	}
-	RespondMd, err := uc.chargeMidtrans.ChargeMidtrans(&paymentReq)
+	respondMd, err := uc.chargeMidtrans.ChargeMidtrans(&paymentReq)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -115,18 +115,18 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 	if strings.ToLower(bank) == "mandiri" {
 		transactionBankModel = model.TransactionBank{
 			BankCode:   bank,
-			BillerCode: RespondMd.BillerCode,
-			VANumber:   RespondMd.BillKey,
+			BillerCode: respondMd.BillerCode,
+			VANumber:   respondMd.BillKey,
 		}
 	} else if strings.ToLower(bank) == "permata" {
 		transactionBankModel = model.TransactionBank{
 			BankCode: bank,
-			VANumber: RespondMd.PermataVaNumber,
+			VANumber: respondMd.PermataVaNumber,
 		}
 	} else {
 		transactionBankModel = model.TransactionBank{
 			BankCode: bank,
-			VANumber: RespondMd.VaNumbers[0].VANumber,
+			VANumber: respondMd.VaNumbers[0].VANumber,
 		}
 	}
 	insertRes, err := uc.insertTransactionBank.Insert(transactionBankModel)

@@ -2,14 +2,14 @@ package order
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 	"net/http"
 )
 
 func (h *orderHandler) CreateOrderWithBank(c *gin.Context) {
-	var orderRequest request.OrderWithBank
+	var orderRequest requests.OrderWithBank
 
 	err := c.ShouldBind(&orderRequest)
 	if err != nil {
@@ -35,6 +35,6 @@ func (h *orderHandler) CreateOrderWithBank(c *gin.Context) {
 	result["order"] = orderResponse
 	result["va_detail"] = bankDetails
 
-	response := helper.GetResponse(result, http.StatusOK, false)
+	response := helper.GetResponse(result, http.StatusCreated, false)
 	response.Send(c)
 }
