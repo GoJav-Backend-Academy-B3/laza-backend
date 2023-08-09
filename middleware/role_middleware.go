@@ -7,7 +7,7 @@ import (
 
 func AdminRoleMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		isAllowed := c.MustGet("role").(bool)
+		isAllowed := c.MustGet("userRole").(bool)
 
 		if !isAllowed {
 			helper.GetResponse("you do not have permission to access", 401, true).Send(c)
@@ -15,7 +15,6 @@ func AdminRoleMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("role", isAllowed)
 		c.Next()
 	}
 }

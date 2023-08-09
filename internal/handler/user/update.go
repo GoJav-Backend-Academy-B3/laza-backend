@@ -14,7 +14,7 @@ import (
 // @Tags user
 // @Accept multipart/form-data
 // @Produce json
-// @Param user formData requests.User true "user"
+// @Param user formData requests.Register true "user"
 // @Param image formData file false "user"
 // @Security JWT
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=response.User}
@@ -26,7 +26,7 @@ func (h *userHandler) update(c *gin.Context) {
 
 	userId := c.MustGet("userId").(uint64)
 
-	var request requests.User
+	var request requests.UpdateUser
 	if err := c.Bind(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return

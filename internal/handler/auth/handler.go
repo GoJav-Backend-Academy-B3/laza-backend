@@ -15,8 +15,8 @@ type authHandler struct {
 	registerUser       user.InsertUserUsecase
 	verifyEmailUser    auth.VerifyEmailUserUsecase
 	resendEmailUser    auth.ResendEmailUserUsecase
-	forgetPasswordUser auth.ForgetPasswordUserUsecase
-	updatePasswordUser auth.UpdatePasswordUserUsecase
+	forgotPasswordUser auth.ForgotPasswordUserUsecase
+	resetPasswordUser  auth.ResetPasswordUserUsecase
 
 	validate *validator.Validate
 }
@@ -27,8 +27,8 @@ func NewAuthHandler(
 	registerUser user.InsertUserUsecase,
 	verifyEmailUser auth.VerifyEmailUserUsecase,
 	resendEmailUser auth.ResendEmailUserUsecase,
-	forgetPasswordUser auth.ForgetPasswordUserUsecase,
-	updatePasswordUser auth.UpdatePasswordUserUsecase,
+	forgotPasswordUser auth.ForgotPasswordUserUsecase,
+	resetPasswordUser auth.ResetPasswordUserUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &authHandler{
@@ -37,8 +37,8 @@ func NewAuthHandler(
 		registerUser:       registerUser,
 		verifyEmailUser:    verifyEmailUser,
 		resendEmailUser:    resendEmailUser,
-		forgetPasswordUser: forgetPasswordUser,
-		updatePasswordUser: updatePasswordUser,
+		forgotPasswordUser: forgotPasswordUser,
+		resetPasswordUser:  resetPasswordUser,
 		validate:           validate,
 	}
 }
@@ -47,13 +47,13 @@ func NewAuthHandler(
 func (h *authHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/login", HandlerFunc: h.login},
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/login-google", HandlerFunc: h.loginGoogle},
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/login-google/callback", HandlerFunc: h.loginGoogleCallback},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/register", HandlerFunc: h.register},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/resend-verify", HandlerFunc: h.resendEmail},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/login-google", HandlerFunc: h.loginGoogle},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/login-google/callback", HandlerFunc: h.loginGoogleCallback},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/verify-email/", HandlerFunc: h.verifyEmail},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/forget-password", HandlerFunc: h.forgetPassword},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/update-password/", HandlerFunc: h.updatePassword},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/resend-verify", HandlerFunc: h.resendEmail},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/forgot-password", HandlerFunc: h.forgotPassword},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/reset-password/", HandlerFunc: h.resetPassword},
 	)
 
 	return

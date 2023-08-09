@@ -16,6 +16,7 @@ type twitterAuthUsecase struct {
 	existByEmailAction    action.ExistsEmail
 	insertUserAction      repositories.InsertAction[model.User]
 	findByEmailAction     action.FindByEmail
+	emailExistsAction     action.ExistsEmail
 }
 
 func (uc *twitterAuthUsecase) Execute(rp response.TwitterFieldResponse) *helper.Response {
@@ -23,8 +24,7 @@ func (uc *twitterAuthUsecase) Execute(rp response.TwitterFieldResponse) *helper.
 	rp.TwitterUser(userDAO)
 
 	response := map[string]string{}
-
-	if exist := uc.existByUsernameAction.ExistsUsername(userDAO.Username); !exist {
+	if exist, emailExist := uc.existByUsernameAction.ExistsUsername(userDAO.Username), uc.emailExistsAction.ExistsEmail(userDAO.Email); !exist && !emailExist {
 
 		insertedUser, err := uc.insertUserAction.Insert(*userDAO)
 		userDAO.Id, userDAO.IsAdmin = insertedUser.Id, insertedUser.IsAdmin
@@ -57,6 +57,7 @@ func NewtwitterAuthUsecase(
 	insertUserAction repositories.InsertAction[model.User],
 	findByEmailAction action.FindByEmail,
 	existByEmailAction action.ExistsEmail,
+	emailExistsAction action.ExistsEmail,
 
 ) tAuth.TwitterAuthUsecase {
 	return &twitterAuthUsecase{
@@ -64,5 +65,6 @@ func NewtwitterAuthUsecase(
 		insertUserAction:      insertUserAction,
 		findByEmailAction:     findByEmailAction,
 		existByEmailAction:    existByEmailAction,
+		emailExistsAction:     emailExistsAction,
 	}
 }

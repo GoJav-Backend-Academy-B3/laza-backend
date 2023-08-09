@@ -9,6 +9,8 @@ import (
 	actionToken "github.com/phincon-backend/laza/domain/repositories/verification_token"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_token"
 )
 
 type VerifyEmailUserUsecase struct {
@@ -17,23 +19,27 @@ type VerifyEmailUserUsecase struct {
 	tokenAction  actionToken.FindByToken
 }
 
-func NewVerifyEmailUserUsecase(
-	repo repositories.UpdateAction[model.User],
-	emailAction actionUser.FindByEmail,
-	tokenAction actionToken.FindByToken,
-) auth.VerifyEmailUserUsecase {
+func NewVerifyEmailUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.VerificationTokenRepo) auth.VerifyEmailUserUsecase {
 	return &VerifyEmailUserUsecase{
-		updateAction: repo,
-		emailAction:  emailAction,
-		tokenAction:  tokenAction,
+		updateAction: &userRepo,
+		emailAction:  &userRepo,
+		tokenAction:  &tokenRepo,
 	}
 }
 
 // Execute implements auth.VerifyEmailUserUsecase.
 func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response {
+	if email == "" && token == "" {
+		return helper.GetResponse("email and token are both empty", 400, true)
+	} else if email == "" {
+		return helper.GetResponse("email empty", 400, true)
+	} else if token == "" {
+		return helper.GetResponse("token empty", 400, true)
+	}
+
 	dataUser, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
-		return helper.GetResponse("email is not exist", 500, true)
+		return helper.GetResponse("email is invalid", 500, true)
 	}
 
 	dataToken, err := uc.tokenAction.FindByToken(uint64(dataUser.Id), token)
