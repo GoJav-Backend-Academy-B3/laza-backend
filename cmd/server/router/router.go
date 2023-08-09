@@ -50,6 +50,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewAddressesHandler(),
 		provider.NewOrderHandler(),
 		provider.NewCategoryHandler(),
+		provider.NewcreditCardHandler(),
 	)
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	for _, v := range server {
