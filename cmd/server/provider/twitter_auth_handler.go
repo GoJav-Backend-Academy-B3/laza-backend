@@ -16,7 +16,7 @@ func NewtwitterAuthHandler() d.HandlerInterface {
 	gorm := db.(*b.PsqlDB).Dbs
 
 	repoUsers := repoUser.NewUserRepo(gorm)
-	useCaseTwitter := u.NewtwitterAuthUsecase(repoUsers, repoUsers, repoUsers, repoUsers)
+	useCaseTwitter := u.NewtwitterAuthUsecase(repoUsers, repoUsers, repoUsers, repoUsers, repoUsers)
 
 	return h.NewtwitterAuthHandler("/auth", "/auth/twitter/callback", useCaseTwitter)
 }

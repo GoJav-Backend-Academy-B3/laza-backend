@@ -1,6 +1,7 @@
 package twitterauth
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,8 +11,11 @@ import (
 )
 
 func (h *twitterAuthHandler) twitterCallBack(c *gin.Context) {
+
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+
 	if err != nil {
+		fmt.Println(user)
 		helper.GetResponse(err.Error(), http.StatusUnauthorized, true).Send(c)
 		return
 	}
