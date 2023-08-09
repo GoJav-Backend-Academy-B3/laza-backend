@@ -5,15 +5,16 @@ import (
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type LoginUserUsecase struct {
 	usernameActon action.FindByUsername
 }
 
-func NewLoginUserUsecase(usernameActon action.FindByUsername) auth.LoginUserUsecase {
+func NewLoginUserUsecase(userRepo user.UserRepo) auth.LoginUserUsecase {
 	return &LoginUserUsecase{
-		usernameActon: usernameActon,
+		usernameActon: &userRepo,
 	}
 }
 
@@ -21,11 +22,11 @@ func NewLoginUserUsecase(usernameActon action.FindByUsername) auth.LoginUserUsec
 func (uc *LoginUserUsecase) Execute(user requests.Login) *helper.Response {
 	data, err := uc.usernameActon.FindByUsername(user.Username)
 	if err != nil {
-		return helper.GetResponse("user is not exist", 500, true)
+		return helper.GetResponse("username or password is invalid", 500, true)
 	}
 
 	if !helper.CheckPassword(data.Password, user.Password) {
-		return helper.GetResponse("password false", 500, true)
+		return helper.GetResponse("username or password is invalid", 500, true)
 	}
 
 	if !data.IsVerified {

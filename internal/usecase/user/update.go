@@ -6,8 +6,9 @@ import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type UpdateUserUsecase struct {
@@ -17,46 +18,38 @@ type UpdateUserUsecase struct {
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewUpdateUserUsecase(
-	repo repositories.UpdateAction[model.User],
-	getByIdAction repositories.GetByIdAction[model.User],
-	emailExistsAction action.ExistsEmail,
-	usernameExistsAction action.ExistsUsername,
-) user.UpdateUserUsecase {
+func NewUpdateUserUsecase(userRepo user.UserRepo) contract.UpdateUserUsecase {
 	return &UpdateUserUsecase{
-		updateAction:         repo,
-		getByIdAction:        getByIdAction,
-		emailExistsAction:    emailExistsAction,
-		usernameExistsAction: usernameExistsAction,
+		updateAction:         &userRepo,
+		getByIdAction:        &userRepo,
+		emailExistsAction:    &userRepo,
+		usernameExistsAction: &userRepo,
 	}
 }
 
 // Excute implements user.UpdateUserUsecase.
-func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Response {
+func (uc *UpdateUserUsecase) Execute(id uint64, user requests.UpdateUser) *helper.Response {
 	data, err := uc.getByIdAction.GetById(id)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 
 	}
 
-	if data.Email != user.Email {
-		if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-			return helper.GetResponse("email is already registered", 500, true)
+	if data.Username != user.Username || data.Email != user.Email {
+		if data.Username != user.Username {
+			if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
+				return helper.GetResponse("username is taken, try another", 500, true)
+			}
+			data.Username = user.Username
 		}
-		data.Email = user.Email
-		data.IsVerified = false
-	}
 
-	if data.Username != user.Username {
-		if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-			return helper.GetResponse("username is already registered", 500, true)
+		if data.Email != user.Email {
+			if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
+				return helper.GetResponse("email is taken, try another", 500, true)
+			}
+			data.Email = user.Email
+			data.IsVerified = false
 		}
-		data.Username = user.Username
-	}
-
-	hashPassword, err := helper.HashPassword(user.Password)
-	if err != nil {
-		return helper.GetResponse(err.Error(), 500, true)
 	}
 
 	var imageUrl = helper.DefaultImageProfileUrl
@@ -77,7 +70,6 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.User) *helper.Resp
 	dao := model.User{
 		FullName:   user.FullName,
 		Username:   data.Username,
-		Password:   hashPassword,
 		Email:      data.Email,
 		ImageUrl:   imageUrl,
 		IsVerified: data.IsVerified,

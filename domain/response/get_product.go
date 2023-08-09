@@ -24,6 +24,21 @@ type ProductReview struct {
 	Products    []model.ProductReview `json:"products"`
 }
 
+type ProductOverview struct {
+	Id        uint64    `json:"id"`
+	Name      string    `json:"name"`
+	ImageUrl  string    `json:"image_url"`
+	Price     float64   `json:"price"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (p *ProductOverview) FillFromEntity(e model.Product) {
+	p.Id = e.Id
+	p.Name = e.Name
+	p.ImageUrl = e.ImageUrl
+	p.Price = e.Price
+}
+
 func (p *Product) FillFromEntity(e model.Product) {
 	p.Id = e.Id
 	p.Name = e.Name

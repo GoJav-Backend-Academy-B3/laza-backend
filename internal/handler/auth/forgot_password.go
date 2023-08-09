@@ -17,7 +17,7 @@ import (
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /auth/forget-password [post]
-func (h *authHandler) forgetPassword(c *gin.Context) {
+func (h *authHandler) forgotPassword(c *gin.Context) {
 	var request requests.Email
 	if err := c.ShouldBindJSON(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
@@ -30,5 +30,5 @@ func (h *authHandler) forgetPassword(c *gin.Context) {
 		return
 	}
 
-	h.forgetPasswordUser.Execute(request.Email).Send(c)
+	h.forgotPasswordUser.Execute(request.Email).Send(c)
 }

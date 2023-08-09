@@ -14,15 +14,14 @@ import (
 func main() {
 	config.LoadConfig()
 
-	godotenv.Load("/Users/juandaantoniuspakpahan/phincon/week5/project/laza-backend/.env")
+	godotenv.Load(".env")
 
-	// gothic.Store = helper.GetStore()
 	goth.UseProviders(
 		twitter.New(os.Getenv("TWITTER_KEY"), os.Getenv("TWITTER_SECRET"), os.Getenv("TWITTER_REDIRECT_URI")),
 	)
 
 	apps := router.NewServerGin()
-	var address string = "0.0.0.0:8080"
+	var address string = "localhost:8080"
 	if APP_PORT := os.Getenv("APP_PORT"); APP_PORT != "" {
 		address = "localhost:" + APP_PORT
 	}

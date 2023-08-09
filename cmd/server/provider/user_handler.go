@@ -17,12 +17,12 @@ func NewUserHandler() handlers.HandlerInterface {
 
 	repoUser := repoUser.NewUserRepo(gorm)
 
-	getAllUser := usecase.NewGetAllUserUsecase(repoUser)
-	getByIdUser := usecase.NewGetByIdUserUsecase(repoUser)
-	getWithLimitUser := usecase.NewGetWithLimitUserUsecase(repoUser)
-	updateUser := usecase.NewUpdateUserUsecase(repoUser, repoUser, repoUser, repoUser)
-	deleteUser := usecase.NewDeleteUserUsecase(repoUser)
-	changePasswordUser := usecase.NewChangePasswordUserUsecase(repoUser, repoUser)
+	getAllUser := usecase.NewGetAllUserUsecase(*repoUser)
+	getByIdUser := usecase.NewGetByIdUserUsecase(*repoUser)
+	getWithLimitUser := usecase.NewGetWithLimitUserUsecase(*repoUser)
+	updateUser := usecase.NewUpdateUserUsecase(*repoUser)
+	deleteUser := usecase.NewDeleteUserUsecase(*repoUser)
+	changePasswordUser := usecase.NewChangePasswordUserUsecase(*repoUser)
 
 	return handler.NewUserHandler(getAllUser, getByIdUser, getWithLimitUser, updateUser, changePasswordUser, deleteUser, validate)
 }
