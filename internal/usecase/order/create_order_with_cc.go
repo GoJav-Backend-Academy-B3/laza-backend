@@ -2,6 +2,7 @@ package order
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
@@ -13,44 +14,45 @@ import (
 	"time"
 )
 
-type CreateOrderWithGopayUsecase struct {
+type CreateOrderWithCCUsecase struct {
 	insertOrder        repositories.InsertAction[model.Order]
 	getAddressById     repositories.GetByIdAction[model.Address]
-	chargeGopay        midtranscore.ChargeMidtransAction
-	insertGopay        repositories.InsertAction[model.Gopay]
+	chargeMidtrans     midtranscore.ChargeMidtransAction
+	getCCToken         midtranscore.FetchMidtransCCTokenAction
+	insertCreditCard   repositories.InsertAction[model.CreditCard]
 	getOrder           repositories.GetByIdAction[model.Order]
 	getProduct         repositories.GetByIdAction[model.Product]
 	insertProductOrder repositories.InsertAction[model.ProductOrder]
 }
 
-func NewCreateOrderWithGopayUsecase(
+func NewCreateOrderWithCCUsecase(
 	insertOrder repositories.InsertAction[model.Order],
 	getAddressById repositories.GetByIdAction[model.Address],
-	chargeGopay midtranscore.ChargeMidtransAction,
-	insertGopay repositories.InsertAction[model.Gopay],
+	chargeMidtrans midtranscore.ChargeMidtransAction,
+	getCCToken midtranscore.FetchMidtransCCTokenAction,
+	insertCreditCard repositories.InsertAction[model.CreditCard],
 	getOrder repositories.GetByIdAction[model.Order],
 	getProduct repositories.GetByIdAction[model.Product],
 	insertProductOrder repositories.InsertAction[model.ProductOrder],
-) *CreateOrderWithGopayUsecase {
-	return &CreateOrderWithGopayUsecase{
+) *CreateOrderWithCCUsecase {
+	return &CreateOrderWithCCUsecase{
 		insertOrder:        insertOrder,
 		getAddressById:     getAddressById,
-		chargeGopay:        chargeGopay,
-		insertGopay:        insertGopay,
+		chargeMidtrans:     chargeMidtrans,
+		getCCToken:         getCCToken,
+		insertCreditCard:   insertCreditCard,
 		getOrder:           getOrder,
 		getProduct:         getProduct,
 		insertProductOrder: insertProductOrder,
 	}
 }
 
-func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, callbackUrl string, products []requests.ProductOrder) (*model.Order, *model.Gopay, error) {
-	// Check if address exists
+func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc model.CreditCard, cvv string, products []requests.ProductOrder) (*model.Order, *model.CreditCard, error) {
+	// check if address exists
 	_, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
-		fmt.Println("error address not found")
 		return nil, nil, err
 	}
-	fmt.Println("tembus error address not found")
 
 	// Generate order number
 	var orderNumber string
@@ -77,40 +79,49 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 			Quantity:  uint16(product.Quantity),
 			Price:     productTemp.Price * float64(product.Quantity),
 		}
-
 		productOrders = append(productOrders, productOrderTemp)
-
 		grossAmount += productTemp.Price * float64(product.Quantity)
 	}
 
-	// Charge gopay to midtrans
-	paymentReq := coreapi.ChargeReq{
-		PaymentType: "gopay",
+	// get cc token
+	cardTokenResponse, errMd := uc.getCCToken.FetchMidtransCCToken(cc.CardNumber, cc.ExpiredMonth, cc.ExpiredYear, cvv)
+	byteArr, _ := json.Marshal(errMd)
+	fmt.Println("error get token: ", errMd)
+	fmt.Println("cc token: ", cardTokenResponse.TokenID)
+	if errMd != nil {
+		fmt.Println("masuk if error", errMd)
+		return nil, nil, errMd.RawError
+	}
+
+	// marshalling the structure
+	byteArr, _ = json.Marshal(cardTokenResponse)
+	fmt.Println("respond Card Token Response", string(byteArr))
+
+	// charge cc to midtrans
+	var paymentReq coreapi.ChargeReq
+	paymentReq = coreapi.ChargeReq{
+		PaymentType: "credit_card",
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  orderNumber,
 			GrossAmt: int64(grossAmount),
 		},
-		Gopay: &coreapi.GopayDetails{
-			EnableCallback: true,
-			CallbackUrl:    callbackUrl,
+		CreditCard: &coreapi.CreditCardDetails{
+			TokenID:        cardTokenResponse.TokenID,
+			Authentication: false,
+			Bank:           cardTokenResponse.Bank,
+			CallbackType:   cardTokenResponse.RedirectURL,
 		},
 	}
-	gopayRespondMd, err := uc.chargeGopay.ChargeMidtrans(&paymentReq)
+	responseMd, err := uc.chargeMidtrans.ChargeMidtrans(&paymentReq)
+	// marshalling the structure
+	byteArr, _ = json.Marshal(responseMd)
+	fmt.Println("respond midtrans charge", string(byteArr))
 	if err != nil {
+		fmt.Println("error midtrans charge: ", err)
 		return nil, nil, err
 	}
 
-	// insert gopay to db
-	gopayRespond, err := uc.insertGopay.Insert(model.Gopay{
-		QRCode:        gopayRespondMd.Actions[0].URL,
-		Deeplink:      gopayRespondMd.Actions[1].URL,
-		GetStatusLink: gopayRespondMd.Actions[2].URL,
-		CancelLink:    gopayRespondMd.Actions[3].URL,
-		ExpiryTime:    time.Now(),
-	})
-	if err != nil {
-		return nil, nil, err
-	}
+	fmt.Println("creditcard : ", cc)
 
 	// insert order to db
 	order := model.Order{
@@ -121,8 +132,8 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		UserId:        userId,
 		OrderStatusId: 1,
 		AddressId:     uint64(addressId),
-		GopayId: sql.NullInt64{
-			Int64: int64(gopayRespond.Id),
+		CreditCardId: sql.NullInt64{
+			Int64: int64(cc.Id),
 			Valid: true,
 		},
 	}
@@ -138,5 +149,5 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		}
 	}
 
-	return &orderRespond, &gopayRespond, nil
+	return &orderRespond, &cc, nil
 }
