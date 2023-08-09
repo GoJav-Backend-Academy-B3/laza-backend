@@ -2,6 +2,7 @@ package creditcard
 
 import (
 	"errors"
+
 	"github.com/phincon-backend/laza/domain/model"
 )
 

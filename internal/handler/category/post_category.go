@@ -1,10 +1,11 @@
 package category
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
-	"net/http"
 )
 
 // PostCategory godoc
@@ -14,6 +15,7 @@ import (
 // @Accept json
 // @Produce json
 // @Security JWT
+// @Param category body requests.CategoryRequest true "create category"
 // @Success 201 {object} helper.Response{code=string,isError=bool,status=string,data=response.CategorySimpleResponse}
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}

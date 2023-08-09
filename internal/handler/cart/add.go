@@ -8,6 +8,18 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// Add Product To Cart godoc
+// @Summary Add Cart
+// @Description Add cart
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param id path int true "ID of the product"
+// @Security JWT
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=model.Cart}
+// @Failure 401 {object} helper.Response{status=string,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
+// @Router /products/{id}/carts [POST]
 func (ct *CartHandler) post(ctx *gin.Context) {
 	userId := ctx.MustGet("userId").(uint64)
 
