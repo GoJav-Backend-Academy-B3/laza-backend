@@ -1,5 +1,9 @@
 package response
 
+import (
+	"github.com/phincon-backend/laza/domain/model"
+)
+
 type RawData struct {
 	ContributorsEnabled bool   `json:"contributors_enabled"`
 	CreatedAt           string `json:"created_at"`
@@ -91,4 +95,11 @@ func FillFromTwitter(email, name, username, image_url string) TwitterFieldRespon
 		NickName: username,
 		ImageUrl: image_url,
 	}
+}
+
+func (t TwitterFieldResponse) TwitterUser(user *model.User) {
+	user.Username = t.NickName
+	user.Email = t.Email
+	user.ImageUrl = t.ImageUrl
+	user.FullName = t.Name
 }
