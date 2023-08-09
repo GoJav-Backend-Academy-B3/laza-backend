@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"github.com/go-playground/validator/v10"
 	domain "github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/internal/db"
 	handler "github.com/phincon-backend/laza/internal/handler/review"
@@ -12,12 +13,12 @@ func NewReviewHandler() domain.HandlerInterface {
 
 	dbs := db.GetPostgreSQLConnection()
 	gorm := dbs.(*db.PsqlDB).Dbs
-
+	validate := validator.New()
 	reviewrepo := repo.NewReviewRepo(gorm)
 	getAllReviewByProduct := usecase.NewGetAllReviewUsecase(reviewrepo)
 	insertReview := usecase.NewinsertReviewUsecase(reviewrepo)
 	getWithLimitReview := usecase.NewGetWithLimitReviewUsecase(reviewrepo)
 
-	return handler.NewReviewHandler(getAllReviewByProduct, insertReview, getWithLimitReview)
+	return handler.NewReviewHandler(getAllReviewByProduct, insertReview, getWithLimitReview, validate)
 
 }
