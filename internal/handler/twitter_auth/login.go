@@ -1,6 +1,7 @@
 package twitterauth
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,9 +16,9 @@ type ProviderIndex struct {
 
 func (h *twitterAuthHandler) loginTwitter(c *gin.Context) {
 	gothic.Store = helper.GetStore()
-
 	if gothUser, err := gothic.CompleteUserAuth(c.Writer, c.Request); err == nil {
 		helper.GetResponse(gothUser, http.StatusOK, false).Send(c)
+		fmt.Println(gothUser)
 	} else {
 		gothic.BeginAuthHandler(c.Writer, c.Request)
 	}

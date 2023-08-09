@@ -4,12 +4,12 @@ import "time"
 
 type Gopay struct {
 	Id            uint64    `json:"id,omitempty"  gorm:"primarykey"`
-	Phone         string    `json:"phone,omitempty"`
-	DeepLink      string    `json:"deep_link,omitempty"`
-	QRCode        string    `json:"qr_code,omitempty"`
-	GetStatusLink string    `json:"get_status_link,omitempty"`
-	CancelLink    string    `json:"cancel_link,omitempty"`
-	ExpiryDate    time.Time `json:"expiry_date"`
+	Phone         string    `json:"phone"`
+	Deeplink      string    `json:"deeplink"`
+	QRCode        string    `json:"qr_code"`
+	GetStatusLink string    `json:"get_status_link"`
+	CancelLink    string    `json:"cancel_link"`
+	ExpiryTime    time.Time `json:"expiry_time"`
 	Orders        []Order   `json:"orders" gorm:"foreignkey:Id"`
 }
 

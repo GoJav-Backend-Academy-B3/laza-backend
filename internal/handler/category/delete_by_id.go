@@ -8,6 +8,19 @@ import (
 	"strconv"
 )
 
+// DeleteCategoryById godoc
+// @Summary Delete category by id
+// @Description Delete category by id
+// @Tags category
+// @Accept json
+// @Param id path int true "Category ID"
+// @Produce json
+// @Security JWT
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=string}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 404 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /category/:id [delete]
 func (ch *categoryHandler) deleteById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

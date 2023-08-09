@@ -39,9 +39,9 @@ func (h *productHandler) get(c *gin.Context) {
 			return
 		}
 
-		productsResponse := make([]response.Product, 0)
+		productsResponse := make([]response.ProductOverview, 0)
 		for _, each := range products {
-			var product response.Product
+			var product response.ProductOverview
 			product.FillFromEntity(each)
 			productsResponse = append(productsResponse, product)
 		}
@@ -57,9 +57,9 @@ func (h *productHandler) get(c *gin.Context) {
 			return
 		}
 
-		productsResponse := make([]response.Product, 0)
+		productsResponse := make([]response.ProductOverview, 0)
 		for _, each := range products {
-			var product response.Product
+			var product response.ProductOverview
 			product.FillFromEntity(each)
 			productsResponse = append(productsResponse, product)
 		}

@@ -1,37 +1,41 @@
 package user
 
 import (
+	"errors"
+
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/requests"
-	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"gorm.io/gorm"
 )
 
 type ChangePasswordUserUsecase struct {
-	updateAction  repositories.UpdateAction[response.User]
-	getByIdAction repositories.GetByIdAction[response.User]
+	updateAction  repositories.UpdateAction[model.User]
+	getByIdAction repositories.GetByIdAction[model.User]
 }
 
-func NewChangePasswordUserUsecase(
-	updateAction repositories.UpdateAction[response.User],
-	getByIdAction repositories.GetByIdAction[response.User],
-) user.ChangePasswordUserUsecase {
+func NewChangePasswordUserUsecase(userRepo user.UserRepo) contract.ChangePasswordUserUsecase {
 	return &ChangePasswordUserUsecase{
-		updateAction:  updateAction,
-		getByIdAction: getByIdAction,
+		updateAction:  &userRepo,
+		getByIdAction: &userRepo,
 	}
 }
 
 // Execute implements auth.ChangePasswordUserUsecase.
 func (uc *ChangePasswordUserUsecase) Execute(id uint64, user requests.ChangePassword) *helper.Response {
-	dataUser, err := uc.getByIdAction.GetById(id)
+	data, err := uc.getByIdAction.GetById(id)
 	if err != nil {
-		return helper.GetResponse("user is not exist", 500, true)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return helper.GetResponse("NotFound: data user not found", 500, true)
+		}
+		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	if !helper.CheckPassword(dataUser.Password, user.OldPassword) {
-		return helper.GetResponse("old password wrong", 500, true)
+	if !helper.CheckPassword(data.Password, user.OldPassword) {
+		return helper.GetResponse("old password is invalid", 500, true)
 	}
 
 	if user.NewPassword != user.RePassword {
@@ -43,10 +47,10 @@ func (uc *ChangePasswordUserUsecase) Execute(id uint64, user requests.ChangePass
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	data := response.User{
+	dao := model.User{
 		Password: hashPassword,
 	}
-	_, err = uc.updateAction.Update(dataUser.Id, data)
+	_, err = uc.updateAction.Update(data.Id, dao)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}

@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/model"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 )
@@ -24,7 +24,7 @@ func (h *sizeHandler) put(c *gin.Context) {
 		return
 	}
 
-	request := request.PUTSizeRequest{}
+	request := requests.PUTSizeRequest{}
 	err = c.ShouldBindJSON(&request)
 	if err != nil {
 		helper.GetResponse(

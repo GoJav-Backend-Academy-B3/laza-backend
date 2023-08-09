@@ -3,45 +3,53 @@ package auth
 import (
 	"time"
 
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	actionUser "github.com/phincon-backend/laza/domain/repositories/user"
 	actionToken "github.com/phincon-backend/laza/domain/repositories/verification_token"
-	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_token"
 )
 
 type VerifyEmailUserUsecase struct {
-	updateAction repositories.UpdateAction[response.User]
+	updateAction repositories.UpdateAction[model.User]
 	emailAction  actionUser.FindByEmail
 	tokenAction  actionToken.FindByToken
 }
 
-func NewVerifyEmailUserUsecase(repo repositories.UpdateAction[response.User],
-	emailAction actionUser.FindByEmail,
-	tokenAction actionToken.FindByToken) auth.VerifyEmailUserUsecase {
+func NewVerifyEmailUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.VerificationTokenRepo) auth.VerifyEmailUserUsecase {
 	return &VerifyEmailUserUsecase{
-		updateAction: repo,
-		emailAction:  emailAction,
-		tokenAction:  tokenAction,
+		updateAction: &userRepo,
+		emailAction:  &userRepo,
+		tokenAction:  &tokenRepo,
 	}
 }
 
 // Execute implements auth.VerifyEmailUserUsecase.
 func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response {
-	user, err := uc.emailAction.FindByEmail(email)
-	if err != nil {
-		return helper.GetResponse("email is not exist", 500, true)
+	if email == "" && token == "" {
+		return helper.GetResponse("email and token are both empty", 400, true)
+	} else if email == "" {
+		return helper.GetResponse("email empty", 400, true)
+	} else if token == "" {
+		return helper.GetResponse("token empty", 400, true)
 	}
 
-	dataToken, err := uc.tokenAction.FindByToken(uint64(user.Id), token)
+	dataUser, err := uc.emailAction.FindByEmail(email)
+	if err != nil {
+		return helper.GetResponse("email is invalid", 500, true)
+	}
+
+	dataToken, err := uc.tokenAction.FindByToken(uint64(dataUser.Id), token)
 	if err != nil {
 		return helper.GetResponse("failed to verify email", 500, true)
 	}
 
 	location, _ := time.LoadLocation("Asia/Jakarta")
 
-	if user.IsVerified {
+	if dataUser.IsVerified {
 		return helper.GetResponse("already registered, you can login", 500, true)
 	} else if dataToken.Token != token {
 		return helper.GetResponse("failed to verify email", 500, true)
@@ -49,10 +57,10 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 		return helper.GetResponse("expired verify email, please resend verify again!", 500, true)
 	}
 
-	data := response.User{
+	dao := model.User{
 		IsVerified: true,
 	}
-	_, err = uc.updateAction.Update(user.Id, data)
+	_, err = uc.updateAction.Update(dataUser.Id, dao)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}

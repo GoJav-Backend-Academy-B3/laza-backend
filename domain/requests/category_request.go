@@ -1,4 +1,4 @@
-package request
+package requests
 
 type CategoryRequest struct {
 	Id       uint64 `json:"id"`

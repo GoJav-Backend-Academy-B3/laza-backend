@@ -8,28 +8,28 @@ import (
 	actionUser "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_token"
 )
 
 type ResendEmailUserUsecase struct {
-	updateAction      repositories.UpdateAction[model.VerificationToken]
 	emailAction       actionUser.FindByEmail
 	emailExistsAction actionUser.ExistsEmail
+	updateTokenAction repositories.UpdateAction[model.VerificationToken]
 }
 
-func NewResendEmailUserUsecase(repo repositories.UpdateAction[model.VerificationToken],
-	emailExistsAction actionUser.ExistsEmail,
-	emailAction actionUser.FindByEmail) auth.ResendEmailUserUsecase {
+func NewResendEmailUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.VerificationTokenRepo) auth.ResendEmailUserUsecase {
 	return &ResendEmailUserUsecase{
-		updateAction:      repo,
-		emailAction:       emailAction,
-		emailExistsAction: emailExistsAction,
+		emailAction:       &userRepo,
+		emailExistsAction: &userRepo,
+		updateTokenAction: &tokenRepo,
 	}
 }
 
 // Execute implements auth.ResendEmailUserUsecase.
 func (uc *ResendEmailUserUsecase) Execute(email string) *helper.Response {
 	if emailExists := uc.emailExistsAction.ExistsEmail(email); !emailExists {
-		return helper.GetResponse("email is not registered", 500, true)
+		return helper.GetResponse("please enter a valid email address", 500, true)
 	}
 
 	data, err := uc.emailAction.FindByEmail(email)
@@ -45,7 +45,7 @@ func (uc *ResendEmailUserUsecase) Execute(email string) *helper.Response {
 		UserId:     uint64(data.Id),
 	}
 
-	_, err = uc.updateAction.Update(data.Id, daoToken)
+	_, err = uc.updateTokenAction.Update(data.Id, daoToken)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}

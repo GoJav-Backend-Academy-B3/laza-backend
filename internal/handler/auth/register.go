@@ -23,7 +23,7 @@ import (
 func (h *authHandler) register(c *gin.Context) {
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 2*1024*1024)
 
-	var request requests.User
+	var request requests.Register
 	if err := c.Bind(&request); err != nil {
 		helper.GetResponse(err.Error(), 400, true).Send(c)
 		return

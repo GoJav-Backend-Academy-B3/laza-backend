@@ -8,6 +8,15 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// FBLogin godoc
+// @Summary Facebook login oauth
+// @Description this endpoint is only used to generate redirect URL to facebook login dialog.
+// @Tags facebookauth
+// @Accept json
+// @Produce json
+// @Failure 405 {object} helper.Response{code=int,description=string,isError=bool}
+// @Success 307 {string} string "Redirecting..."
+// @Router /auth/facebook [get]
 func (fb *facebookAuthHandler) login(c *gin.Context) {
 	if c.Request.Method != http.MethodGet {
 		helper.GetResponse("method not allowed", http.StatusMethodNotAllowed, true).Send(c)

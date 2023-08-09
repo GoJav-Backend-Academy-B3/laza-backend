@@ -45,6 +45,7 @@ func (d *PsqlDB) OpenConnection() {
 
 	connString := "host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s search_path=%s"
 	db_, err := sql.Open("postgres", fmt.Sprintf(connString, host, user, pass, dbname, port, sslMode, timezone, searchPath))
+
 	if err != nil {
 		panic(err)
 	}

@@ -8,7 +8,7 @@ import (
 	"github.com/phincon-backend/laza/domain/repositories/category"
 	"github.com/phincon-backend/laza/domain/repositories/product"
 	"github.com/phincon-backend/laza/domain/repositories/size"
-	"github.com/phincon-backend/laza/domain/request"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 	"gorm.io/gorm"
 
@@ -37,7 +37,7 @@ type CreateProductUsecaseImpl struct {
 }
 
 // Execute implements product.CreateProductUsecase.
-func (u *CreateProductUsecaseImpl) Execute(request request.ProductRequest) (product model.Product, err error) {
+func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (product model.Product, err error) {
 
 	// Check if brand name exists
 	// return error if false

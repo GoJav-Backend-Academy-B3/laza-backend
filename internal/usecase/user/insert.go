@@ -8,36 +8,36 @@ import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
+	"github.com/phincon-backend/laza/internal/repo/verification_token"
 )
 
 type InsertUserUsecase struct {
-	insertUserAction     repositories.InsertAction[response.User]
 	insertTokenAction    repositories.InsertAction[model.VerificationToken]
+	insertUserAction     repositories.InsertAction[model.User]
 	emailExistsAction    action.ExistsEmail
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewInsertUserUsecase(repoUser repositories.InsertAction[response.User],
-	repoToken repositories.InsertAction[model.VerificationToken], repoExistsEmail action.ExistsEmail,
-	repoExistsUsername action.ExistsUsername) user.InsertUserUsecase {
+func NewInsertUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.VerificationTokenRepo) contract.InsertUserUsecase {
 	return &InsertUserUsecase{
-		insertUserAction:     repoUser,
-		insertTokenAction:    repoToken,
-		emailExistsAction:    repoExistsEmail,
-		usernameExistsAction: repoExistsUsername,
+		insertTokenAction:    &tokenRepo,
+		insertUserAction:     &userRepo,
+		emailExistsAction:    &userRepo,
+		usernameExistsAction: &userRepo,
 	}
 }
 
 // Excute implements user.InsertUserUsecase.
-func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
+func (uc *InsertUserUsecase) Execute(user requests.Register) *helper.Response {
 	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-		return helper.GetResponse("username is already registered", 500, true)
+		return helper.GetResponse("username is taken, try another", 500, true)
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-		return helper.GetResponse("email is already registered", 500, true)
+		return helper.GetResponse("email is taken, try another", 500, true)
 	}
 
 	hashPassword, err := helper.HashPassword(user.Password)
@@ -60,7 +60,7 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		imageUrl = url
 	}
 
-	data := response.User{
+	dao := model.User{
 		FullName: user.FullName,
 		Username: user.Username,
 		Password: hashPassword,
@@ -68,7 +68,7 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		ImageUrl: imageUrl,
 	}
 
-	result, err := uc.insertUserAction.Insert(data)
+	res, err := uc.insertUserAction.Insert(dao)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
@@ -78,7 +78,7 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 	daoToken := model.VerificationToken{
 		Token:      codeVerify,
 		ExpiryDate: expiryDate,
-		UserId:     uint64(result.Id),
+		UserId:     uint64(res.Id),
 	}
 
 	_, err = uc.insertTokenAction.Insert(daoToken)
@@ -87,8 +87,8 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 	}
 
 	configMail := helper.DataMail{
-		Username: result.Username,
-		Email:    result.Email,
+		Username: res.Username,
+		Email:    res.Email,
 		Token:    codeVerify,
 		Subject:  "Your verification account",
 	}
@@ -98,5 +98,6 @@ func (uc *InsertUserUsecase) Execute(user requests.User) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	result := response.UserModelResponse(res)
 	return helper.GetResponse(result, 201, false)
 }
