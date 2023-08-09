@@ -1,8 +1,6 @@
 package review
 
 import (
-	"fmt"
-
 	review "github.com/phincon-backend/laza/domain/repositories/Review"
 	rw "github.com/phincon-backend/laza/domain/usecases/review"
 	"github.com/phincon-backend/laza/helper"
@@ -21,6 +19,6 @@ func (uc *GetWithLimitReviewUsecase) Execute(offset, limit uint64, productID uin
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
-	fmt.Println(result)
+
 	return helper.GetResponse(result, 200, false)
 }

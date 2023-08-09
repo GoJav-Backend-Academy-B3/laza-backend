@@ -5,7 +5,7 @@ import (
 )
 
 func (r *ProductRepo) GetById(id any) (e model.Product, err error) {
-	tx := r.db.Preload("Reviews").First(&e, "id = ?", id)
+	tx := r.db.First(&e, "id = ?", id)
 	err = tx.Error
 	return
 }

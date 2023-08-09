@@ -2,13 +2,13 @@ package response
 
 import "github.com/phincon-backend/laza/domain/model"
 
-type Size struct {
+type GetSize struct {
 	Id   uint64 `json:"id"`
 	Size string `json:"size"`
 }
 
-func (p *Size) FillFromEntity(e model.Size) {
+func (p GetSize) FillFromEntity(e model.Size) GetSize {
 	p.Id = e.Id
 	p.Size = e.Size
-
+	return p
 }

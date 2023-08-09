@@ -482,9 +482,6 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "code": {
-                                            "type": "string"
-                                        },
                                         "data": {
                                             "$ref": "#/definitions/model.Address"
                                         },
@@ -1645,14 +1642,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}/reviews/": {
+        "/products/{id}": {
             "get": {
                 "security": [
                     {
                         "JWT": []
                     }
                 ],
-                "description": "get the bank corresponding to the input Id",
+                "description": "get the product corresponding to the input Id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1660,9 +1657,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ShowReviewLimit"
+                    "Product"
                 ],
-                "summary": "Get bank identified by the given id",
+                "summary": "Get product identified by the given id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1684,61 +1681,13 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.ProductReview"
+                                            "$ref": "#/definitions/response.ProductDetail"
                                         },
                                         "isError": {
                                             "type": "boolean"
                                         },
                                         "status": {
                                             "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/helper.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "code": {
-                                            "type": "integer"
-                                        },
-                                        "description": {
-                                            "type": "string"
-                                        },
-                                        "isError": {
-                                            "type": "boolean"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/helper.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "code": {
-                                            "type": "integer"
-                                        },
-                                        "description": {
-                                            "type": "string"
-                                        },
-                                        "isError": {
-                                            "type": "boolean"
                                         }
                                     }
                                 }
@@ -2759,6 +2708,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "image_url": {
+                    "type": "string"
+                },
                 "rating": {
                     "type": "number"
                 }
@@ -3029,6 +2981,61 @@ const docTemplate = `{
                 "re_password": {
                     "type": "string",
                     "minLength": 8
+                }
+            }
+        },
+        "response.GetSize": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ProductDetail": {
+            "type": "object",
+            "properties": {
+                "brand_id": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "reviews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ProductReview"
+                    }
+                },
+                "size": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.GetSize"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },

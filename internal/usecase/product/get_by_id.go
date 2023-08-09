@@ -12,11 +12,12 @@ import (
 
 type GetByIdProductUsecase struct {
 	getProductByIdAction repositories.GetByIdAction[model.Product]
+	getAllSizeAction     repositories.GetAllAction[model.Size]
 	getReviewByProduct   review.GetReviewByProduct
 }
 
-func NewGetByIdProductUsecase(repo repositories.GetByIdAction[model.Product], repoReview review.GetReviewByProduct) product.GetByIdProductUsecase {
-	return &GetByIdProductUsecase{getProductByIdAction: repo, getReviewByProduct: repoReview}
+func NewGetByIdProductUsecase(product repositories.GetByIdAction[model.Product], repoReview review.GetReviewByProduct, size repositories.GetAllAction[model.Size]) product.GetByIdProductUsecase {
+	return &GetByIdProductUsecase{getProductByIdAction: product, getReviewByProduct: repoReview, getAllSizeAction: size}
 }
 
 func (uc *GetByIdProductUsecase) Execute(id uint64) *helper.Response {
@@ -26,7 +27,16 @@ func (uc *GetByIdProductUsecase) Execute(id uint64) *helper.Response {
 	}
 	pd := response.ProductDetail{}.FillFromEntity(result)
 	review, err := uc.getReviewByProduct.GetProductById(id)
-	pd.Reviews = review
 
-	return helper.GetResponse(pd, 200, true)
+	sz := []response.GetSize{}
+	models, err := uc.getAllSizeAction.GetAll()
+	for _, v := range models {
+		ds := response.GetSize{}.FillFromEntity(v)
+		sz = append(sz, ds)
+	}
+
+	pd.Reviews = review[:2]
+	pd.Sizes = sz
+
+	return helper.GetResponse(pd, 200, false)
 }

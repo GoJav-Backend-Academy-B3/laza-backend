@@ -1,5 +1,7 @@
 package product
 
-type GetProductByIdAction[EntityT any] interface {
-	GetProductById(id any) (EntityT, error)
+import "github.com/phincon-backend/laza/domain/model"
+
+type GetProductByIdAction interface {
+	GetProductById(productID uint64) ([]model.ProductReview, error)
 }

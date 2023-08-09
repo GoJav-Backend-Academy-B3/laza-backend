@@ -9,7 +9,3 @@ type GetReviewByProduct interface {
 type GetWithLimitReviewsAction interface {
 	GetWithLimit(offset, limit uint64, productID uint64) ([]model.ProductReview, error)
 }
-
-// type GetReviewWithLimitAction interface {
-// 	GetWithLimit(offset, limit uint64, productID uint64) ([]model.ProductReview, error)
-// }

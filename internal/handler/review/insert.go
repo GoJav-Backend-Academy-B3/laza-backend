@@ -10,17 +10,6 @@ import (
 )
 
 func (ct *reviewHandler) post(ctx *gin.Context) {
-	// var request requests.ReviewRequest
-	// if err := ctx.ShouldBindJSON(&request); err != nil {
-	// 	helper.GetResponse(err.Error(), 400, true).Send(ctx)
-	// 	return
-	// }
-
-	// err := ct.validate.Struct(request)
-	// if err != nil {
-	// 	helper.GetResponse(err.Error(), 400, true).Send(ctx)
-	// 	return
-	// }
 	userId := ctx.MustGet("userId").(uint64)
 	// userId := uint64(3)
 	productId, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
