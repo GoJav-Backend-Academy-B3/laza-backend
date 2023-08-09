@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"time"
-
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	actionUser "github.com/phincon-backend/laza/domain/repositories/user"
@@ -29,13 +27,9 @@ func NewResetPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_c
 }
 
 // Execute implements auth.UpdatePasswordUserUsecase.
-func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.ResetPassword) *helper.Response {
-	if email == "" && code == "" {
-		return helper.GetResponse("email and code are both empty", 400, true)
-	} else if email == "" {
+func (uc *ResetPasswordUserUsecase) Execute(email string, user requests.ResetPassword) *helper.Response {
+	if email == "" {
 		return helper.GetResponse("email empty", 400, true)
-	} else if code == "" {
-		return helper.GetResponse("code empty", 400, true)
 	}
 
 	if user.NewPassword != user.RePassword {
@@ -45,18 +39,6 @@ func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.Re
 	dataUser, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
 		return helper.GetResponse("email is invalid", 401, true)
-	}
-
-	dataCode, err := uc.codeAction.FindByCode(uint64(dataUser.Id), code)
-	if err != nil {
-		return helper.GetResponse("failed to verify email", 401, true)
-	}
-
-	location, _ := time.LoadLocation("Asia/Jakarta")
-	if dataCode.Code != code {
-		return helper.GetResponse("failed to verify email", 401, true)
-	} else if dataCode.ExpiryDate.In(location).Add(-7 * time.Hour).Before(time.Now().In(location)) {
-		return helper.GetResponse("expired verify email, please resend mail verify again!", 401, true)
 	}
 
 	hashPassword, err := helper.HashPassword(user.NewPassword)

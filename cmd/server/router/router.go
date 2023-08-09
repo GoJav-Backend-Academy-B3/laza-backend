@@ -72,14 +72,13 @@ func NewServerGin() *gin.Engine {
 
 	return r
 }
- 
+
 var noAuthList = make([]string, 0)
+
 func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/")
 	noAuthList = append(noAuthList, "/login")
 	noAuthList = append(noAuthList, "/register")
-	noAuthList = append(noAuthList, "/login-google")
-	noAuthList = append(noAuthList, "/login-google/callback")
 	noAuthList = append(noAuthList, "/products")
 	noAuthList = append(noAuthList, "/products/:id")
 	noAuthList = append(noAuthList, "/size")
@@ -97,6 +96,7 @@ func noAuth(url string) bool {
 }
 
 var roleAdminList = make([]string, 0)
+
 func roleAdmin(url string) bool {
 	roleAdminList = append(roleAdminList, "/user")
 	roleAdminList = append(roleAdminList, "/user/")
