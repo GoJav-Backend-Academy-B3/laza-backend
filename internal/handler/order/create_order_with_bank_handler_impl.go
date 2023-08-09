@@ -13,7 +13,7 @@ func (h *orderHandler) CreateOrderWithBank(c *gin.Context) {
 
 	err := c.ShouldBind(&orderRequest)
 	if err != nil {
-		response := helper.GetResponse(err, http.StatusBadRequest, true)
+		response := helper.GetResponse(err.Error(), http.StatusBadRequest, true)
 		response.Send(c)
 		return
 	}
@@ -22,7 +22,7 @@ func (h *orderHandler) CreateOrderWithBank(c *gin.Context) {
 
 	order, bankDetails, err := h.createOrderWithBankUsecase.Execute(userId, orderRequest.AddressId, orderRequest.Bank, orderRequest.Products)
 	if err != nil {
-		response := helper.GetResponse(err, http.StatusInternalServerError, true)
+		response := helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
 		response.Send(c)
 		return
 	}
