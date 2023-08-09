@@ -10,6 +10,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// GetByBrandId godoc
+// @Summary Get Details for a given id
+// @Description Get details of brand corresponding is the input Id
+// @Tags brand
+// @Accept json
+// @Produce json
+// @Param id path int true "ID of the brand"
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=model.Brand}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /brand/{id} [get]
 func (h *brandHandler) GetById(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

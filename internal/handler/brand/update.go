@@ -10,6 +10,20 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// UpdateBrand godoc
+// @Summary put Details
+// @Description put details of brand
+// @Tags brand
+// @Accept multiprat/form-data
+// @Produce json
+// @Param id path int true "ID of the brand"
+// @Param brand formData requests.BrandRequest true "create brand"
+// @Param logo_url formData file true "brand logo"
+// @Security JWT
+// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=model.Brand}
+// @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /brand/{id} [put]
 func (h *brandHandler) UpdateBrand(ctx *gin.Context) {
 	var request requests.BrandRequest
 
