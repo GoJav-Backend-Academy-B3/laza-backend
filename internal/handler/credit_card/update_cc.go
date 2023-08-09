@@ -9,6 +9,19 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// Update Credit Card godoc
+// @Summary Update Credit Card
+// @Description Credit Card
+// @Tags creditcard
+// @Accept json
+// @Produce json
+// @Param id path int true "ID of the credit card"
+// @Param creditcard body requests.CreditCardRequest true "update credit card"
+// @Security JWT
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=response.CreditCardResponse}
+// @Failure 404 {object} helper.Response{status=string,description=string,isError=bool}
+// @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
+// @Router /credit-card/{id} [PUT]
 func (h *getCreditCardHandler) Update(c *gin.Context) {
 	userId := c.MustGet("userId").(uint64)
 	ccId, err := strconv.ParseUint(c.Param("id"), 10, 64)

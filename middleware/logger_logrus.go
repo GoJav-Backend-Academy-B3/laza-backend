@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"bytes"
-	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/helper"
 	"io"
 	"net/url"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/phincon-backend/laza/helper"
 )
 
 func LoggerMiddleware() gin.HandlerFunc {
