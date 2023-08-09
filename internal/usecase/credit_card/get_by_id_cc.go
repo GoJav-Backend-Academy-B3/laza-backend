@@ -12,11 +12,11 @@ import (
 )
 
 type getByIdCreditCardUsecase struct {
-	addCcRepo repo.GetByIdAction[model.CreditCard]
+	getCcRepo repo.GetByIdAction[model.CreditCard]
 }
 
 func (h *getByIdCreditCardUsecase) Execute(ccId uint64) *helper.Response {
-	rp, err := h.addCcRepo.GetById(ccId)
+	rp, err := h.getCcRepo.GetById(ccId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return helper.GetResponse(err.Error(), http.StatusNotFound, true)
@@ -28,8 +28,8 @@ func (h *getByIdCreditCardUsecase) Execute(ccId uint64) *helper.Response {
 	return helper.GetResponse(dt, http.StatusOK, false)
 }
 
-func NewgetByIdCreditCardUsecase(addCcRepo repo.GetByIdAction[model.CreditCard]) uc.GetByIdCreditCardUsecase {
+func NewgetByIdCreditCardUsecase(getCcRepo repo.GetByIdAction[model.CreditCard]) uc.GetByIdCreditCardUsecase {
 	return &getByIdCreditCardUsecase{
-		addCcRepo: addCcRepo,
+		getCcRepo: getCcRepo,
 	}
 }

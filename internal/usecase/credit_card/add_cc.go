@@ -6,6 +6,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
 	repo "github.com/phincon-backend/laza/domain/repositories"
+	rp "github.com/phincon-backend/laza/domain/repositories/credit_card"
+
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
 	uc "github.com/phincon-backend/laza/domain/usecases/credit_card"
@@ -13,8 +15,9 @@ import (
 )
 
 type AddCreditCardUsecase struct {
-	addCcRepo repo.InsertAction[model.CreditCard]
-	validate  *validator.Validate
+	isExistsCc rp.IsExistsCcAction
+	addCcRepo  repo.InsertAction[model.CreditCard]
+	validate   *validator.Validate
 }
 
 func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardRequest) *helper.Response {
@@ -22,6 +25,14 @@ func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardReq
 	err := ad.validate.Struct(rb)
 	if err != nil {
 		return helper.GetResponse(err.Error(), http.StatusBadRequest, true)
+	}
+
+	tf, err := ad.isExistsCc.IsExistsCc(userId, rb.CardNumber)
+	if err != nil {
+		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+	}
+	if tf {
+		return helper.GetResponse("credit card already saved", http.StatusInternalServerError, true)
 	}
 
 	md := model.CreditCard{}
@@ -36,11 +47,15 @@ func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardReq
 	return helper.GetResponse(data, http.StatusCreated, false)
 }
 
-func NewaddCreditCardUsecase(addCcRepo repo.InsertAction[model.CreditCard],
+func NewaddCreditCardUsecase(
+	isExistsCc rp.IsExistsCcAction,
+	addCcRepo repo.InsertAction[model.CreditCard],
 	validate *validator.Validate,
 ) uc.AddCreditCardUsecase {
+
 	return &AddCreditCardUsecase{
-		addCcRepo: addCcRepo,
-		validate:  validate,
+		isExistsCc: isExistsCc,
+		addCcRepo:  addCcRepo,
+		validate:   validate,
 	}
 }

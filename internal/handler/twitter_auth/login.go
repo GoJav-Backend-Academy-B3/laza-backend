@@ -12,6 +12,15 @@ type ProviderIndex struct {
 	ProvidersMap map[string]string
 }
 
+// TwitterLogin godoc
+// @Summary Twitter Login auth
+// @Description This endpoint is login endpoint for twitter
+// @Tags twitterauth
+// @Accept json
+// @Produce json
+// @Failure 405 {object} helper.Response{code=int,description=string,isError=bool}
+// @Success 307 {string} string "Redirecting..."
+// @Router /auth [get]
 func (h *twitterAuthHandler) loginTwitter(c *gin.Context) {
 
 	gothic.Store = helper.GetStore()

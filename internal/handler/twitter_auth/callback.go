@@ -10,6 +10,16 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
+// TwitterCallback godoc
+// @Summary Twitter callback endpoint when login success
+// @Description This endpoint is a callback endpoint when login success
+// @Tags twitterauth
+// @Accept json
+// @Produce json
+// @Success 200 {object} helper.Response{code=string,isError=bool,data=map[string]string}
+// @Failure 405 {object} helper.Response{code=int,description=string,isError=bool}
+// @Failure 403 {object} helper.Response{code=int,description=string,isError=bool}
+// @Router /auth/twitter/callback [get]
 func (h *twitterAuthHandler) twitterCallBack(c *gin.Context) {
 
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
