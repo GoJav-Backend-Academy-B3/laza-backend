@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/twitter"

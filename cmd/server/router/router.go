@@ -27,7 +27,7 @@ import (
 // @description	How to input in swagger : 'Bearer <insert_your_token_here>'
 func NewServerGin() *gin.Engine {
 
-	r := gin.Default()
+	r := gin.New()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	var server []handlers.HandlerInterface
@@ -50,7 +50,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewBrandHandler(),
 		provider.NewcreditCardHandler(),
 	)
-
+	r.Use(middleware.LoggerMiddleware())
 	auth := r.Group("").Use(middleware.AuthMiddleware())
 	adminAuth := r.Group("").Use(middleware.AuthMiddleware(), middleware.AdminRoleMiddleware())
 
