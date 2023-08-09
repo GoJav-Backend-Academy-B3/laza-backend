@@ -14,7 +14,7 @@ import (
 	"github.com/phincon-backend/laza/helper"
 )
 
-type addCreditCardUsecase struct {
+type AddCreditCardUsecase struct {
 	isExistsCc rp.IsExistsCcAction
 	addCcRepo  repo.InsertAction[model.CreditCard]
 	validate   *validator.Validate
@@ -52,15 +52,10 @@ func NewaddCreditCardUsecase(
 	addCcRepo repo.InsertAction[model.CreditCard],
 	validate *validator.Validate,
 ) uc.AddCreditCardUsecase {
-<<<<<<< HEAD
-	return &addCreditCardUsecase{
+
+	return &AddCreditCardUsecase{
 		isExistsCc: isExistsCc,
 		addCcRepo:  addCcRepo,
 		validate:   validate,
-=======
-	return &AddCreditCardUsecase{
-		addCcRepo: addCcRepo,
-		validate:  validate,
->>>>>>> dev
 	}
 }
