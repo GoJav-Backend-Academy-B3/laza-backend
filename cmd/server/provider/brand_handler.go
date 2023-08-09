@@ -15,12 +15,12 @@ func NewBrandHandler() handlers.HandlerInterface {
 
 	brandRepo := repository.NewBrandRepo(gorm)
 
-	createBrandUsecase := usecase.NewCreateBrandUseCaseImpl(brandRepo)
-	getBrandByIdUsecase := usecase.NewGetBrandByIdUsecaseImpl(brandRepo)
-	searchBrandByName := usecase.NewSearchBrandByNameUsecaseImpl(brandRepo)
-	viewBrandUsecase := usecase.NewViewBrandUsecaseImpl(brandRepo)
-	deleteBrandUsecase := usecase.NewDeleteBrandUsecaseImpl(brandRepo)
-	updateBrandUsecase := usecase.NewUpdateBrandImpl(brandRepo)
+	createBrandUsecase := usecase.NewCreateBrandUseCaseImpl(*brandRepo)
+	getBrandByIdUsecase := usecase.NewGetBrandByIdUsecaseImpl(*brandRepo)
+	searchBrandByName := usecase.NewSearchBrandByNameUsecaseImpl(*brandRepo)
+	viewBrandUsecase := usecase.NewViewBrandUsecaseImpl(*brandRepo)
+	deleteBrandUsecase := usecase.NewDeleteBrandUsecaseImpl(*brandRepo)
+	updateBrandUsecase := usecase.NewUpdateBrandImpl(*brandRepo)
 
 	validate := validator.New()
 
