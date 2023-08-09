@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Failure 405 {object} helper.Response{description=string,code=int,isError=bool}
 // @Success 307 {string} string "Redirecting..."
-// @Router /auth/login-google [get]
+// @Router /auth/google [get]
 func (h *authHandler) loginGoogle(c *gin.Context) {
 	// Create oauthState cookie
 	oauthState := helper.GenerateStateOauthCookie(c)
