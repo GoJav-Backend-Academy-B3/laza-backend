@@ -22,5 +22,5 @@ func NewAddressesHandler() handlers.HandlerInterface {
 	getUsecase := usecase.NewGetAddrressUsecase(*addressRepo)
 	addUsecase := usecase.NewAddAddressUsecase(*addressRepo)
 
-	return handler.NewAddressHandler(addUsecase, getUsecase, updateUsecase, deleteUsecase, validate)
+	return handler.NewAddressHandler("/address", addUsecase, getUsecase, updateUsecase, deleteUsecase, validate)
 }
