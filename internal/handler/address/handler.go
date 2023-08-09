@@ -3,16 +3,19 @@ package address
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/domain/usecases/address"
+	"github.com/phincon-backend/laza/middleware"
 )
 
 type addressHandler struct {
-	insert address.AddAddressUsecase
-	get    address.GetAddressUsecase
-	update address.UpdateAddressUsecase
-	delete address.DeleteAddressUsecase
+	basicPath string
+	insert    address.AddAddressUsecase
+	get       address.GetAddressUsecase
+	update    address.UpdateAddressUsecase
+	delete    address.DeleteAddressUsecase
 
 	validate *validator.Validate
 }
@@ -24,28 +27,33 @@ func (h *addressHandler) GetHandlers() []handlers.HandlerStruct {
 	hs = append(hs,
 		handlers.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/address",
+			Path:        h.basicPath,
 			HandlerFunc: h.PostAddressHandler,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        "/address",
+			Path:        h.basicPath,
 			HandlerFunc: h.GetAllAddressByUserIdHandler,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        "/address/:id",
+			Path:        h.basicPath + "/:id",
 			HandlerFunc: h.GetAddressByIdHandler,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/address/:id",
+			Path:        h.basicPath + "/:id",
 			HandlerFunc: h.UpdateAddressHandler,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodDelete,
-			Path:        "/address/:id",
+			Path:        h.basicPath + "/:id",
 			HandlerFunc: h.DeleteAddressHandler,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
 		},
 	)
 
@@ -53,17 +61,20 @@ func (h *addressHandler) GetHandlers() []handlers.HandlerStruct {
 
 }
 
-func NewAddressHandler(insert address.AddAddressUsecase,
+func NewAddressHandler(
+	basicPath string,
+	insert address.AddAddressUsecase,
 	get address.GetAddressUsecase,
 	update address.UpdateAddressUsecase,
 	delete address.DeleteAddressUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &addressHandler{
-		insert:   insert,
-		get:      get,
-		update:   update,
-		delete:   delete,
-		validate: validate,
+		basicPath: basicPath,
+		insert:    insert,
+		get:       get,
+		update:    update,
+		delete:    delete,
+		validate:  validate,
 	}
 }

@@ -12,7 +12,7 @@ func (r *GopayOrderResponse) FillFromEntity(m *model.Order) {
 	r.Amount = m.Amount
 	r.CreatedAt = m.CreatedAt
 	r.UpdatedAt = m.UpdatedAt
-	r.OrderStatus = m.OrderStatusId
+	r.OrderStatus = m.OrderStatus
 	r.AddressId = m.AddressId
 	if m.GopayId.Valid {
 		r.GopayId = uint64(m.GopayId.Int64)

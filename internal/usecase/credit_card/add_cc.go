@@ -7,6 +7,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	repo "github.com/phincon-backend/laza/domain/repositories"
 	rp "github.com/phincon-backend/laza/domain/repositories/credit_card"
+	"github.com/phincon-backend/laza/domain/repositories/midtrans"
 
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/response"
@@ -15,14 +16,20 @@ import (
 )
 
 type AddCreditCardUsecase struct {
-	isExistsCc rp.IsExistsCcAction
-	addCcRepo  repo.InsertAction[model.CreditCard]
-	validate   *validator.Validate
+	isExistsCc           rp.IsExistsCcAction
+	addCcRepo            repo.InsertAction[model.CreditCard]
+	fetchMidtransCCToken midtrans.FetchMidtransCCTokenAction
+	validate             *validator.Validate
 }
 
-func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardRequest) *helper.Response {
+func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardOrder) *helper.Response {
 
 	err := ad.validate.Struct(rb)
+	if err != nil {
+		return helper.GetResponse(err.Error(), http.StatusBadRequest, true)
+	}
+
+	_, err = ad.fetchMidtransCCToken.FetchMidtransCCToken(rb.CardNumber, rb.ExpMonth, rb.ExpYear, rb.CVV)
 	if err != nil {
 		return helper.GetResponse(err.Error(), http.StatusBadRequest, true)
 	}
@@ -36,7 +43,7 @@ func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardReq
 	}
 
 	md := model.CreditCard{}
-	rb.FilltoField(userId, &md)
+	requests.RequestFiledToCardOrder(userId, rb, &md)
 
 	rs, err := ad.addCcRepo.Insert(md)
 	if err != nil {
@@ -50,12 +57,14 @@ func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardReq
 func NewaddCreditCardUsecase(
 	isExistsCc rp.IsExistsCcAction,
 	addCcRepo repo.InsertAction[model.CreditCard],
+	fetchMidtransCCToken midtrans.FetchMidtransCCTokenAction,
 	validate *validator.Validate,
 ) uc.AddCreditCardUsecase {
 
 	return &AddCreditCardUsecase{
-		isExistsCc: isExistsCc,
-		addCcRepo:  addCcRepo,
-		validate:   validate,
+		isExistsCc:           isExistsCc,
+		addCcRepo:            addCcRepo,
+		fetchMidtransCCToken: fetchMidtransCCToken,
+		validate:             validate,
 	}
 }

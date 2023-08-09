@@ -11,7 +11,7 @@ type Order struct {
 	CreatedAt         time.Time     `json:"created_at"`
 	UpdatedAt         time.Time     `json:"updated_at"`
 	UserId            uint64        `json:"user_id"`
-	OrderStatusId     uint64        `json:"order_status"`
+	OrderStatus       string        `json:"order_status"`
 	AddressId         uint64        `json:"address_id"`
 	CreditCardId      sql.NullInt64 `json:"credit_card_id,omitempty" swaggertype:"integer"`
 	TransactionBankId sql.NullInt64 `json:"transaction_bank_id,omitempty" swaggertype:"integer"`

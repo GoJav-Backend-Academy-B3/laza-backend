@@ -10,6 +10,6 @@ type BasicOrderResponse struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 	UserId      uint64    `json:"user_id,omitempty"`
-	OrderStatus uint64    `json:"order_status_id,omitempty"`
+	OrderStatus string    `json:"order_status,omitempty"`
 	AddressId   uint64    `json:"address_id,omitempty"`
 }
