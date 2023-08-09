@@ -51,9 +51,7 @@ func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper
 		data = result
 	}
 
-	jwt := helper.NewToken(uint64(data.Id), data.IsAdmin)
-
-	accessToken, err := jwt.Create()
+	accessToken, err := helper.NewToken(uint64(data.Id), data.IsAdmin).Create()
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
