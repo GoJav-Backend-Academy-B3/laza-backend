@@ -73,7 +73,7 @@ func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.Re
 	}
 
 	response := map[string]string{
-		"message": "successfully update password",
+		"message": "successfully reset password",
 	}
 
 	return helper.GetResponse(response, 200, false)

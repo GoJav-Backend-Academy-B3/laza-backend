@@ -15,7 +15,7 @@ type authHandler struct {
 	registerUser       user.InsertUserUsecase
 	verifyEmailUser    auth.VerifyEmailUserUsecase
 	resendEmailUser    auth.ResendEmailUserUsecase
-	forgetPasswordUser auth.ForgetPasswordUserUsecase
+	forgotPasswordUser auth.ForgotPasswordUserUsecase
 	resetPasswordUser  auth.ResetPasswordUserUsecase
 
 	validate *validator.Validate
@@ -27,7 +27,7 @@ func NewAuthHandler(
 	registerUser user.InsertUserUsecase,
 	verifyEmailUser auth.VerifyEmailUserUsecase,
 	resendEmailUser auth.ResendEmailUserUsecase,
-	forgetPasswordUser auth.ForgetPasswordUserUsecase,
+	forgotPasswordUser auth.ForgotPasswordUserUsecase,
 	resetPasswordUser auth.ResetPasswordUserUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
@@ -37,7 +37,7 @@ func NewAuthHandler(
 		registerUser:       registerUser,
 		verifyEmailUser:    verifyEmailUser,
 		resendEmailUser:    resendEmailUser,
-		forgetPasswordUser: forgetPasswordUser,
+		forgotPasswordUser: forgotPasswordUser,
 		resetPasswordUser:  resetPasswordUser,
 		validate:           validate,
 	}
@@ -52,7 +52,7 @@ func (h *authHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/login-google/callback", HandlerFunc: h.loginGoogleCallback},
 		handlers.HandlerStruct{Method: http.MethodGet, Path: "/auth/verify-email/", HandlerFunc: h.verifyEmail},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/resend-verify", HandlerFunc: h.resendEmail},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/forget-password", HandlerFunc: h.forgetPassword},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/forgot-password", HandlerFunc: h.forgotPassword},
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/auth/reset-password/", HandlerFunc: h.resetPassword},
 	)
 

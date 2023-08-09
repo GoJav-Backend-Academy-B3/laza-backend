@@ -14,7 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type ForgetPasswordUserUsecase struct {
+type ForgotPasswordUserUsecase struct {
 	emailAction        actionUser.FindByEmail
 	emailExistsAction  actionUser.ExistsEmail
 	updateAction       repositories.UpdateAction[model.VerificationCode]
@@ -22,8 +22,8 @@ type ForgetPasswordUserUsecase struct {
 	findByUserIdAction actionCode.FindByUserId
 }
 
-func NewForgetPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_code.VerificationCodeRepo) auth.ForgetPasswordUserUsecase {
-	return &ForgetPasswordUserUsecase{
+func NewForgotPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_code.VerificationCodeRepo) auth.ForgotPasswordUserUsecase {
+	return &ForgotPasswordUserUsecase{
 		emailAction:        &userRepo,
 		emailExistsAction:  &userRepo,
 		updateAction:       &codeRepo,
@@ -33,7 +33,7 @@ func NewForgetPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_
 }
 
 // Execute implements auth.ForgetPasswordUserUsecase.
-func (uc *ForgetPasswordUserUsecase) Execute(email string) *helper.Response {
+func (uc *ForgotPasswordUserUsecase) Execute(email string) *helper.Response {
 	if emailExists := uc.emailExistsAction.ExistsEmail(email); !emailExists {
 		return helper.GetResponse("please enter a valid email address", 500, true)
 	}
@@ -80,7 +80,7 @@ func (uc *ForgetPasswordUserUsecase) Execute(email string) *helper.Response {
 	}
 
 	response := map[string]string{
-		"message": "successfully send mail forget password",
+		"message": "successfully send mail forgot password",
 	}
 
 	return helper.GetResponse(response, 200, false)
