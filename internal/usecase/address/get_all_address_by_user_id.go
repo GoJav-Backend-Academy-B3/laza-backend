@@ -3,12 +3,13 @@ package address
 import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
-	repository "github.com/phincon-backend/laza/domain/repositories/address"
+	action "github.com/phincon-backend/laza/domain/repositories/address"
 	"github.com/phincon-backend/laza/domain/usecases/address"
+	repository "github.com/phincon-backend/laza/internal/repo/address"
 )
 
 type getAddressUsecase struct {
-	getAllAddress  repository.GetAllByUserIdAction
+	getAllAddress  action.GetAllByUserIdAction
 	getAddressById repositories.GetByIdAction[model.Address]
 }
 
@@ -32,6 +33,6 @@ func (u *getAddressUsecase) GetAllAddressByUserId(userId uint64) (addresses []mo
 	return
 }
 
-func NewGetAddrressUsecase(getAllAddress repository.GetAllByUserIdAction, getAddressById repositories.GetByIdAction[model.Address]) address.GetAddressUsecase {
-	return &getAddressUsecase{getAllAddress: getAllAddress, getAddressById: getAddressById}
+func NewGetAddrressUsecase(addressRepo repository.AddressRepo) address.GetAddressUsecase {
+	return &getAddressUsecase{getAllAddress: &addressRepo, getAddressById: &addressRepo}
 }

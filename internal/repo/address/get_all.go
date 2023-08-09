@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (r *addressRepo) GetAllByUserId(userId uint64) (addresses []model.Address, err error) {
+func (r *AddressRepo) GetAllByUserId(userId uint64) (addresses []model.Address, err error) {
 	err = r.db.Where("user_id = ?", userId).Preload("User", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, username, email, full_name")
 	}).Find(&addresses).Error

@@ -72,8 +72,9 @@ func NewServerGin() *gin.Engine {
 
 	return r
 }
- 
+
 var noAuthList = make([]string, 0)
+
 func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/")
 	noAuthList = append(noAuthList, "/login")
@@ -97,6 +98,7 @@ func noAuth(url string) bool {
 }
 
 var roleAdminList = make([]string, 0)
+
 func roleAdmin(url string) bool {
 	roleAdminList = append(roleAdminList, "/user")
 	roleAdminList = append(roleAdminList, "/user/")
