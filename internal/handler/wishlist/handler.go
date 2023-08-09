@@ -3,7 +3,9 @@ package wishlist
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	handler "github.com/phincon-backend/laza/domain/handlers"
+	"github.com/phincon-backend/laza/middleware"
 
 	usecase "github.com/phincon-backend/laza/domain/usecases/wishlist"
 )
@@ -20,11 +22,13 @@ func (h *getWishlistHandler) GetHandlers() (hs []handler.HandlerStruct) {
 			Method:      http.MethodPut,
 			Path:        "/products/:id/wishlists",
 			HandlerFunc: h.Put,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 		handler.HandlerStruct{
 			Method:      http.MethodGet,
 			Path:        "/wishlists",
 			HandlerFunc: h.getByLimit,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		})
 	return
 }
