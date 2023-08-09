@@ -3,20 +3,21 @@ package address
 import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
-	repository "github.com/phincon-backend/laza/domain/repositories/address"
+	action "github.com/phincon-backend/laza/domain/repositories/address"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/address"
+	repository "github.com/phincon-backend/laza/internal/repo/address"
 )
 
 type addAddressUsecase struct {
 	addressRepo                            repositories.InsertAction[model.Address]
-	setAllprimaryAddressesNonPrimaryAction repository.SetAllAddressesNonPrimaryAction
+	setAllprimaryAddressesNonPrimaryAction action.SetAllAddressesNonPrimaryAction
 }
 
-func NewAddAddressUsecase(addressRepo repositories.InsertAction[model.Address], setAllprimaryAddressesNonPrimaryAction repository.SetAllAddressesNonPrimaryAction) address.AddAddressUsecase {
+func NewAddAddressUsecase(addressRepo repository.AddressRepo) address.AddAddressUsecase {
 	return &addAddressUsecase{
-		addressRepo:                            addressRepo,
-		setAllprimaryAddressesNonPrimaryAction: setAllprimaryAddressesNonPrimaryAction,
+		addressRepo:                            &addressRepo,
+		setAllprimaryAddressesNonPrimaryAction: &addressRepo,
 	}
 }
 

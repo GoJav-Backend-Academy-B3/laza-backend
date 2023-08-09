@@ -8,8 +8,8 @@ import (
 )
 
 // GetAllAddress godoc
-// @Summary Get All Address
-// @Description Get all Address
+// @Summary Get All Address By User ID
+// @Description Get all Address By User ID
 // @Tags address
 // @Accept json
 // @Produce json

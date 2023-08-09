@@ -4,6 +4,7 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/usecases/address"
+	repository "github.com/phincon-backend/laza/internal/repo/address"
 )
 
 type deleteAddressUsecase struct {
@@ -26,9 +27,9 @@ func (u *deleteAddressUsecase) DeleteAddressById(id uint64) (err error) {
 	return
 }
 
-func NewDeleteAddressUsecase(delete repositories.DeleteAction[model.Address], getById repositories.GetByIdAction[model.Address]) address.DeleteAddressUsecase {
+func NewDeleteAddressUsecase(addressRepo repository.AddressRepo) address.DeleteAddressUsecase {
 	return &deleteAddressUsecase{
-		delete:  delete,
-		getById: getById,
+		delete:  &addressRepo,
+		getById: &addressRepo,
 	}
 }
