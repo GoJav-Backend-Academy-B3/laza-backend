@@ -20,7 +20,7 @@ type addCreditCardUsecase struct {
 	validate   *validator.Validate
 }
 
-func (ad *addCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardRequest) *helper.Response {
+func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardRequest) *helper.Response {
 
 	err := ad.validate.Struct(rb)
 	if err != nil {
@@ -52,9 +52,15 @@ func NewaddCreditCardUsecase(
 	addCcRepo repo.InsertAction[model.CreditCard],
 	validate *validator.Validate,
 ) uc.AddCreditCardUsecase {
+<<<<<<< HEAD
 	return &addCreditCardUsecase{
 		isExistsCc: isExistsCc,
 		addCcRepo:  addCcRepo,
 		validate:   validate,
+=======
+	return &AddCreditCardUsecase{
+		addCcRepo: addCcRepo,
+		validate:  validate,
+>>>>>>> dev
 	}
 }

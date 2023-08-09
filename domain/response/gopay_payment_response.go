@@ -7,13 +7,11 @@ import (
 )
 
 type GopayPaymentResponse struct {
-	Id            uint64
-	Phone         string
-	DeepLink      string
-	QRCode        string
-	GetStatusLink string
-	CancelLink    string
-	ExpiryTime    time.Time
+	Id         uint64    `json:"id,omitempty"`
+	Phone      string    `json:"phone,omitempty"`
+	DeepLink   string    `json:"deep_link,omitempty"`
+	QRCode     string    `json:"qr_code,omitempty"`
+	ExpiryTime time.Time `json:"expiry_time"`
 }
 
 func (r *GopayPaymentResponse) FillFromEntity(m *model.Gopay) {
@@ -21,7 +19,5 @@ func (r *GopayPaymentResponse) FillFromEntity(m *model.Gopay) {
 	r.Phone = m.Phone
 	r.DeepLink = m.Deeplink
 	r.QRCode = m.QRCode
-	r.GetStatusLink = m.GetStatusLink
-	r.CancelLink = m.CancelLink
 	r.ExpiryTime = m.ExpiryTime
 }

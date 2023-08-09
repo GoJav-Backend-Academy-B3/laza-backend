@@ -4,7 +4,7 @@ import "github.com/phincon-backend/laza/domain/model"
 
 type TransactionBankOrderResponse struct {
 	BasicOrderResponse
-	TransactionBankId uint64
+	TransactionBankId uint64 `json:"va_number"`
 }
 
 func (r *TransactionBankOrderResponse) FillFromEntity(m *model.Order) {
@@ -12,7 +12,7 @@ func (r *TransactionBankOrderResponse) FillFromEntity(m *model.Order) {
 	r.Amount = m.Amount
 	r.CreatedAt = m.CreatedAt
 	r.UpdatedAt = m.UpdatedAt
-	r.OrderStatusId = m.OrderStatusId
+	r.OrderStatus = m.OrderStatusId
 	r.AddressId = m.AddressId
 	if m.TransactionBankId.Valid {
 		r.TransactionBankId = uint64(m.TransactionBankId.Int64)
