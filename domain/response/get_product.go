@@ -32,6 +32,34 @@ type ProductOverview struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+type ProductDetail struct {
+	Id          uint64                   `json:"id"`
+	Name        string                   `json:"name"`
+	Description string                   `json:"description"`
+	ImageUrl    string                   `json:"image_url"`
+	Price       float64                  `json:"price"`
+	CategoryId  uint64                   `json:"category_id"`
+	Categories  []CategorySimpleResponse `json:"category"`
+	Sizes       []GetSize                `json:"size"`
+	Reviews     []model.ProductReview    `json:"reviews"`
+	CreatedAt   time.Time                `json:"created_at"`
+	UpdatedAt   time.Time                `json:"updated_at"`
+}
+
+func (p ProductDetail) FillFromEntity(e model.Product) ProductDetail {
+	p = ProductDetail{
+		Id:          e.Id,
+		Name:        e.Name,
+		Description: e.Description,
+		ImageUrl:    e.ImageUrl,
+		Price:       e.Price,
+		CategoryId:  e.CategoryId,
+		CreatedAt:   e.CreatedAt,
+		UpdatedAt:   e.UpdatedAt,
+	}
+	return p
+}
+
 func (p *ProductOverview) FillFromEntity(e model.Product) {
 	p.Id = e.Id
 	p.Name = e.Name
