@@ -15,8 +15,7 @@ type ProviderIndex struct {
 }
 
 func (h *twitterAuthHandler) loginTwitter(c *gin.Context) {
-	// gothic.Store = helper.GetStore()
-
+	gothic.Store = helper.GetStore()
 	if gothUser, err := gothic.CompleteUserAuth(c.Writer, c.Request); err == nil {
 		helper.GetResponse(gothUser, http.StatusOK, false).Send(c)
 		fmt.Println(gothUser)
