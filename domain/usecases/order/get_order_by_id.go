@@ -5,5 +5,5 @@ import (
 )
 
 type GetOrderByIdUsecase interface {
-	Execute(orderId any) (order model.Order, err error)
+	Execute(orderId string) (order model.Order, err error)
 }

@@ -2,6 +2,7 @@ package order
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 	"net/http"
 )
@@ -22,7 +23,10 @@ func (h *orderHandler) GetOrderById(c *gin.Context) {
 		return
 	}
 
-	helper.GetResponse(order, 200, false).Send(c)
+	orderResponse := response.Order{}
+	orderResponse.FillFromEntity(&order)
+
+	helper.GetResponse(orderResponse, 200, false).Send(c)
 	return
 
 }

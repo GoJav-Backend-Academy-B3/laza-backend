@@ -6,15 +6,15 @@ import (
 )
 
 type GetByIdUsecase struct {
-	getByIdAction repositories.GetByIdAction[model.Order]
+	getOrder repositories.GetByIdAction[model.Order]
 }
 
-func NewGetByIdUsecase(getByIdAction repositories.GetByIdAction[model.Order]) *GetByIdUsecase {
-	return &GetByIdUsecase{getByIdAction: getByIdAction}
+func NewGetByIdUsecase(getOrder repositories.GetByIdAction[model.Order]) *GetByIdUsecase {
+	return &GetByIdUsecase{getOrder: getOrder}
 }
 
 // Execute implements product.SearchProductByNameUsecase.
-func (u *GetByIdUsecase) Execute(orderId any) (order model.Order, err error) {
-	order, err = u.getByIdAction.GetById(orderId)
+func (u *GetByIdUsecase) Execute(orderId string) (order model.Order, err error) {
+	order, err = u.getOrder.GetById(orderId)
 	return
 }

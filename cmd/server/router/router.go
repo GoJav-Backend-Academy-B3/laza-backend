@@ -8,7 +8,6 @@ import (
 	_ "github.com/phincon-backend/laza/docs"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -73,8 +72,9 @@ func NewServerGin() *gin.Engine {
 
 	return r
 }
- 
+
 var noAuthList = make([]string, 0)
+
 func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/")
 	noAuthList = append(noAuthList, "/login")
@@ -98,6 +98,7 @@ func noAuth(url string) bool {
 }
 
 var roleAdminList = make([]string, 0)
+
 func roleAdmin(url string) bool {
 	roleAdminList = append(roleAdminList, "/user")
 	roleAdminList = append(roleAdminList, "/user/")
