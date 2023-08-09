@@ -3,16 +3,19 @@ package user
 import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type DeleteUserUsecase struct {
 	deleteAction repositories.DeleteAction[model.User]
 }
 
-func NewDeleteUserUsecase(repo repositories.DeleteAction[model.User]) user.DeleteUserUsecase {
-	return &DeleteUserUsecase{deleteAction: repo}
+func NewDeleteUserUsecase(userRepo user.UserRepo) contract.DeleteUserUsecase {
+	return &DeleteUserUsecase{
+		deleteAction: &userRepo,
+	}
 }
 
 // Excute implements user.DeleteUserUsecase.

@@ -5,8 +5,9 @@ import (
 
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 	"gorm.io/gorm"
 )
 
@@ -14,8 +15,10 @@ type GetByIdUserUsecase struct {
 	getByIdAction repositories.GetByIdAction[model.User]
 }
 
-func NewGetByIdUserUsecase(repo repositories.GetByIdAction[model.User]) user.GetByIdUserUsecase {
-	return &GetByIdUserUsecase{getByIdAction: repo}
+func NewGetByIdUserUsecase(userRepo user.UserRepo) contract.GetByIdUserUsecase {
+	return &GetByIdUserUsecase{
+		getByIdAction: &userRepo,
+	}
 }
 
 // Excute implements user.GetByIdUserUsecase.
