@@ -47,6 +47,7 @@ func NewServerGin() *gin.Engine {
 		provider.NewAddressesHandler(),
 		provider.NewOrderHandler(),
 		provider.NewCategoryHandler(),
+		provider.NewBrandHandler(),
 		provider.NewcreditCardHandler(),
 	)
 
@@ -84,6 +85,9 @@ func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/size")
 	noAuthList = append(noAuthList, "/size/:id")
 	noAuthList = append(noAuthList, "/category")
+	noAuthList = append(noAuthList, "/brand")
+	noAuthList = append(noAuthList, "/brand/:id")
+	noAuthList = append(noAuthList, "/brand/search")
 	for _, item := range noAuthList {
 		if strings.EqualFold(item, url) {
 			return true
