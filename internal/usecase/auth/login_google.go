@@ -6,6 +6,7 @@ import (
 	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/usecases/auth"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type LoginGoogleUserUsecase struct {
@@ -15,17 +16,12 @@ type LoginGoogleUserUsecase struct {
 	usernameExistsAction action.ExistsUsername
 }
 
-func NewLoginGoogleUserUsecase(
-	insertUserAction repositories.InsertAction[model.User],
-	findByEmailAction action.FindByEmail,
-	emailExistsAction action.ExistsEmail,
-	usernameExistsAction action.ExistsUsername,
-) auth.LoginGoogleUserUsecase {
+func NewLoginGoogleUserUsecase(userRepo user.UserRepo) auth.LoginGoogleUserUsecase {
 	return &LoginGoogleUserUsecase{
-		insertUserAction:     insertUserAction,
-		findByEmailAction:    findByEmailAction,
-		emailExistsAction:    emailExistsAction,
-		usernameExistsAction: usernameExistsAction,
+		insertUserAction:     &userRepo,
+		findByEmailAction:    &userRepo,
+		emailExistsAction:    &userRepo,
+		usernameExistsAction: &userRepo,
 	}
 }
 
@@ -33,7 +29,7 @@ func NewLoginGoogleUserUsecase(
 func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper.Response {
 	username := helper.ExtractUsernameFromEmail(user.Email)
 	if userExists := uc.usernameExistsAction.ExistsUsername(username); userExists {
-		return helper.GetResponse("username is already registered", 500, true)
+		return helper.GetResponse("username is taken, try another", 500, true)
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); !emailExists {
