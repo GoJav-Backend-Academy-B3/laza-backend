@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	action "github.com/phincon-backend/laza/domain/repositories/user"
 	"github.com/phincon-backend/laza/domain/response"
 	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
@@ -11,11 +12,13 @@ import (
 
 type GetWithLimitUserUsecase struct {
 	getWithLimitAction repositories.GetWithLimitAction[model.User]
+	countAction        action.Count
 }
 
 func NewGetWithLimitUserUsecase(userRepo user.UserRepo) contract.GetWithLimitUserUsecase {
 	return &GetWithLimitUserUsecase{
 		getWithLimitAction: &userRepo,
+		countAction:        &userRepo,
 	}
 }
 
@@ -39,5 +42,20 @@ func (uc *GetWithLimitUserUsecase) Execute(page, perpage uint64) *helper.Respons
 	for _, v := range res {
 		result = append(result, *response.UserModelResponse(v))
 	}
-	return helper.GetResponse(result, 200, false)
+
+	count, err := uc.countAction.Count()
+	if err != nil {
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+	totalPage := helper.PageCount(count, int64(perpage))
+
+	response := map[string]any{
+		"meta": map[string]any{
+			"page":       page,
+			"perpage":    perpage,
+			"total_page": totalPage,
+		},
+		"data": result,
+	}
+	return helper.GetResponse(response, 200, false)
 }
