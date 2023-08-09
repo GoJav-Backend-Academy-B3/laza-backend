@@ -15,6 +15,7 @@ type ProductReview struct {
 	Comment   string    `json:"comment"`
 	Rating    float32   `json:"rating"`
 	FullName  string    `json:"full_name"`
+	ImageUrl  string    `json:"image_url"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
