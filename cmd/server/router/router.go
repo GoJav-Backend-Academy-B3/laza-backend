@@ -5,14 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/cmd/server/provider"
+	_ "github.com/phincon-backend/laza/docs"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
-
-	_ "github.com/phincon-backend/laza/docs"
-
-	ginSwagger "github.com/swaggo/gin-swagger"
-
 	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title Laza
@@ -52,7 +49,10 @@ func NewServerGin() *gin.Engine {
 		provider.NewCategoryHandler(),
 		provider.NewcreditCardHandler(),
 	)
+
 	auth := r.Group("").Use(middleware.AuthMiddleware())
+	adminAuth := r.Group("").Use(middleware.AuthMiddleware(), middleware.AdminRoleMiddleware())
+
 	for _, v := range server {
 		handlers := v.GetHandlers()
 		for _, handler := range handlers {
@@ -61,6 +61,8 @@ func NewServerGin() *gin.Engine {
 				r.Handle(handler.GinHandlerFunc())
 			} else if strings.Contains(path, "/auth") {
 				r.Handle(handler.GinHandlerFunc())
+			} else if roleAdmin(path) {
+				adminAuth.Handle(handler.GinHandlerFunc())
 			} else {
 				auth.Handle(handler.GinHandlerFunc())
 			}
@@ -69,9 +71,8 @@ func NewServerGin() *gin.Engine {
 
 	return r
 }
-
+ 
 var noAuthList = make([]string, 0)
-
 func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/")
 	noAuthList = append(noAuthList, "/login")
@@ -84,6 +85,18 @@ func noAuth(url string) bool {
 	noAuthList = append(noAuthList, "/size/:id")
 	noAuthList = append(noAuthList, "/category")
 	for _, item := range noAuthList {
+		if strings.EqualFold(item, url) {
+			return true
+		}
+	}
+	return false
+}
+
+var roleAdminList = make([]string, 0)
+func roleAdmin(url string) bool {
+	roleAdminList = append(roleAdminList, "/user")
+	roleAdminList = append(roleAdminList, "/user/")
+	for _, item := range roleAdminList {
 		if strings.EqualFold(item, url) {
 			return true
 		}

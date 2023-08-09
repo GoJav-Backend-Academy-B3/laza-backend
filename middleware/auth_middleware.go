@@ -33,6 +33,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("userId", validatedToken.UserId)
+		c.Set("userRole", validatedToken.Role)
 		c.Next()
 	}
 }

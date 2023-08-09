@@ -63,15 +63,14 @@ CLOUD_SECRET=
 
 APP_PORT=
 BASE_URL=
-
 ```
 
-9. Run Swaggo init to generate documentation
-```
+4. Run Swaggo init to generate documentation
+```bash
 swag init -g cmd/server/router/router.go
 ```
 
-4. Run the app
+5. Run the app
 
 ```bash
 go run /cmd/server/main.go

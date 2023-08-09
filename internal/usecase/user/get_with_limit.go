@@ -4,18 +4,19 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type GetWithLimitUserUsecase struct {
 	getWithLimitAction repositories.GetWithLimitAction[model.User]
 }
 
-func NewGetWithLimitUserUsecase(
-	repo repositories.GetWithLimitAction[model.User],
-) user.GetWithLimitUserUsecase {
-	return &GetWithLimitUserUsecase{getWithLimitAction: repo}
+func NewGetWithLimitUserUsecase(userRepo user.UserRepo) contract.GetWithLimitUserUsecase {
+	return &GetWithLimitUserUsecase{
+		getWithLimitAction: &userRepo,
+	}
 }
 
 // Excute implements user.GetWithLimitUserUsecase.

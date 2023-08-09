@@ -4,16 +4,19 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/domain/usecases/user"
+	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/internal/repo/user"
 )
 
 type GetAllUserUsecase struct {
 	getAllAction repositories.GetAllAction[model.User]
 }
 
-func NewGetAllUserUsecase(repo repositories.GetAllAction[model.User]) user.GetAllUserUsecase {
-	return &GetAllUserUsecase{getAllAction: repo}
+func NewGetAllUserUsecase(userRepo user.UserRepo) contract.GetAllUserUsecase {
+	return &GetAllUserUsecase{
+		getAllAction: &userRepo,
+	}
 }
 
 // Excute implements user.GetAllUserUsecase.

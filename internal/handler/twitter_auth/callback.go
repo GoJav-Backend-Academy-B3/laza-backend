@@ -11,15 +11,16 @@ import (
 )
 
 func (h *twitterAuthHandler) twitterCallBack(c *gin.Context) {
-	// gothic.Store = helper.GetStore()
-	gothUser, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+
+	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+
 	if err != nil {
-		fmt.Println(gothUser)
+		fmt.Println(user)
 		helper.GetResponse(err.Error(), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 
-	rb := response.FillFromTwitter(gothUser.Email, gothUser.Name, gothUser.NickName, gothUser.RawData["profile_image_url_https"].(string))
+	rb := response.FillFromTwitter(user.Email, user.Name, user.NickName, user.RawData["profile_image_url_https"].(string))
 
 	h.useCaseTwitter.Execute(rb).Send(c)
 }

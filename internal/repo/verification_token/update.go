@@ -1,4 +1,4 @@
-package verificationtoken
+package verification_token
 
 import (
 	"github.com/phincon-backend/laza/domain/model"
