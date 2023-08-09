@@ -125,13 +125,13 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 
 	// insert order to db
 	order := model.Order{
-		Id:            orderNumber,
-		Amount:        int64(grossAmount),
-		CreatedAt:     time.Now(),
-		UpdatedAt:     time.Now(),
-		UserId:        userId,
-		OrderStatusId: 1,
-		AddressId:     uint64(addressId),
+		Id:          orderNumber,
+		Amount:      int64(grossAmount),
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+		UserId:      userId,
+		OrderStatus: "pending",
+		AddressId:   uint64(addressId),
 		CreditCardId: sql.NullInt64{
 			Int64: int64(cc.Id),
 			Valid: true,
