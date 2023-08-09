@@ -4,7 +4,7 @@ import "github.com/phincon-backend/laza/domain/model"
 
 type GopayOrderResponse struct {
 	BasicOrderResponse
-	GopayId uint64
+	GopayId uint64 `json:"gopay_id"`
 }
 
 func (r *GopayOrderResponse) FillFromEntity(m *model.Order) {
@@ -12,7 +12,7 @@ func (r *GopayOrderResponse) FillFromEntity(m *model.Order) {
 	r.Amount = m.Amount
 	r.CreatedAt = m.CreatedAt
 	r.UpdatedAt = m.UpdatedAt
-	r.OrderStatusId = m.OrderStatusId
+	r.OrderStatus = m.OrderStatusId
 	r.AddressId = m.AddressId
 	if m.GopayId.Valid {
 		r.GopayId = uint64(m.GopayId.Int64)

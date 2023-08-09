@@ -8,7 +8,7 @@ import (
 func GenerateOrderNumber() string {
 
 	year, month, day := time.Now().Date()
-	result := fmt.Sprintf("ORD-%d%d%d-", year, month, day)
+	result := fmt.Sprintf("ORD-%04d%02d%02d-", year, month, day)
 
 	result += GenerateRandomNumericString(10)
 
