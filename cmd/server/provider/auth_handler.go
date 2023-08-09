@@ -27,8 +27,8 @@ func NewAuthHandler() handlers.HandlerInterface {
 	registerUser := usecaseUser.NewInsertUserUsecase(*repoUser, *repoToken)
 	verifyEmailUser := usecaseAuth.NewVerifyEmailUserUsecase(*repoUser, *repoToken)
 	resendEmailUser := usecaseAuth.NewResendEmailUserUsecase(*repoUser, *repoToken)
-	forgetPasswordUser := usecaseAuth.NewForgetPasswordUserUsecase(*repoUser, *repoCode)
+	forgotPasswordUser := usecaseAuth.NewForgotPasswordUserUsecase(*repoUser, *repoCode)
 	resetPasswordUser := usecaseAuth.NewResetPasswordUserUsecase(*repoUser, *repoCode)
 
-	return handler.NewAuthHandler(loginUser, loginGoogleUser, registerUser, verifyEmailUser, resendEmailUser, forgetPasswordUser, resetPasswordUser, validate)
+	return handler.NewAuthHandler(loginUser, loginGoogleUser, registerUser, verifyEmailUser, resendEmailUser, forgotPasswordUser, resetPasswordUser, validate)
 }

@@ -14,7 +14,7 @@ import (
 // @Tags user
 // @Accept multipart/form-data
 // @Produce json
-// @Param user formData requests.User true "user"
+// @Param user formData requests.Register true "user"
 // @Param image formData file false "user"
 // @Security JWT
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=response.User}
