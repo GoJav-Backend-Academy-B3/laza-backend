@@ -1,12 +1,15 @@
 package user
 
 import (
+	"errors"
+
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/requests"
 	contract "github.com/phincon-backend/laza/domain/usecases/user"
 	"github.com/phincon-backend/laza/helper"
 	"github.com/phincon-backend/laza/internal/repo/user"
+	"gorm.io/gorm"
 )
 
 type ChangePasswordUserUsecase struct {
@@ -25,11 +28,14 @@ func NewChangePasswordUserUsecase(userRepo user.UserRepo) contract.ChangePasswor
 func (uc *ChangePasswordUserUsecase) Execute(id uint64, user requests.ChangePassword) *helper.Response {
 	data, err := uc.getByIdAction.GetById(id)
 	if err != nil {
-		return helper.GetResponse("user is not exist", 500, true)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return helper.GetResponse("NotFound: data user not found", 500, true)
+		}
+		return helper.GetResponse(err.Error(), 500, true)
 	}
 
 	if !helper.CheckPassword(data.Password, user.OldPassword) {
-		return helper.GetResponse("old password wrong", 500, true)
+		return helper.GetResponse("old password is invalid", 500, true)
 	}
 
 	if user.NewPassword != user.RePassword {

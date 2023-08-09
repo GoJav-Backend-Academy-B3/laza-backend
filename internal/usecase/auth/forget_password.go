@@ -35,7 +35,7 @@ func NewForgetPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_
 // Execute implements auth.ForgetPasswordUserUsecase.
 func (uc *ForgetPasswordUserUsecase) Execute(email string) *helper.Response {
 	if emailExists := uc.emailExistsAction.ExistsEmail(email); !emailExists {
-		return helper.GetResponse("email is not registered", 500, true)
+		return helper.GetResponse("please enter a valid email address", 500, true)
 	}
 
 	data, err := uc.emailAction.FindByEmail(email)

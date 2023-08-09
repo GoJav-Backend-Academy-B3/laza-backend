@@ -28,7 +28,7 @@ type Login struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
-type UpdatePassword struct {
+type ResetPassword struct {
 	NewPassword string `json:"new_password" validate:"required,min=8"`
 	RePassword  string `json:"re_password" validate:"required,min=8"`
 }

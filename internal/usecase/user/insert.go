@@ -33,11 +33,11 @@ func NewInsertUserUsecase(userRepo user.UserRepo, tokenRepo verification_token.V
 // Excute implements user.InsertUserUsecase.
 func (uc *InsertUserUsecase) Execute(user requests.Register) *helper.Response {
 	if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-		return helper.GetResponse("username is already registered", 500, true)
+		return helper.GetResponse("username is taken, try another", 500, true)
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-		return helper.GetResponse("email is already registered", 500, true)
+		return helper.GetResponse("email is taken, try another", 500, true)
 	}
 
 	hashPassword, err := helper.HashPassword(user.Password)

@@ -35,19 +35,21 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.UpdateUser) *helpe
 
 	}
 
-	if data.Email != user.Email {
-		if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
-			return helper.GetResponse("email is already registered", 500, true)
+	if data.Username != user.Username || data.Email != user.Email {
+		if data.Username != user.Username {
+			if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
+				return helper.GetResponse("username is taken, try another", 500, true)
+			}
+			data.Username = user.Username
 		}
-		data.Email = user.Email
-		data.IsVerified = false
-	}
 
-	if data.Username != user.Username {
-		if userExists := uc.usernameExistsAction.ExistsUsername(user.Username); userExists {
-			return helper.GetResponse("username is already registered", 500, true)
+		if data.Email != user.Email {
+			if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); emailExists {
+				return helper.GetResponse("email is taken, try another", 500, true)
+			}
+			data.Email = user.Email
+			data.IsVerified = false
 		}
-		data.Username = user.Username
 	}
 
 	var imageUrl = helper.DefaultImageProfileUrl

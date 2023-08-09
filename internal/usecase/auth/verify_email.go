@@ -39,7 +39,7 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 
 	dataUser, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
-		return helper.GetResponse("email is not exist", 500, true)
+		return helper.GetResponse("email is invalid", 500, true)
 	}
 
 	dataToken, err := uc.tokenAction.FindByToken(uint64(dataUser.Id), token)

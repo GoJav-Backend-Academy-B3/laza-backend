@@ -22,11 +22,11 @@ func NewLoginUserUsecase(userRepo user.UserRepo) auth.LoginUserUsecase {
 func (uc *LoginUserUsecase) Execute(user requests.Login) *helper.Response {
 	data, err := uc.usernameActon.FindByUsername(user.Username)
 	if err != nil {
-		return helper.GetResponse("user is not exist", 500, true)
+		return helper.GetResponse("username or password is invalid", 500, true)
 	}
 
 	if !helper.CheckPassword(data.Password, user.Password) {
-		return helper.GetResponse("password false", 500, true)
+		return helper.GetResponse("username or password is invalid", 500, true)
 	}
 
 	if !data.IsVerified {

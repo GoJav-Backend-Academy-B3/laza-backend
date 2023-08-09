@@ -29,7 +29,7 @@ func NewLoginGoogleUserUsecase(userRepo user.UserRepo) auth.LoginGoogleUserUseca
 func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper.Response {
 	username := helper.ExtractUsernameFromEmail(user.Email)
 	if userExists := uc.usernameExistsAction.ExistsUsername(username); userExists {
-		return helper.GetResponse("username is already registered", 500, true)
+		return helper.GetResponse("username is taken, try another", 500, true)
 	}
 
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); !emailExists {

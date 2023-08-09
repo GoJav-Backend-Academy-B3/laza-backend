@@ -14,14 +14,14 @@ import (
 	"github.com/phincon-backend/laza/internal/repo/verification_code"
 )
 
-type UpdatePasswordUserUsecase struct {
+type ResetPasswordUserUsecase struct {
 	updateAction repositories.UpdateAction[model.User]
 	emailAction  actionUser.FindByEmail
 	codeAction   actionCode.FindByCode
 }
 
-func NewUpdatePasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_code.VerificationCodeRepo) auth.UpdatePasswordUserUsecase {
-	return &UpdatePasswordUserUsecase{
+func NewResetPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_code.VerificationCodeRepo) auth.ResetPasswordUserUsecase {
+	return &ResetPasswordUserUsecase{
 		updateAction: &userRepo,
 		emailAction:  &userRepo,
 		codeAction:   &codeRepo,
@@ -29,7 +29,7 @@ func NewUpdatePasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_
 }
 
 // Execute implements auth.UpdatePasswordUserUsecase.
-func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.UpdatePassword) *helper.Response {
+func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.ResetPassword) *helper.Response {
 	if email == "" && code == "" {
 		return helper.GetResponse("email and code are both empty", 400, true)
 	} else if email == "" {
@@ -39,12 +39,12 @@ func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.U
 	}
 
 	if user.NewPassword != user.RePassword {
-		return helper.GetResponse("passwords do not match. please try again.", 401, true)
+		return helper.GetResponse("passwords do not match, please try again.", 401, true)
 	}
 
 	dataUser, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
-		return helper.GetResponse("email is not exist", 401, true)
+		return helper.GetResponse("email is invalid", 401, true)
 	}
 
 	dataCode, err := uc.codeAction.FindByCode(uint64(dataUser.Id), code)
@@ -53,11 +53,10 @@ func (uc *UpdatePasswordUserUsecase) Execute(email, code string, user requests.U
 	}
 
 	location, _ := time.LoadLocation("Asia/Jakarta")
-
 	if dataCode.Code != code {
 		return helper.GetResponse("failed to verify email", 401, true)
 	} else if dataCode.ExpiryDate.In(location).Add(-7 * time.Hour).Before(time.Now().In(location)) {
-		return helper.GetResponse("expired verify email, please resend verify again!", 401, true)
+		return helper.GetResponse("expired verify email, please resend mail verify again!", 401, true)
 	}
 
 	hashPassword, err := helper.HashPassword(user.NewPassword)
