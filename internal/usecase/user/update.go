@@ -67,6 +67,7 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.UpdateUser) *helpe
 		imageUrl = url
 	}
 
+	// TODO: Fix bug before update is_verified false and after update back to true
 	dao := model.User{
 		FullName:   user.FullName,
 		Username:   data.Username,

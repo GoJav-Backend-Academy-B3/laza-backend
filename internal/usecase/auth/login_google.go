@@ -31,6 +31,7 @@ func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper
 	if emailExists := uc.emailExistsAction.ExistsEmail(user.Email); !emailExists {
 		dao := model.User{
 			FullName:   user.Name,
+			Username:   helper.ExtractUsernameFromEmail(user.Email),
 			Email:      user.Email,
 			ImageUrl:   user.Picture,
 			IsVerified: user.Verified_email,

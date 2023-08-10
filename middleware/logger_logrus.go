@@ -23,8 +23,11 @@ func LoggerMiddleware() gin.HandlerFunc {
 		ip := c.ClientIP()
 
 		// Read and capture the request body
-		body, _ := io.ReadAll(c.Request.Body)
-		c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
+		var bodyBytes []byte
+		if c.Request.Header.Get("Content-Type") != "multipart/form-data" {
+			bodyBytes, _ = io.ReadAll(c.Request.Body)
+			c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+		}
 
 		// Continue handling the request
 		c.Next()
@@ -43,6 +46,6 @@ func LoggerMiddleware() gin.HandlerFunc {
 
 		// Log the information
 		logger.Infof("Method: %s, Path: %s, PathParam: %s Query: %s, IP: %s, RequestBody: %s, StatusCode: %d, Duration: %s, ResponseSize: %d, ErrorMessage: %s",
-			method, path, pathParam, query, ip, body, statusCode, duration, respSize, errMessage)
+			method, path, pathParam, query, ip, string(bodyBytes), statusCode, duration, respSize, errMessage)
 	}
 }

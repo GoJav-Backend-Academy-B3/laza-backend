@@ -21,18 +21,17 @@ func NewGetAllReviewUsecase(repoProduct review.GetReviewByProduct) action.GetRev
 
 func (uc *GetAllReviewUsecase) Execute(productID uint64) *helper.Response {
 	product, err := uc.getReviewByProduct.GetProductById(productID)
-	if err != nil {
-		return helper.GetResponse(err.Error(), 500, true)
+	if len(product) == 0 {
+		return helper.GetResponse("Product not found", 404, true)
 	}
-
 	averageRating, total, err := uc.getReviewByProduct.GetReviewStatsByProduct(productID)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 	averageRating = math.Round(averageRating*100) / 100
-	newProdustReviews := response.ProductReview{
+	newProdustReviews := response.GetReviews{
 		Total:       total,
-		Products:    product,
+		Reviews:     product,
 		Avrg_Rating: averageRating,
 	}
 
