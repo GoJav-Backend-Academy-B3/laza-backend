@@ -35,7 +35,7 @@ func NewOrderHandler() domain.HandlerInterface {
 	createOrderWithGopay := orderUsecase.NewCreateOrderWithGopayUsecase(orderRepo, addressRepo, midtransRepo, gopayRepo, orderRepo, productRepo, productOrderRepo)
 	createOrderWithBank := orderUsecase.NewCreateOrderWithBankUsecase(orderRepo, addressRepo, midtransRepo, transactionBankRepo, orderRepo, productRepo, productOrderRepo)
 	createOrderWithCC := orderUsecase.NewCreateOrderWithCCUsecase(orderRepo, addressRepo, midtransRepo, midtransRepo, creditCardRepo, orderRepo, productRepo, productOrderRepo)
-	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo)
+	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo, orderRepo, midtransRepo)
 
 	return handler.NewOrderHandler(createOrderWithGopay, createOrderWithBank, createOrderWithCC, getOrderById)
 

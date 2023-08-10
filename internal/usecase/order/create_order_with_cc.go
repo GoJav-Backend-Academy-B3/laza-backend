@@ -130,7 +130,7 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 		UserId:      userId,
-		OrderStatus: "pending",
+		OrderStatus: responseMd.TransactionStatus,
 		AddressId:   uint64(addressId),
 		CreditCardId: sql.NullInt64{
 			Int64: int64(cc.Id),

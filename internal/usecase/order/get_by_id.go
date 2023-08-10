@@ -1,20 +1,42 @@
 package order
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
+	"time"
 )
 
 type GetByIdUsecase struct {
-	getOrder repositories.GetByIdAction[model.Order]
+	getOrder               repositories.GetByIdAction[model.Order]
+	updateOrder            repositories.UpdateAction[model.Order]
+	getMidtransTransaction midtranscore.FetchMidtransTransactionAction
 }
 
-func NewGetByIdUsecase(getOrder repositories.GetByIdAction[model.Order]) *GetByIdUsecase {
-	return &GetByIdUsecase{getOrder: getOrder}
+func NewGetByIdUsecase(getOrder repositories.GetByIdAction[model.Order], updateOrder repositories.UpdateAction[model.Order], getMidtransTransaction midtranscore.FetchMidtransTransactionAction) *GetByIdUsecase {
+	return &GetByIdUsecase{getOrder: getOrder, updateOrder: updateOrder, getMidtransTransaction: getMidtransTransaction}
 }
 
 // Execute implements product.SearchProductByNameUsecase.
 func (u *GetByIdUsecase) Execute(orderId string) (order model.Order, err error) {
 	order, err = u.getOrder.GetById(orderId)
-	return
+	if err != nil {
+		return
+	}
+	midtransTransaction, err := u.getMidtransTransaction.FetchMidtransTransaction(order.Id)
+
+	byteArr, _ := json.Marshal(midtransTransaction)
+	fmt.Println(string(byteArr))
+
+	order.OrderStatus = midtransTransaction.TransactionStatus
+	order.UpdatedAt = time.Now()
+
+	update, err := u.updateOrder.Update(orderId, order)
+	if err != nil {
+		return model.Order{}, err
+	}
+
+	return update, err
 }
