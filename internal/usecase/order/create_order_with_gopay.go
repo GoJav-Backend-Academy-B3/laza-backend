@@ -119,7 +119,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 		UserId:      userId,
-		OrderStatus: "pending",
+		OrderStatus: gopayRespondMd.TransactionStatus,
 		AddressId:   uint64(addressId),
 		GopayId: sql.NullInt64{
 			Int64: int64(gopayRespond.Id),

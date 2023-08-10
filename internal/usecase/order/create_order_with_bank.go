@@ -142,7 +142,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 		UserId:      userId,
-		OrderStatus: "pending",
+		OrderStatus: respondMd.TransactionStatus,
 		AddressId:   uint64(addressId),
 		TransactionBankId: sql.NullInt64{
 			Int64: int64(insertRes.Id),
