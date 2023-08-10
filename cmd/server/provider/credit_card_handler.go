@@ -2,8 +2,8 @@ package provider
 
 import (
 	"github.com/go-playground/validator/v10"
+	midtrans_core "github.com/phincon-backend/laza/config"
 	"github.com/phincon-backend/laza/domain/handlers"
-	midtrans_core "github.com/phincon-backend/laza/external/midtrans"
 	"github.com/phincon-backend/laza/internal/db"
 	hd "github.com/phincon-backend/laza/internal/handler/credit_card"
 	rp "github.com/phincon-backend/laza/internal/repo/credit_card"
@@ -22,7 +22,7 @@ func NewcreditCardHandler() handlers.HandlerInterface {
 
 	creditCrepo := rp.NewCreditCardRepo(gorm)
 	addCcUc := uc.NewaddCreditCardUsecase(creditCrepo, creditCrepo, midtransRepo, validate)
-	updateCcUc := uc.NewupdateCreditCardUsecase(creditCrepo, validate)
+	updateCcUc := uc.NewupdateCreditCardUsecase(creditCrepo, validate, midtransRepo)
 	getByIdCcUc := uc.NewgetByIdCreditCardUsecase(creditCrepo)
 	getAllCcUc := uc.NewgetAllCreditCardUsecase(creditCrepo)
 
