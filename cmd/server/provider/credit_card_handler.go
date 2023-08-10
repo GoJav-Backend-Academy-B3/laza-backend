@@ -2,8 +2,8 @@ package provider
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/handlers"
+	midtrans_core "github.com/phincon-backend/laza/external/midtrans"
 	"github.com/phincon-backend/laza/internal/db"
 	hd "github.com/phincon-backend/laza/internal/handler/credit_card"
 	rp "github.com/phincon-backend/laza/internal/repo/credit_card"
@@ -17,7 +17,7 @@ func NewcreditCardHandler() handlers.HandlerInterface {
 
 	gorm := dbs.(*db.PsqlDB).Dbs
 	validate := validator.New()
-	midclient := new(coreapi.Client)
+	midclient := midtrans_core.Init()
 	midtransRepo := rpm.NewMidtransRepo(midclient)
 
 	creditCrepo := rp.NewCreditCardRepo(gorm)

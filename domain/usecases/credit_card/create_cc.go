@@ -6,5 +6,5 @@ import (
 )
 
 type AddCreditCardUsecase interface {
-	Execute(userId uint64, md cc_request.CreditCardOrder) *helper.Response
+	Execute(userId uint64, md cc_request.CreditCardRequest) *helper.Response
 }
