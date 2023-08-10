@@ -1,8 +1,6 @@
 package category
 
 import (
-	"log"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
@@ -25,7 +23,6 @@ func (cc *createCategoryUsecaseImpl) Execute(categoryRequest requests.CategoryRe
 	}
 	categoryModel.SetCategory(categoryRequest.GetCategory())
 
-	log.Println("category--->>", categoryModel)
 	res, err := cc.insertCategoryAction.Insert(*categoryModel)
 	result = mapper.CategoryModelToSimpleResponse(res)
 	return
