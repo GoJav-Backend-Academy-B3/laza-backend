@@ -9,7 +9,6 @@ import (
 func (m *MidtransRepo) FetchMidtransCCToken(cardNumber string, expMonth int, expYear int, cvv string) (*coreapi.CardTokenResponse, *midtrans.Error) {
 
 	token, err := m.midtransClient.CardToken(cardNumber, expMonth, expYear, cvv, consts.MidtransSandBoxClientKey)
-
 	if err != nil {
 		return nil, err
 	}

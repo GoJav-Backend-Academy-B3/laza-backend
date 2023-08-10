@@ -1,7 +1,6 @@
 package credit_card
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,12 +23,11 @@ import (
 func (h *getCreditCardHandler) Add(c *gin.Context) {
 	userId := c.MustGet("userId").(uint64)
 
-	var requestBody requests.CreditCardOrder
+	var requestBody requests.CreditCardRequest
 	if err := c.Bind(&requestBody); err != nil {
 		helper.GetResponse(err.Error(), http.StatusBadRequest, true).Send(c)
 		return
 	}
-	fmt.Println(requestBody)
 
 	h.addCcUc.Execute(userId, requestBody).Send(c)
 }
