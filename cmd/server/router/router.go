@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/cmd/server/provider"
-	_ "github.com/phincon-backend/laza/docs"
+
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/middleware"
 	swaggerfiles "github.com/swaggo/files"

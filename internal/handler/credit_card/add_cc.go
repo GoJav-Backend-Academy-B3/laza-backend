@@ -24,7 +24,7 @@ import (
 func (h *getCreditCardHandler) Add(c *gin.Context) {
 	userId := c.MustGet("userId").(uint64)
 
-	var requestBody requests.CreditCardRequest
+	var requestBody requests.CreditCardOrder
 	if err := c.Bind(&requestBody); err != nil {
 		helper.GetResponse(err.Error(), http.StatusBadRequest, true).Send(c)
 		return

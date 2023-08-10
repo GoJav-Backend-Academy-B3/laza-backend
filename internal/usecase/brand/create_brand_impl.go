@@ -1,19 +1,28 @@
 package brand
 
 import (
+	"errors"
+
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	action "github.com/phincon-backend/laza/domain/repositories/brand"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/domain/usecases/brand"
 	"github.com/phincon-backend/laza/helper"
+	repository "github.com/phincon-backend/laza/internal/repo/brand"
 )
 
 type createBrandUsecaseImpl struct {
 	insertCategoryAction repositories.InsertAction[model.Brand]
+	isBrandExist         action.IsBrandExistAction
 }
 
 // Execute implements brand.CreateBrandUsecase.
 func (u *createBrandUsecaseImpl) Execute(request requests.BrandRequest) (brand model.Brand, err error) {
+	brandExist := u.isBrandExist.IsBrandExist(request.Name)
+	if brandExist {
+		return brand, errors.New("brand is exist")
+	}
 
 	file, err := request.LogoUrl.Open()
 	if err != nil {
@@ -41,6 +50,9 @@ func (u *createBrandUsecaseImpl) Execute(request requests.BrandRequest) (brand m
 	return
 }
 
-func NewCreateBrandUseCaseImpl(insertCategoryAction repositories.InsertAction[model.Brand]) brand.CreateBrandUsecase {
-	return &createBrandUsecaseImpl{insertCategoryAction: insertCategoryAction}
+func NewCreateBrandUseCaseImpl(brandRepo repository.BrandRepo) brand.CreateBrandUsecase {
+	return &createBrandUsecaseImpl{
+		insertCategoryAction: &brandRepo,
+		isBrandExist:         &brandRepo,
+	}
 }

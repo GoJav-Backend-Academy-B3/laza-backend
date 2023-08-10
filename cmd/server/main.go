@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/joho/godotenv"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/twitter"
 	"github.com/phincon-backend/laza/cmd/server/router"
 	"github.com/phincon-backend/laza/config"
+	_ "github.com/phincon-backend/laza/docs"
 )
 
 func main() {
