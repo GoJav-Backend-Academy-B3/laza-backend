@@ -28,5 +28,4 @@ func (h *orderHandler) GetOrderById(c *gin.Context) {
 
 	helper.GetResponse(orderResponse, 200, false).Send(c)
 	return
-
 }

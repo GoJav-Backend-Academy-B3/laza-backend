@@ -1,8 +1,8 @@
 package provider
 
 import (
+	midtrans_core "github.com/phincon-backend/laza/config"
 	domain "github.com/phincon-backend/laza/domain/handlers"
-	midtrans_core "github.com/phincon-backend/laza/external/midtrans"
 	"github.com/phincon-backend/laza/internal/db"
 	handler "github.com/phincon-backend/laza/internal/handler/order"
 	addressRepo "github.com/phincon-backend/laza/internal/repo/address"
@@ -36,7 +36,7 @@ func NewOrderHandler() domain.HandlerInterface {
 	createOrderWithBank := orderUsecase.NewCreateOrderWithBankUsecase(orderRepo, addressRepo, midtransRepo, transactionBankRepo, orderRepo, productRepo, productOrderRepo)
 	createOrderWithCC := orderUsecase.NewCreateOrderWithCCUsecase(orderRepo, addressRepo, midtransRepo, midtransRepo, creditCardRepo, orderRepo, productRepo, productOrderRepo)
 	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo, orderRepo, midtransRepo)
+	getAllOrderByUser := orderUsecase.NewGetAllOrderByUserUsecaseImpl(orderRepo)
 
-	return handler.NewOrderHandler(createOrderWithGopay, createOrderWithBank, createOrderWithCC, getOrderById)
-
+	return handler.NewOrderHandler(createOrderWithGopay, createOrderWithBank, createOrderWithCC, getOrderById, getAllOrderByUser)
 }
