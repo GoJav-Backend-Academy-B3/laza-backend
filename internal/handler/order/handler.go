@@ -13,6 +13,7 @@ type orderHandler struct {
 	createOrderWithBankUsecase  order.CreateOrderWithBankUsecase
 	createOrderWithCCUsecase    order.CreateOrderWithCCUsecase
 	getById                     order.GetOrderByIdUsecase
+	getAllByUser                order.GetAllOrderByUserUsecase
 }
 
 func NewOrderHandler(
@@ -20,12 +21,14 @@ func NewOrderHandler(
 	createOrderWithBankUsecase order.CreateOrderWithBankUsecase,
 	createOrderWithCCUsecase order.CreateOrderWithCCUsecase,
 	getById order.GetOrderByIdUsecase,
-) *orderHandler {
+	getAllByUser order.GetAllOrderByUserUsecase,
+) handlers.HandlerInterface {
 	return &orderHandler{
 		createOrderWithGopayUsecase: createOrderWithGopayUsecase,
 		createOrderWithBankUsecase:  createOrderWithBankUsecase,
 		createOrderWithCCUsecase:    createOrderWithCCUsecase,
 		getById:                     getById,
+		getAllByUser:                getAllByUser,
 	}
 }
 
@@ -53,6 +56,12 @@ func (h *orderHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 			Method:      http.MethodGet,
 			Path:        "/order/:order_id",
 			HandlerFunc: h.GetOrderById,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/orders",
+			HandlerFunc: h.GetOrderByUser,
 			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
 		},
 	)

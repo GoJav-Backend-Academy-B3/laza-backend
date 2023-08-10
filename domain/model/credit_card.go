@@ -6,7 +6,7 @@ type CreditCard struct {
 	ExpiredMonth int     `json:"expired_month,omitempty"`
 	ExpiredYear  int     `json:"expired_year,omitempty"`
 	UserId       uint64  `json:"user_id,omitempty"`
-	Orders       []Order `json:"orders" gorm:"foreignkey:Id"`
+	Orders       []Order `json:"orders,omitempty" gorm:"foreignkey:Id"`
 }
 
 func (CreditCard) TableName() string {

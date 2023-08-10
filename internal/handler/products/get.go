@@ -56,10 +56,8 @@ func (h *productHandler) get(c *gin.Context) {
 			product.FillFromEntity(each)
 			productsResponse = append(productsResponse, product)
 		}
-		response := helper.GetResponse(productsResponse, 200, false)
-
-		c.JSON(response.Code, response)
-		return
+		response := helper.GetResponse(productsResponse, http.StatusOK, false)
+		response.Send(c)
 	} else {
 		products, err := h.searchProductByNameUsecase.Execute(search_q, offset, limit)
 		if err != nil {

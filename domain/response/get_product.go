@@ -65,6 +65,7 @@ func (p *ProductOverview) FillFromEntity(e model.Product) {
 	p.Name = e.Name
 	p.ImageUrl = e.ImageUrl
 	p.Price = e.Price
+	p.CreatedAt = e.CreatedAt
 }
 
 func (p *Product) FillFromEntity(e model.Product) {
