@@ -38,13 +38,10 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 
 	// Check if brand name exists
 	// return error if false
-	ps, err := u.searchByBrandAction.SearchByBrand(request.Brand, 0, 1)
+	brand, err := u.getBrandName.GetByName(request.Brand)
 	if err != nil {
 		// TODO: Handle errors
 		return
-	}
-	if len(ps) == 0 {
-		return product, errors.New("NotFound: Brand name not found")
 	}
 
 	sizeModels := make([]model.Size, 0)
