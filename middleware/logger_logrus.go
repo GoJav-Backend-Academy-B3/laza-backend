@@ -3,7 +3,9 @@ package middleware
 import (
 	"bytes"
 	"io"
+	"log"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -23,8 +25,9 @@ func LoggerMiddleware() gin.HandlerFunc {
 		ip := c.ClientIP()
 
 		// Read and capture the request body
+		log.Println(c.Request.Header.Get("Content-Type"))
 		var bodyBytes []byte
-		if c.Request.Header.Get("Content-Type") != "multipart/form-data" {
+		if !strings.Contains(c.Request.Header.Get("Content-Type"), "multipart/form-data") {
 			bodyBytes, _ = io.ReadAll(c.Request.Body)
 			c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 		}
