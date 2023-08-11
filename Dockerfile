@@ -7,8 +7,9 @@ COPY . .
 RUN go mod tidy
 RUN go build -o main -ldflags=-X=main.version=${VERSION} cmd/server/main.go
 
-FROM debian:buster-slim
-COPY --from=builder /app/main /go/bin/main
-ENV PATH="/go/bin:${PATH}"
+FROM golang:1.20-alpine
+WORKDIR /server
+COPY --from=builder /app/main /server/main
+
 EXPOSE 8080
-CMD ["main"]
+ENTRYPOINT ["/server/main"]
