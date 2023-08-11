@@ -37,6 +37,10 @@ func (uc *ResendEmailUserUsecase) Execute(email string) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	if data.IsVerified {
+		return helper.GetResponse("already registered, you can login", 500, true)
+	}
+
 	codeVerify := helper.GenerateRandomNumericString(4)
 	expiryDate, _ := helper.GetExpiryDate(5*time.Minute, "Asia/Jakarta")
 	daoToken := model.VerificationToken{

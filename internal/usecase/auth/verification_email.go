@@ -44,7 +44,7 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 
 	dataToken, err := uc.tokenAction.FindByToken(uint64(dataUser.Id), token)
 	if err != nil {
-		return helper.GetResponse("token not found", 500, true)
+		return helper.GetResponse("token is invalid", 500, true)
 	}
 
 	location, _ := time.LoadLocation("Asia/Jakarta")
@@ -68,5 +68,5 @@ func (uc *VerifyEmailUserUsecase) Execute(email, token string) *helper.Response 
 		"message": "successfully verification email",
 	}
 
-	return helper.GetResponse(response, 200, false)
+	return helper.GetResponse(response, 202, false)
 }

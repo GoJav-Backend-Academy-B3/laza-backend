@@ -11,7 +11,7 @@ type User struct {
 	FullName   string    `json:"full_name"`
 	Username   string    `json:"username"`
 	Email      string    `json:"email"`
-	ImageUrl   string    `json:"image_url"`
+	ImageUrl   string    `json:"image_url,omitempty"`
 	IsVerified bool      `json:"is_verified,omitempty"`
 	IsAdmin    bool      `json:"is_admin,omitempty"`
 	CreatedAt  time.Time `json:"created_at"`

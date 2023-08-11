@@ -20,6 +20,7 @@ import (
 // @Router /auth/reset-password/ [post]
 func (h *authHandler) resetPassword(c *gin.Context) {
 	email := c.Query("email")
+	code := c.Query("code")
 
 	var request requests.ResetPassword
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -33,5 +34,5 @@ func (h *authHandler) resetPassword(c *gin.Context) {
 		return
 	}
 
-	h.resetPasswordUser.Execute(email, request).Send(c)
+	h.resetPasswordUser.Execute(email, code, request).Send(c)
 }
