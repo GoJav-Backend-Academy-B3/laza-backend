@@ -78,7 +78,7 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 		ImageUrl:    url,
 		Price:       request.Price,
 		CategoryId:  category.Id,
-		BrandId:     ps[0].BrandId, // didapat dari search by brand, ambil salah satu brand id
+		BrandId:     brand.Id, // didapat dari search by brand, ambil salah satu brand id
 		Sizes:       sizeModels,
 	})
 	if err != nil {
