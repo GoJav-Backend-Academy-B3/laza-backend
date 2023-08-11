@@ -3,7 +3,7 @@ package model
 type Category struct {
 	Id       uint64    `json:"id,omitempty" gorm:"primarykey"`
 	Category string    `json:"category,omitempty"`
-	Products []Product `json:"products" gorm:"many2many:category_product"`
+	Products []Product `json:"products,omitempty"`
 }
 
 func (*Category) TableName() string {

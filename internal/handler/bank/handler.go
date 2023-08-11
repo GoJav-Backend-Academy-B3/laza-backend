@@ -43,7 +43,6 @@ func (h *bankHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		handlers.HandlerStruct{Method: http.MethodPost, Path: "/bank", HandlerFunc: h.insert},
 		handlers.HandlerStruct{Method: http.MethodPut, Path: "/bank/:id", HandlerFunc: h.update},
 		handlers.HandlerStruct{Method: http.MethodDelete, Path: "/bank/:id", HandlerFunc: h.delete},
-		// handlers.HandlerStruct{Method: http.MethodGet, Path: "/user/", HandlerFunc: h.getWithLimit},
 	)
 	return
 }

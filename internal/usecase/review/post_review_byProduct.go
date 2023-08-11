@@ -4,22 +4,32 @@ import (
 	"net/http"
 
 	m "github.com/phincon-backend/laza/domain/model"
-	d "github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/repositories"
+	d "github.com/phincon-backend/laza/domain/repositories/cart"
 	usecase "github.com/phincon-backend/laza/domain/usecases/review"
 	h "github.com/phincon-backend/laza/helper"
 )
 
 type insertReviewUsecase struct {
-	insertReviewRepo d.InsertAction[m.Review]
+	insertReviewRepo repositories.InsertAction[m.Review]
+	getCartByIdRepo  d.GetCartByIdAction
 }
 
-func NewinsertReviewUsecase(h d.InsertAction[m.Review]) usecase.InsertReviewUsecase {
+func NewinsertReviewUsecase(review repositories.InsertAction[m.Review], gcr d.GetCartByIdAction) usecase.InsertReviewUsecase {
 	return &insertReviewUsecase{
-		insertReviewRepo: h,
+		insertReviewRepo: review,
+		getCartByIdRepo:  gcr,
 	}
 }
 
 func (uc *insertReviewUsecase) Execute(userId uint64, productId uint64, comment string, rating float32) *h.Response {
+	rs, err := uc.getCartByIdRepo.GetCartById(userId)
+	if len(rs) == 0 {
+		return h.GetResponse("You must checkout before giving a review", http.StatusBadRequest, true)
+	}
+	if rating > 5 {
+		return h.GetResponse("Rating cannot exceed 5", http.StatusBadRequest, true)
+	}
 	review := m.Review{
 		UserId:    userId,
 		ProductId: productId,
@@ -32,5 +42,5 @@ func (uc *insertReviewUsecase) Execute(userId uint64, productId uint64, comment 
 		return h.GetResponse(err.Error(), http.StatusInternalServerError, true)
 	}
 
-	return h.GetResponse(addreview, http.StatusOK, false)
+	return h.GetResponse(addreview, 201, false)
 }
