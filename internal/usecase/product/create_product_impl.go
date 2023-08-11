@@ -132,8 +132,6 @@ func (u *CreateProductUsecaseImpl) getCategoryRepo(ctx context.Context, category
 
 	var err error
 	*category, err = u.getCategoryAction.GetByNameWithContext(ctx, categoryName)
-	// BUG: This sometimes not emitting gorm.ErrRecordNotFound when inputting
-	//      nonexistent errors.
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		errChan <- errors.New("NotFound: Category not found")
 		return
