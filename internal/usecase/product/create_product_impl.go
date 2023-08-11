@@ -84,11 +84,11 @@ func NewCreateProductUsecaseImpl(
 	insertProductAction repositories.InsertAction[model.Product],
 	searchByBrandAction brand.GetByNameAction,
 	getSizeAction size.GetByNameAction,
-	getCategoryByNameAction category.GetByNameAction) usecase.CreateProductUsecase {
+	getCategoryAction category.GetByNameAction) usecase.CreateProductUsecase {
 	return &CreateProductUsecaseImpl{
 		insertProductAction: insertProductAction,
 		getBrandName:        searchByBrandAction,
 		getSizeAction:       getSizeAction,
-		getCategoryAction:   getCategoryByNameAction,
+		getCategoryAction:   getCategoryAction,
 	}
 }
