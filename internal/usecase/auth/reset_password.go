@@ -37,12 +37,17 @@ func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.Re
 	}
 
 	if user.NewPassword != user.RePassword {
-		return helper.GetResponse("passwords do not match, please try again.", 401, true)
+		return helper.GetResponse("passwords do not match, please try again.", 500, true)
 	}
 
 	dataUser, err := uc.emailAction.FindByEmail(email)
 	if err != nil {
-		return helper.GetResponse("email is invalid", 401, true)
+		return helper.GetResponse("email is invalid", 500, true)
+	}
+
+	_, err = uc.codeAction.FindByCode(uint64(dataUser.Id), code)
+	if err != nil {
+		return helper.GetResponse("code is invalid", 500, true)
 	}
 
 	hashPassword, err := helper.HashPassword(user.NewPassword)
@@ -55,7 +60,7 @@ func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.Re
 	}
 	_, err = uc.updateAction.Update(dataUser.Id, dao)
 	if err != nil {
-		return helper.GetResponse(err.Error(), 401, true)
+		return helper.GetResponse(err.Error(), 500, true)
 	}
 
 	response := map[string]string{

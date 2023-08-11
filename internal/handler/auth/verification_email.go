@@ -12,7 +12,7 @@ import (
 // @Produce json
 // @Param token query string true "Query Token"
 // @Param email query string true "Query Email "
-// @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
+// @Success 202 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /auth/confirm [get]
