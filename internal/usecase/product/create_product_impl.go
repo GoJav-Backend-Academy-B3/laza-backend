@@ -5,8 +5,8 @@ import (
 
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/repositories/brand"
 	"github.com/phincon-backend/laza/domain/repositories/category"
-	"github.com/phincon-backend/laza/domain/repositories/product"
 	"github.com/phincon-backend/laza/domain/repositories/size"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
