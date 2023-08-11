@@ -49,18 +49,17 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 
 	// Check existing name on repo
 	taskCount++
-	go u.getBrandNameRepo(brandContext, request.Brand, &brand, errorChan, &taskCount)
+	go u.getBrandNameRepo(checkingContext, request.Brand, &brand, errorChan, &taskCount)
 
 	// Check existing size on repo
 	for _, v := range request.Sizes {
-		insideSizeContext, _ := context.WithCancel(sizeContext) // Cancel should be done on parent's parent
 		taskCount++
-		go u.getSizeRepo(insideSizeContext, v, &sizes, errorChan, &taskCount)
+		go u.getSizeRepo(checkingContext, v, &sizes, errorChan, &taskCount)
 	}
 
 	// Check existing category on repo
 	taskCount++
-	go u.getCategoryRepo(categoryContext, request.Category, &category, errorChan, &taskCount)
+	go u.getCategoryRepo(checkingContext, request.Category, &category, errorChan, &taskCount)
 
 	for e := range errorChan {
 		if e != nil {
