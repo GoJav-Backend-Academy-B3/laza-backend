@@ -29,8 +29,8 @@ type UpdateProductUsecaseImpl struct {
 	// Get size by name
 	getSizeAction size.GetByNameAction
 
-	// TODO: Add Category repo to check by name
-	getCategoryByNameAction category.GetByNameAction
+	// Get category by name
+	getCategoryAction category.GetByNameAction
 }
 
 // Execute implements product.UpdateProductUsecase.
