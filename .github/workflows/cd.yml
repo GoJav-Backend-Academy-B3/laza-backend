@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/laza-backend
+            cd ~/laza_backend
             git pull origin staging
             docker build -t laza-image .
             docker-compose up -d
