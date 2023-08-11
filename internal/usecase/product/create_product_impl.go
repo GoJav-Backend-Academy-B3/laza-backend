@@ -23,11 +23,8 @@ type CreateProductUsecaseImpl struct {
 	// Insert to product table
 	insertProductAction repositories.InsertAction[model.Product]
 
-	// Search by brand
-	searchByBrandAction product.SearchByBrandAction
-
-	// Get product name in table
-	searchByNameAction product.SearchByNameAction
+	// get brand name
+	getBrandName brand.GetByNameAction
 
 	// Get size by name
 	getSizeAction size.GetByNameAction
