@@ -21,16 +21,15 @@ func NewProductsHandler() d.HandlerInterface {
 	db := b.GetPostgreSQLConnection()
 	gorm := db.(*b.PsqlDB).Dbs
 
-	productRepo := r.NewProductRepo(gorm)
-	sizeRepo := rs.NewSizeRepo(gorm)
-	categoryRepo := rc.NewCategoryRepo(gorm)
-	reviewRepo := rv.NewReviewRepo(gorm)
+	productRepo := pr.NewProductRepo(gorm)
+	sizeRepo := sr.NewSizeRepo(gorm)
 	brandRepo := br.NewBrandRepo(gorm)
+	categoryRepo := cr.NewCategoryRepo(gorm)
+	reviewRepo := rr.NewReviewRepo(gorm)
 
 	viewProduct := u.NewViewProductUsecaseImpl(productRepo)
 	searchProduct := u.NewSearchProductUsecaseImpl(productRepo)
 	getByIdProduct := u.NewGetByIdProductUsecase(productRepo, reviewRepo, sizeRepo, categoryRepo)
-	createProduct := u.NewCreateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
 	createProduct := u.NewCreateProductUsecaseImpl(productRepo, brandRepo, sizeRepo, categoryRepo)
 	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
 	deleteProduct := u.NewDeleteProductUsecaseImpl(productRepo)
