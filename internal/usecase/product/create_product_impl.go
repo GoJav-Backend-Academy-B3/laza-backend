@@ -43,8 +43,6 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	sizeModels := make([]model.Size, 0)
 	for _, v := range request.Sizes {
 		sz, err := u.getSizeAction.GetByName(v)
-		// FIXME: Should use devs made repos instead of
-		// gorms, but ok
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return product, errors.New("NotFound: Size not found")
 		}
@@ -59,12 +57,10 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	file, err := request.Image.Open()
 	defer file.Close()
 	if err != nil {
-		// TODO: Should return error here
 		return
 	}
 	url, err := helper.UploadImageFile("product", file)
 	if err != nil {
-		// TODO: Should return error here
 		return
 	}
 
