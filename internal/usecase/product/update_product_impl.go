@@ -13,9 +13,6 @@ import (
 	"gorm.io/gorm"
 
 	usecase "github.com/phincon-backend/laza/domain/usecases/product"
-	icategory "github.com/phincon-backend/laza/internal/repo/category"
-	iproduct "github.com/phincon-backend/laza/internal/repo/product"
-	isize "github.com/phincon-backend/laza/internal/repo/size"
 )
 
 type UpdateProductUsecaseImpl struct {
