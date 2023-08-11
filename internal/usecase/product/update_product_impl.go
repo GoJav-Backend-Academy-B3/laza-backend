@@ -87,14 +87,14 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 }
 
 func NewUpdateProductUsecaseImpl(
-	productRepo *iproduct.ProductRepo,
-	sizeRepo *isize.SizeRepo,
-	categoryRepo *icategory.CategoryRepo) usecase.UpdateProductUsecase {
+	updateProductAction repositories.UpdateAction[model.Product],
+	getBrandAction brand.GetByNameAction,
+	getSizeAction size.GetByNameAction,
+	getCategoryAction category.GetByNameAction) usecase.UpdateProductUsecase {
 	return &UpdateProductUsecaseImpl{
-		updateProductAction:     productRepo,
-		searchByBrandAction:     productRepo,
-		searchByNameAction:      productRepo,
-		getSizeAction:           sizeRepo,
-		getCategoryByNameAction: categoryRepo,
+		updateProductAction: updateProductAction,
+		getBrandName:        getBrandAction,
+		getSizeAction:       getSizeAction,
+		getCategoryAction:   getCategoryAction,
 	}
 }
