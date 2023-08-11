@@ -40,7 +40,7 @@ func Mail(data *DataMail) *DataMail {
 	h := hermes.Hermes{
 		Product: hermes.Product{
 			Name: "Lazapedia",
-			Link: os.Getenv("BASE_URL"),
+			Link: os.Getenv("FRONTEND_ORIGIN_URL"),
 			Logo: "https://cdn.discordapp.com/attachments/776427670979215363/1137076469877710888/412-4127373_datei-anzeigen-golang-gopher-china.jpeg",
 		},
 	}
