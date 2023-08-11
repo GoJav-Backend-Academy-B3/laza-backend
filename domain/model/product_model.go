@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Product struct {
 	Id            uint64    `json:"id,omitempty" gorm:"primarykey"`

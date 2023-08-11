@@ -30,6 +30,9 @@ func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardReq
 		return helper.GetResponse(err.Error(), http.StatusBadRequest, true)
 	}
 
+	if rb.CVV == "" {
+		rb.CVV = "123"
+	}
 	responseMd, errMd := ad.fetchMidtransCCToken.FetchMidtransCCToken(rb.CardNumber, rb.ExpiredMonth, rb.ExpiredYear, rb.CVV)
 
 	if errMd != nil {

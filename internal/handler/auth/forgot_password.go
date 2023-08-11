@@ -16,7 +16,7 @@ import (
 // @Success 200 {object} helper.Response{code=string,isError=bool,status=string,data=map[string]string}
 // @Failure 400 {object} helper.Response{code=int,description=string,isError=bool}
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
-// @Router /auth/forget-password [post]
+// @Router /auth/forgotpassword [post]
 func (h *authHandler) forgotPassword(c *gin.Context) {
 	var request requests.Email
 	if err := c.ShouldBindJSON(&request); err != nil {

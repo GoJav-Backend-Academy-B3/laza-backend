@@ -18,6 +18,7 @@ type authHandler struct {
 	forgotPasswordUser   auth.ForgotPasswordUserUsecase
 	verificationCodeUser auth.VerificationCodeUserUsecase
 	resetPasswordUser    auth.ResetPasswordUserUsecase
+	refreshTokenUser     auth.RefreshTokenUsecase
 
 	validate *validator.Validate
 }
@@ -31,6 +32,7 @@ func NewAuthHandler(
 	forgotPasswordUser auth.ForgotPasswordUserUsecase,
 	verificationCodeUser auth.VerificationCodeUserUsecase,
 	resetPasswordUser auth.ResetPasswordUserUsecase,
+	refreshTokenUser auth.RefreshTokenUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &authHandler{
@@ -42,6 +44,7 @@ func NewAuthHandler(
 		forgotPasswordUser:   forgotPasswordUser,
 		verificationCodeUser: verificationCodeUser,
 		resetPasswordUser:    resetPasswordUser,
+		refreshTokenUser:     refreshTokenUser,
 		validate:             validate,
 	}
 }
@@ -71,28 +74,33 @@ func (h *authHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        "/auth/verify-email/",
-			HandlerFunc: h.verifyEmail,
+			Path:        "/auth/confirm",
+			HandlerFunc: h.confirmEmail,
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/auth/resend-verify",
+			Path:        "/auth/confirm/resend",
 			HandlerFunc: h.resendEmail,
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/auth/forgot-password",
+			Path:        "/auth/forgotpassword",
 			HandlerFunc: h.forgotPassword,
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/auth/verification-code",
+			Path:        "/auth/recover/code",
 			HandlerFunc: h.verificationCode,
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/auth/reset-password/",
+			Path:        "/auth/recover/password",
 			HandlerFunc: h.resetPassword,
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/auth/refresh",
+			HandlerFunc: h.refreshToken,
 		},
 	)
 

@@ -9,3 +9,7 @@ type GetAllByUserIdAction interface {
 type SetAllAddressesNonPrimaryAction interface {
 	SetAllAddressesNonPrimary(userId uint64) (err error)
 }
+
+type FindLatestAddressByUserIdAction interface {
+	FindLatestAddressByUserId(user_id uint64) (address model.Address)
+}

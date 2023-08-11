@@ -22,7 +22,7 @@ func NewcreditCardHandler() handlers.HandlerInterface {
 
 	creditCrepo := rp.NewCreditCardRepo(gorm)
 	addCcUc := uc.NewaddCreditCardUsecase(creditCrepo, creditCrepo, midtransRepo, validate)
-	updateCcUc := uc.NewupdateCreditCardUsecase(creditCrepo, validate)
+	updateCcUc := uc.NewupdateCreditCardUsecase(creditCrepo, validate, midtransRepo)
 	getByIdCcUc := uc.NewgetByIdCreditCardUsecase(creditCrepo)
 	getAllCcUc := uc.NewgetAllCreditCardUsecase(creditCrepo)
 

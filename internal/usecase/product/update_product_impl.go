@@ -5,17 +5,14 @@ import (
 
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/repositories/brand"
 	"github.com/phincon-backend/laza/domain/repositories/category"
-	"github.com/phincon-backend/laza/domain/repositories/product"
 	"github.com/phincon-backend/laza/domain/repositories/size"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 	"gorm.io/gorm"
 
 	usecase "github.com/phincon-backend/laza/domain/usecases/product"
-	icategory "github.com/phincon-backend/laza/internal/repo/category"
-	iproduct "github.com/phincon-backend/laza/internal/repo/product"
-	isize "github.com/phincon-backend/laza/internal/repo/size"
 )
 
 type UpdateProductUsecaseImpl struct {
@@ -23,17 +20,14 @@ type UpdateProductUsecaseImpl struct {
 	// Update to product table
 	updateProductAction repositories.UpdateAction[model.Product]
 
-	// Search by brand
-	searchByBrandAction product.SearchByBrandAction
-
-	// Get product name in table
-	searchByNameAction product.SearchByNameAction
+	// get brand name
+	getBrandName brand.GetByNameAction
 
 	// Get size by name
 	getSizeAction size.GetByNameAction
 
-	// TODO: Add Category repo to check by name
-	getCategoryByNameAction category.GetByNameAction
+	// Get category by name
+	getCategoryAction category.GetByNameAction
 }
 
 // Execute implements product.UpdateProductUsecase.
@@ -41,27 +35,21 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 
 	// Check if brand name exists
 	// return error if false
-	ps, err := u.searchByBrandAction.SearchByBrand(request.Brand, 0, 1)
-	if err != nil {
-		// TODO: Handle errors
-		return
-	}
-	if len(ps) == 0 {
-		return product, errors.New("NotFound: Brand name not found")
+	brand, err := u.getBrandName.GetByName(request.Brand)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return product, errors.New("NotFound: Size not found")
 	}
 
 	sizeModels := make([]model.Size, 0)
 	for _, v := range request.Sizes {
 		sz, err := u.getSizeAction.GetByName(v)
-		// FIXME: Should use devs made repos instead of
-		// gorms, but ok
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return product, errors.New("NotFound: Size not found")
 		}
 		sizeModels = append(sizeModels, sz)
 	}
 
-	category, err := u.getCategoryByNameAction.GetByName(request.Category)
+	category, err := u.getCategoryAction.GetByName(request.Category)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return product, errors.New("NotFound: Category not found")
 	}
@@ -84,7 +72,7 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 		ImageUrl:    url,
 		Price:       request.Price,
 		CategoryId:  category.Id,
-		BrandId:     ps[0].BrandId, // didapat dari search by brand, ambil salah satu brand id
+		BrandId:     brand.Id, // didapat dari search by brand, ambil salah satu brand id
 		Sizes:       sizeModels,
 	})
 
@@ -96,14 +84,14 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 }
 
 func NewUpdateProductUsecaseImpl(
-	productRepo *iproduct.ProductRepo,
-	sizeRepo *isize.SizeRepo,
-	categoryRepo *icategory.CategoryRepo) usecase.UpdateProductUsecase {
+	updateProductAction repositories.UpdateAction[model.Product],
+	getBrandAction brand.GetByNameAction,
+	getSizeAction size.GetByNameAction,
+	getCategoryAction category.GetByNameAction) usecase.UpdateProductUsecase {
 	return &UpdateProductUsecaseImpl{
-		updateProductAction:     productRepo,
-		searchByBrandAction:     productRepo,
-		searchByNameAction:      productRepo,
-		getSizeAction:           sizeRepo,
-		getCategoryByNameAction: categoryRepo,
+		updateProductAction: updateProductAction,
+		getBrandName:        getBrandAction,
+		getSizeAction:       getSizeAction,
+		getCategoryAction:   getCategoryAction,
 	}
 }

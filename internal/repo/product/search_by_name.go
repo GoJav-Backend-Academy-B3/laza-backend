@@ -8,9 +8,9 @@ import (
 
 func (p *ProductRepo) SearchByName(keyword string, offset, limit uint64) (ms []model.Product, err error) {
 	tx := p.db.Where("lower(name) LIKE lower(?)", fmt.Sprintf("%%%s%%", keyword)).
-		Find(&ms).
+		Limit(int(limit)).
 		Offset(int(offset)).
-		Limit(int(limit))
+		Find(&ms)
 	err = tx.Error
 	return
 }

@@ -28,24 +28,24 @@ func NewVerificationCodeUserUsecase(userRepo user.UserRepo, codeRepo verificatio
 func (uc *VerificationCodeUserUsecase) Execute(user requests.VerificationCode) *helper.Response {
 	dataUser, err := uc.emailAction.FindByEmail(user.Email)
 	if err != nil {
-		return helper.GetResponse("email is invalid", 401, true)
+		return helper.GetResponse("email is invalid", 500, true)
 	}
 
 	dataCode, err := uc.codeAction.FindByCode(uint64(dataUser.Id), user.Code)
 	if err != nil {
-		return helper.GetResponse("code not found", 401, true)
+		return helper.GetResponse("code is invalid", 500, true)
 	}
 
 	location, _ := time.LoadLocation("Asia/Jakarta")
 	if dataCode.Code != user.Code {
-		return helper.GetResponse("code is invalid", 401, true)
+		return helper.GetResponse("code is invalid", 500, true)
 	} else if dataCode.ExpiryDate.In(location).Add(-7 * time.Hour).Before(time.Now().In(location)) {
-		return helper.GetResponse("expired verify email, please resend mail verify again!", 401, true)
+		return helper.GetResponse("expired verify email, please resend mail verify again!", 500, true)
 	}
 
 	response := map[string]string{
 		"message": "code is valid",
 	}
 
-	return helper.GetResponse(response, 200, false)
+	return helper.GetResponse(response, 202, false)
 }

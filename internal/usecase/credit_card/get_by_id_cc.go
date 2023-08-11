@@ -8,7 +8,6 @@ import (
 	"github.com/phincon-backend/laza/domain/response"
 	uc "github.com/phincon-backend/laza/domain/usecases/credit_card"
 	"github.com/phincon-backend/laza/helper"
-	"gorm.io/gorm"
 )
 
 type getByIdCreditCardUsecase struct {
@@ -17,10 +16,8 @@ type getByIdCreditCardUsecase struct {
 
 func (h *getByIdCreditCardUsecase) Execute(ccId uint64) *helper.Response {
 	rp, err := h.getCcRepo.GetById(ccId)
+
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return helper.GetResponse(err.Error(), http.StatusNotFound, true)
-		}
 		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
 	}
 
