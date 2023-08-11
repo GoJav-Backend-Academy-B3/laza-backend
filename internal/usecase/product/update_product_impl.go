@@ -46,8 +46,6 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 	sizeModels := make([]model.Size, 0)
 	for _, v := range request.Sizes {
 		sz, err := u.getSizeAction.GetByName(v)
-		// FIXME: Should use devs made repos instead of
-		// gorms, but ok
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return product, errors.New("NotFound: Size not found")
 		}
