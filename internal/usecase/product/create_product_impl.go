@@ -36,9 +36,8 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	// Check if brand name exists
 	// return error if false
 	brand, err := u.getBrandName.GetByName(request.Brand)
-	if err != nil {
-		// TODO: Handle errors
-		return
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return product, errors.New("NotFound: Size not found")
 	}
 
 	sizeModels := make([]model.Size, 0)
