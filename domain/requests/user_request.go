@@ -3,11 +3,10 @@ package requests
 import "mime/multipart"
 
 type Register struct {
-	FullName string                `json:"full_name" form:"full_name" validate:"required,min=3"`
-	Username string                `json:"username" form:"username" validate:"required,min=3"`
-	Password string                `json:"password" form:"password" validate:"required,min=8"`
-	Email    string                `json:"email" form:"email" validate:"required,email"`
-	Image    *multipart.FileHeader `json:"image" form:"image" swaggerignore:"true"`
+	FullName string `json:"full_name" validate:"required,min=3"`
+	Username string `json:"username" validate:"required,min=3"`
+	Password string `json:"password" validate:"required,min=8"`
+	Email    string `json:"email" validate:"required,email"`
 }
 
 type UpdateUser struct {
