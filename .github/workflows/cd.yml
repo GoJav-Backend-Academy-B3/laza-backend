@@ -20,5 +20,6 @@ jobs:
           script: |
             cd ~/laza_backend
             git pull origin staging
+            swag init -g cmd/server/router/router.go
             docker build -t laza-image .
             docker-compose up -d
