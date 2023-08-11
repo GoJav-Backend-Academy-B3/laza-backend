@@ -47,10 +47,6 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	checkingContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	brandContext, _ := context.WithCancel(checkingContext)    // Cancel should be done on parent
-	sizeContext, _ := context.WithCancel(checkingContext)     // Cancel should be done on parent
-	categoryContext, _ := context.WithCancel(checkingContext) // Cancel should be done on parent
-
 	// Check existing name on repo
 	taskCount++
 	go u.getBrandNameRepo(brandContext, request.Brand, &brand, errorChan, &taskCount)
