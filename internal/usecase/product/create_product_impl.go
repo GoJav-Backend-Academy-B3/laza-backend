@@ -89,14 +89,14 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 }
 
 func NewCreateProductUsecaseImpl(
-	productRepo *iproduct.ProductRepo,
-	sizeRepo *isize.SizeRepo,
-	categoryRepo *icategory.CategoryRepo) usecase.CreateProductUsecase {
+	insertProductAction repositories.InsertAction[model.Product],
+	searchByBrandAction brand.GetByNameAction,
+	getSizeAction size.GetByNameAction,
+	getCategoryByNameAction category.GetByNameAction) usecase.CreateProductUsecase {
 	return &CreateProductUsecaseImpl{
-		insertProductAction:     productRepo,
-		searchByBrandAction:     productRepo,
-		searchByNameAction:      productRepo,
-		getSizeAction:           sizeRepo,
-		getCategoryByNameAction: categoryRepo,
+		insertProductAction: insertProductAction,
+		getBrandName:        searchByBrandAction,
+		getSizeAction:       getSizeAction,
+		getCategoryAction:   getCategoryByNameAction,
 	}
 }
