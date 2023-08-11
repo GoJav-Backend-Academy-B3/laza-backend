@@ -6,14 +6,13 @@ import (
 
 	u "github.com/phincon-backend/laza/internal/usecase/product"
 
-	r "github.com/phincon-backend/laza/internal/repo/product"
-
-	rs "github.com/phincon-backend/laza/internal/repo/size"
-
-	rc "github.com/phincon-backend/laza/internal/repo/category"
+	br "github.com/phincon-backend/laza/internal/repo/brand"
+	cr "github.com/phincon-backend/laza/internal/repo/category"
+	pr "github.com/phincon-backend/laza/internal/repo/product"
+	rr "github.com/phincon-backend/laza/internal/repo/review"
+	sr "github.com/phincon-backend/laza/internal/repo/size"
 
 	b "github.com/phincon-backend/laza/internal/db"
-	rv "github.com/phincon-backend/laza/internal/repo/review"
 )
 
 func NewProductsHandler() d.HandlerInterface {
