@@ -6,14 +6,13 @@ import (
 
 	u "github.com/phincon-backend/laza/internal/usecase/product"
 
-	r "github.com/phincon-backend/laza/internal/repo/product"
-
-	rs "github.com/phincon-backend/laza/internal/repo/size"
-
-	rc "github.com/phincon-backend/laza/internal/repo/category"
+	br "github.com/phincon-backend/laza/internal/repo/brand"
+	cr "github.com/phincon-backend/laza/internal/repo/category"
+	pr "github.com/phincon-backend/laza/internal/repo/product"
+	rr "github.com/phincon-backend/laza/internal/repo/review"
+	sr "github.com/phincon-backend/laza/internal/repo/size"
 
 	b "github.com/phincon-backend/laza/internal/db"
-	rv "github.com/phincon-backend/laza/internal/repo/review"
 )
 
 func NewProductsHandler() d.HandlerInterface {
@@ -22,16 +21,17 @@ func NewProductsHandler() d.HandlerInterface {
 	db := b.GetPostgreSQLConnection()
 	gorm := db.(*b.PsqlDB).Dbs
 
-	productRepo := r.NewProductRepo(gorm)
-	sizeRepo := rs.NewSizeRepo(gorm)
-	categoryRepo := rc.NewCategoryRepo(gorm)
-	reviewRepo := rv.NewReviewRepo(gorm)
+	productRepo := pr.NewProductRepo(gorm)
+	sizeRepo := sr.NewSizeRepo(gorm)
+	brandRepo := br.NewBrandRepo(gorm)
+	categoryRepo := cr.NewCategoryRepo(gorm)
+	reviewRepo := rr.NewReviewRepo(gorm)
 
 	viewProduct := u.NewViewProductUsecaseImpl(productRepo)
 	searchProduct := u.NewSearchProductUsecaseImpl(productRepo)
 	getByIdProduct := u.NewGetByIdProductUsecase(productRepo, reviewRepo, sizeRepo, categoryRepo)
-	createProduct := u.NewCreateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
-	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
+	createProduct := u.NewCreateProductUsecaseImpl(productRepo, brandRepo, sizeRepo, categoryRepo)
+	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, brandRepo, sizeRepo, categoryRepo)
 	deleteProduct := u.NewDeleteProductUsecaseImpl(productRepo)
 	return h.NewProductHandler("/products",
 		createProduct, updateProduct, viewProduct, deleteProduct, searchProduct, getByIdProduct)
