@@ -16,7 +16,7 @@ type Product struct {
 	BrandId       uint64         `json:"brand_id,omitempty"`
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
-	DeletedAt     gorm.DeletedAt `json:"deleted_at"`
+	DeletedAt     gorm.DeletedAt `json:"deleted_at" swaggertype:"primitive,integer"`
 	Sizes         []Size         `json:"size" gorm:"many2many:size_product"`
 	Reviews       []Review       `json:"reviews" gorm:"foreignkey:Id"`
 	Categories    []Category     `json:"categories" gorm:"many2many:category_product"` //many 2 many
