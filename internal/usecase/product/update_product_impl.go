@@ -75,7 +75,7 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 		ImageUrl:    url,
 		Price:       request.Price,
 		CategoryId:  category.Id,
-		BrandId:     ps[0].BrandId, // didapat dari search by brand, ambil salah satu brand id
+		BrandId:     brand.Id, // didapat dari search by brand, ambil salah satu brand id
 		Sizes:       sizeModels,
 	})
 
