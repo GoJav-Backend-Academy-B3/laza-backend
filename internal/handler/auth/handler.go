@@ -18,6 +18,7 @@ type authHandler struct {
 	forgotPasswordUser   auth.ForgotPasswordUserUsecase
 	verificationCodeUser auth.VerificationCodeUserUsecase
 	resetPasswordUser    auth.ResetPasswordUserUsecase
+	refreshTokenUser     auth.RefreshTokenUsecase
 
 	validate *validator.Validate
 }
@@ -31,6 +32,7 @@ func NewAuthHandler(
 	forgotPasswordUser auth.ForgotPasswordUserUsecase,
 	verificationCodeUser auth.VerificationCodeUserUsecase,
 	resetPasswordUser auth.ResetPasswordUserUsecase,
+	refreshTokenUser auth.RefreshTokenUsecase,
 	validate *validator.Validate,
 ) handlers.HandlerInterface {
 	return &authHandler{
@@ -42,6 +44,7 @@ func NewAuthHandler(
 		forgotPasswordUser:   forgotPasswordUser,
 		verificationCodeUser: verificationCodeUser,
 		resetPasswordUser:    resetPasswordUser,
+		refreshTokenUser:     refreshTokenUser,
 		validate:             validate,
 	}
 }
@@ -93,6 +96,11 @@ func (h *authHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 			Method:      http.MethodPost,
 			Path:        "/auth/recover/password",
 			HandlerFunc: h.resetPassword,
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/auth/refresh",
+			HandlerFunc: h.refreshToken,
 		},
 	)
 
