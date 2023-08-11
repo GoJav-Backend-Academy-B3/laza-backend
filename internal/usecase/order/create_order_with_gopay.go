@@ -2,7 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -47,10 +46,8 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	// Check if address exists
 	_, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
-		fmt.Println("error address not found")
 		return nil, nil, err
 	}
-	fmt.Println("tembus error address not found")
 
 	// Generate order number
 	var orderNumber string
@@ -89,10 +86,6 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  orderNumber,
 			GrossAmt: int64(grossAmount),
-		},
-		Gopay: &coreapi.GopayDetails{
-			EnableCallback: true,
-			CallbackUrl:    callbackUrl,
 		},
 	}
 	gopayRespondMd, err := uc.chargeGopay.ChargeMidtrans(&paymentReq)
