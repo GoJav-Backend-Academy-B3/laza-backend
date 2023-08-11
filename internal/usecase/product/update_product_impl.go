@@ -52,7 +52,7 @@ func (u *UpdateProductUsecaseImpl) Execute(id uint64, request requests.ProductRe
 		sizeModels = append(sizeModels, sz)
 	}
 
-	category, err := u.getCategoryByNameAction.GetByName(request.Category)
+	category, err := u.getCategoryAction.GetByName(request.Category)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return product, errors.New("NotFound: Category not found")
 	}
