@@ -30,6 +30,7 @@ func NewAuthHandler() handlers.HandlerInterface {
 	forgotPasswordUser := usecaseAuth.NewForgotPasswordUserUsecase(*repoUser, *repoCode)
 	verificationCodePasswordUser := usecaseAuth.NewVerificationCodeUserUsecase(*repoUser, *repoCode)
 	resetPasswordUser := usecaseAuth.NewResetPasswordUserUsecase(*repoUser, *repoCode)
+	refreshTokenUser := usecaseAuth.NewRefreshTokenUsecase(*repoUser)
 
 	return handler.NewAuthHandler(
 		loginUser,
@@ -40,6 +41,7 @@ func NewAuthHandler() handlers.HandlerInterface {
 		forgotPasswordUser,
 		verificationCodePasswordUser,
 		resetPasswordUser,
+		refreshTokenUser,
 		validate,
 	)
 }

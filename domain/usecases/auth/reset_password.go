@@ -6,5 +6,5 @@ import (
 )
 
 type ResetPasswordUserUsecase interface {
-	Execute(email string, user requests.ResetPassword) *helper.Response
+	Execute(email, code string, user requests.ResetPassword) *helper.Response
 }

@@ -45,43 +45,22 @@ func (uc *InsertUserUsecase) Execute(user requests.Register) *helper.Response {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
-	var imageUrl = helper.DefaultImageProfileUrl
-	if user.Image != nil {
-		file, err := user.Image.Open()
-		if err != nil {
-			return helper.GetResponse(err.Error(), 500, true)
-		}
-		defer file.Close()
-
-		url, err := helper.UploadImageFile("user", file)
-		if err != nil {
-			return helper.GetResponse(err.Error(), 500, true)
-		}
-		imageUrl = url
-	}
-
-	dao := model.User{
-		FullName: user.FullName,
-		Username: user.Username,
-		Password: hashPassword,
-		Email:    user.Email,
-		ImageUrl: imageUrl,
-	}
-
-	res, err := uc.insertUserAction.Insert(dao)
-	if err != nil {
-		return helper.GetResponse(err.Error(), 500, true)
-	}
-
 	codeVerify := helper.GenerateRandomNumericString(4)
 	expiryDate, _ := helper.GetExpiryDate(5*time.Minute, "Asia/Jakarta")
 	daoToken := model.VerificationToken{
 		Token:      codeVerify,
 		ExpiryDate: expiryDate,
-		UserId:     uint64(res.Id),
 	}
 
-	_, err = uc.insertTokenAction.Insert(daoToken)
+	dao := model.User{
+		FullName:           user.FullName,
+		Username:           user.Username,
+		Password:           hashPassword,
+		Email:              user.Email,
+		VerificationTokens: []model.VerificationToken{daoToken},
+	}
+
+	res, err := uc.insertUserAction.Insert(dao)
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}

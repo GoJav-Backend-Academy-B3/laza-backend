@@ -14,8 +14,6 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
-const DefaultImageProfileUrl = "https://res.cloudinary.com/dmacd1wra/image/upload/v1691457070/1691417374674578922.png"
-
 type CloudinaryCredentials struct {
 	Name   string
 	APIKey string

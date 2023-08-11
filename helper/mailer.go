@@ -40,7 +40,7 @@ func Mail(data *DataMail) *DataMail {
 	h := hermes.Hermes{
 		Product: hermes.Product{
 			Name: "Lazapedia",
-			Link: os.Getenv("BASE_URL"),
+			Link: os.Getenv("FRONTEND_ORIGIN_URL"),
 			Logo: "https://cdn.discordapp.com/attachments/776427670979215363/1137076469877710888/412-4127373_datei-anzeigen-golang-gopher-china.jpeg",
 		},
 	}
@@ -72,7 +72,7 @@ func Mail(data *DataMail) *DataMail {
 		}
 	}
 
-	urlString := fmt.Sprintf("%s/auth/verify-email/?email=%s&token=%s", os.Getenv("FRONTEND_ORIGIN_URL"), data.Email, data.Token)
+	urlString := fmt.Sprintf("%s/auth/confirm?email=%s&token=%s", os.Getenv("FRONTEND_ORIGIN_URL"), data.Email, data.Token)
 	emailBody, _ := h.GenerateHTML(hermes.Email{
 		Body: hermes.Body{
 			Name: data.Username,

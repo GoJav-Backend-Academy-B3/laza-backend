@@ -52,8 +52,12 @@ func (uc *UpdateUserUsecase) Execute(id uint64, user requests.UpdateUser) *helpe
 		}
 	}
 
-	var imageUrl = helper.DefaultImageProfileUrl
+	var imageUrl = data.ImageUrl
 	if user.Image != nil {
+		if user.Image.Size >= int64(2*1024*1024) {
+			return helper.GetResponse("file to large", 400, true)
+		}
+
 		file, err := user.Image.Open()
 		if err != nil {
 			return helper.GetResponse(err.Error(), 500, true)
