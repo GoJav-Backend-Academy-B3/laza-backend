@@ -25,11 +25,13 @@ func NewProductsHandler() d.HandlerInterface {
 	sizeRepo := rs.NewSizeRepo(gorm)
 	categoryRepo := rc.NewCategoryRepo(gorm)
 	reviewRepo := rv.NewReviewRepo(gorm)
+	brandRepo := br.NewBrandRepo(gorm)
 
 	viewProduct := u.NewViewProductUsecaseImpl(productRepo)
 	searchProduct := u.NewSearchProductUsecaseImpl(productRepo)
 	getByIdProduct := u.NewGetByIdProductUsecase(productRepo, reviewRepo, sizeRepo, categoryRepo)
 	createProduct := u.NewCreateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
+	createProduct := u.NewCreateProductUsecaseImpl(productRepo, brandRepo, sizeRepo, categoryRepo)
 	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
 	deleteProduct := u.NewDeleteProductUsecaseImpl(productRepo)
 	return h.NewProductHandler("/products",
