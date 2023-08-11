@@ -23,11 +23,8 @@ type UpdateProductUsecaseImpl struct {
 	// Update to product table
 	updateProductAction repositories.UpdateAction[model.Product]
 
-	// Search by brand
-	searchByBrandAction product.SearchByBrandAction
-
-	// Get product name in table
-	searchByNameAction product.SearchByNameAction
+	// get brand name
+	getBrandName brand.GetByNameAction
 
 	// Get size by name
 	getSizeAction size.GetByNameAction
