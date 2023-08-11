@@ -1,8 +1,6 @@
 package order
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
@@ -21,14 +19,14 @@ func NewGetByIdUsecase(getOrder repositories.GetByIdAction[model.Order], updateO
 
 // Execute implements product.SearchProductByNameUsecase.
 func (u *GetByIdUsecase) Execute(orderId string) (order model.Order, err error) {
+	// get order
 	order, err = u.getOrder.GetById(orderId)
 	if err != nil {
 		return
 	}
-	midtransTransaction, err := u.getMidtransTransaction.FetchMidtransTransaction(order.Id)
 
-	byteArr, _ := json.Marshal(midtransTransaction)
-	fmt.Println(string(byteArr))
+	// get status transaction
+	midtransTransaction, err := u.getMidtransTransaction.FetchMidtransTransaction(order.Id)
 
 	order.OrderStatus = midtransTransaction.TransactionStatus
 	order.UpdatedAt = time.Now()

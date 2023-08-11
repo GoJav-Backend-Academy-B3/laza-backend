@@ -2,8 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"encoding/json"
-	"fmt"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -85,17 +83,9 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 
 	// get cc token
 	cardTokenResponse, errMd := uc.getCCToken.FetchMidtransCCToken(cc.CardNumber, cc.ExpiredMonth, cc.ExpiredYear, cvv)
-	byteArr, _ := json.Marshal(errMd)
-	fmt.Println("error get token: ", errMd)
-	fmt.Println("cc token: ", cardTokenResponse.TokenID)
 	if errMd != nil {
-		fmt.Println("masuk if error", errMd)
 		return nil, nil, errMd.RawError
 	}
-
-	// marshalling the structure
-	byteArr, _ = json.Marshal(cardTokenResponse)
-	fmt.Println("respond Card Token Response", string(byteArr))
 
 	// charge cc to midtrans
 	var paymentReq coreapi.ChargeReq
@@ -113,15 +103,9 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 		},
 	}
 	responseMd, err := uc.chargeMidtrans.ChargeMidtrans(&paymentReq)
-	// marshalling the structure
-	byteArr, _ = json.Marshal(responseMd)
-	fmt.Println("respond midtrans charge", string(byteArr))
 	if err != nil {
-		fmt.Println("error midtrans charge: ", err)
 		return nil, nil, err
 	}
-
-	fmt.Println("creditcard : ", cc)
 
 	// insert order to db
 	order := model.Order{
