@@ -27,9 +27,13 @@ func NewResetPasswordUserUsecase(userRepo user.UserRepo, codeRepo verification_c
 }
 
 // Execute implements auth.UpdatePasswordUserUsecase.
-func (uc *ResetPasswordUserUsecase) Execute(email string, user requests.ResetPassword) *helper.Response {
-	if email == "" {
+func (uc *ResetPasswordUserUsecase) Execute(email, code string, user requests.ResetPassword) *helper.Response {
+	if email == "" && code == "" {
+		return helper.GetResponse("email and code are both empty", 400, true)
+	} else if email == "" {
 		return helper.GetResponse("email empty", 400, true)
+	} else if code == "" {
+		return helper.GetResponse("code empty", 400, true)
 	}
 
 	if user.NewPassword != user.RePassword {

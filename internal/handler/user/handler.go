@@ -49,7 +49,7 @@ func (h *userHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
 		handlers.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        h.basePath,
+			Path:        h.basePath + "s",
 			HandlerFunc: h.get,
 			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()},
 		},
@@ -61,7 +61,7 @@ func (h *userHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 		},
 		handlers.HandlerStruct{
 			Method:      http.MethodGet,
-			Path:        h.basePath + "/",
+			Path:        h.basePath,
 			HandlerFunc: h.getWithLimit,
 			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()},
 		},

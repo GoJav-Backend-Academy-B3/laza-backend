@@ -1,8 +1,6 @@
 package user
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
@@ -22,8 +20,6 @@ import (
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /user/update [put]
 func (h *userHandler) update(c *gin.Context) {
-	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 2*1024*1024)
-
 	userId := c.MustGet("userId").(uint64)
 
 	var request requests.UpdateUser
