@@ -69,7 +69,6 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 			err = e
 			return
 		}
-		taskCount--
 		if taskCount == 0 {
 			break
 		}
