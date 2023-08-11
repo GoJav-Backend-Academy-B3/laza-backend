@@ -31,7 +31,7 @@ func NewProductsHandler() d.HandlerInterface {
 	searchProduct := u.NewSearchProductUsecaseImpl(productRepo)
 	getByIdProduct := u.NewGetByIdProductUsecase(productRepo, reviewRepo, sizeRepo, categoryRepo)
 	createProduct := u.NewCreateProductUsecaseImpl(productRepo, brandRepo, sizeRepo, categoryRepo)
-	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, sizeRepo, categoryRepo)
+	updateProduct := u.NewUpdateProductUsecaseImpl(productRepo, brandRepo, sizeRepo, categoryRepo)
 	deleteProduct := u.NewDeleteProductUsecaseImpl(productRepo)
 	return h.NewProductHandler("/products",
 		createProduct, updateProduct, viewProduct, deleteProduct, searchProduct, getByIdProduct)
