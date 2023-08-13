@@ -2,6 +2,8 @@ package model
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -15,6 +17,7 @@ type User struct {
 	IsAdmin            bool                `json:"is_admin,omitempty"`
 	CreatedAt          time.Time           `json:"created_at,omitempty"`
 	UpdatedAt          time.Time           `json:"updated_at,omitempty"`
+	DeletedAt          gorm.DeletedAt      `json:"deleted_at,omitempty" swaggertype:"primitive,integer"`
 	Addresses          []Address           `json:"addresses,omitempty" gorm:"foreignKey:UserId"`
 	CreditCards        []CreditCard        `json:"credit_cards,omitempty" gorm:"foreignKey:Id"`
 	Reviews            []Review            `json:"reviews,omitempty" gorm:"foreignkey:Id"`
