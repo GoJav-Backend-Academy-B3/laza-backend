@@ -4,17 +4,17 @@ import "github.com/phincon-backend/laza/domain/model"
 
 func (r *CartRepo) Insert(cart model.Cart) (cr model.Cart, err error) {
 
-	if r.db.Where("user_id =? AND product_id =?", cart.UserId, cart.ProductId).Find(&cr); cr == (model.Cart{}) {
-		err = r.db.Create(&cart).Scan(&cr).Error
-		if err != nil {
-			return
-		}
+	if r.db.
+		Where("user_id =? AND product_id =? AND size_id = ?", cart.UserId, cart.ProductId, cart.SizeId).
+		Take(&cr); cr == (model.Cart{}) {
+		tx := r.db.Create(&cart)
+		err = tx.Error
+		cr = cart
 	} else {
-		err = r.db.Model(&cr).Where("user_id =? AND product_id =?", cart.UserId, cart.ProductId).
-			Update("quantity", cr.Quantity+1).Error
-		if err != nil {
-			return
-		}
+		tx := r.db.Model(&cr).
+			Where("user_id =? AND product_id =? AND size_id = ?", cart.UserId, cart.ProductId, cart.SizeId).
+			Update("quantity", cr.Quantity+1)
+		err = tx.Error
 	}
 	return
 }

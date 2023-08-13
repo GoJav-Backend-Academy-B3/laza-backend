@@ -14,6 +14,6 @@ type WishProduct struct {
 }
 
 type WishListProductLimit struct {
-	Total           int           `json:"total"`
-	WishlistProduct []WishProduct `json:"products"`
+	Total   int               `json:"total"`
+	Product []ProductOverview `json:"products"`
 }

@@ -4,17 +4,32 @@ import (
 	"github.com/phincon-backend/laza/domain/model"
 )
 
-func (r *CartRepo) Update(id any, cr model.Cart) (rs model.Cart, err error) {
+func (r *CartRepo) UpdateCart(md model.Cart) (rs any, err error) {
+	var _model model.Cart
 
-	if r.db.Where("user_id=? AND product_id =?", cr.UserId, cr.ProductId).Find(&cr); cr.Quantity == 1 {
-		err = r.db.Where("user_id=? AND product_id =?", cr.UserId, cr.ProductId).Delete(&rs).Error
-		cr.Quantity = 0
-		rs = cr
-	} else {
-		if cr.Quantity > 1 {
-			quantity := cr.Quantity - 1
-			err = r.db.Model(&cr).Where("user_id=? AND product_id =?", cr.UserId, cr.ProductId).Update("quantity", quantity).Scan(&rs).Error
-		}
+	tx := r.db.Where("user_id=? AND product_id =? AND size_id = ?", md.UserId, md.ProductId, md.SizeId).
+		Take(&_model)
+	err = tx.Error
+
+	if _model.Quantity == 1 {
+
+		tx := r.db.
+			Where("user_id=? AND product_id =? AND size_id =?", md.UserId, md.ProductId, md.SizeId).
+			Delete(&_model)
+		err = tx.Error
+		rs = "successfully delete product cart"
 	}
+
+	if _model.Quantity > 1 {
+		quantity := _model.Quantity - 1
+		tx := r.db.
+			Model(&_model).
+			Where("user_id=? AND product_id =? AND size_id=?", md.UserId, md.ProductId, md.SizeId).
+			Update("quantity", quantity)
+
+		err = tx.Error
+		rs = _model
+	}
+
 	return
 }

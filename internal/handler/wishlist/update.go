@@ -29,6 +29,13 @@ func (h *getWishlistHandler) Put(ctx *gin.Context) {
 		return
 	}
 
-	h.updateWishlistUsecase.Execute(userId, productid).Send(ctx)
+	value, err := h.updateWishlistUsecase.Execute(userId, productid)
+
+	if err != nil {
+		helper.GetResponse(err.Error(), 500, true).Send(ctx)
+		return
+	}
+
+	helper.GetResponse(value, 200, false).Send(ctx)
 
 }
