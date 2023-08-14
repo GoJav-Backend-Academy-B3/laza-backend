@@ -57,8 +57,14 @@ func (uc *LoginGoogleUserUsecase) Execute(user *helper.GoogleUserResult) *helper
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
+	refreshToken, err := helper.NewRefresh(uint64(data.Id), data.IsAdmin).CreateRefresh()
+	if err != nil {
+		return helper.GetResponse(err.Error(), 500, true)
+	}
+
 	response := map[string]string{
-		"access_token": accessToken,
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	}
 
 	return helper.GetResponse(response, 200, false)
