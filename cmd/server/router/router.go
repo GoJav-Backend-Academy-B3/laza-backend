@@ -1,6 +1,10 @@
 package router
 
 import (
+	"net/http"
+	"time"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/cmd/server/provider"
 
@@ -24,8 +28,22 @@ import (
 // @name                        X-Auth-Token
 // @description	How to input in swagger : 'Bearer <insert_your_token_here>'
 func NewServerGin() *gin.Engine {
-
 	r := gin.New()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{
+			http.MethodHead,
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+		},
+		AllowHeaders:     []string{"*"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	var server []handlers.HandlerInterface

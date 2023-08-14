@@ -23,6 +23,7 @@ func main() {
 	)
 
 	apps := router.NewServerGin()
+
 	var address string = "localhost:8080"
 	if APP_PORT := os.Getenv("APP_PORT"); APP_PORT != "" {
 		address = "localhost:" + APP_PORT
