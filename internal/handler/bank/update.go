@@ -24,6 +24,7 @@ import (
 // @Failure 500 {object} helper.Response{code=int,description=string,isError=bool}
 // @Router /bank/{id} [put]
 func (h *bankHandler) update(c *gin.Context) {
+
 	id := c.Param("id")
 	if id == "" {
 		helper.GetResponse("missing 'id' path params", 400, true).Send(c)
@@ -37,5 +38,6 @@ func (h *bankHandler) update(c *gin.Context) {
 	}
 
 	idParse, _ := strconv.ParseUint(id, 10, 64)
+
 	h.updateBank.Execute(idParse, request).Send(c)
 }
