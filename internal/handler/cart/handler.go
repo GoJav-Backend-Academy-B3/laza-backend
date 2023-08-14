@@ -21,19 +21,19 @@ func (ch *CartHandler) GetHandlers() (h []hd.HandlerStruct) {
 	h = append(h,
 		hd.HandlerStruct{
 			Method:      http.MethodPost,
-			Path:        "/products/:id/carts",
+			Path:        "/carts",
 			HandlerFunc: ch.post,
 			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodDelete,
-			Path:        "/products/:id/carts",
+			Path:        "/carts",
 			HandlerFunc: ch.Delete,
 			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
 		hd.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/products/:id/carts",
+			Path:        "/carts",
 			HandlerFunc: ch.Update,
 			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},

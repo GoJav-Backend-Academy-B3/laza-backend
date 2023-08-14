@@ -5,6 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/defaults"
+	"github.com/phincon-backend/laza/domain/response"
+	"github.com/phincon-backend/laza/helper"
 )
 
 // Get Wishlist godoc
@@ -38,5 +40,22 @@ func (h *getWishlistHandler) getByLimit(c *gin.Context) {
 	if err != nil {
 		offset = defaults.Query.Offset()
 	}
-	h.getWishlistLimitUsecase.Execute(userId, offset, limit).Send(c)
+	result_, err := h.getWishlistLimitUsecase.Execute(userId, offset, limit)
+	if err != nil {
+		helper.GetResponse(err.Error(), 500, true).Send(c)
+		return
+	}
+
+	var _data response.ProductOverview
+	// response data
+	var _response_data response.WishListProductLimit
+	_response_data.Total = len(result_)
+	for _, v := range result_ {
+
+		// model product to response product
+		_data.FillFromEntity(v)
+		_response_data.Product = append(_response_data.Product, _data)
+	}
+
+	helper.GetResponse(_response_data, 200, false).Send(c)
 }

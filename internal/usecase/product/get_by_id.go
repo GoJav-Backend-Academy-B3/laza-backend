@@ -24,7 +24,6 @@ func NewGetByIdProductUsecase(product repositories.GetByIdAction[model.Product],
 
 func (uc *GetByIdProductUsecase) Execute(id uint64) *helper.Response {
 	result, err := uc.getProductByIdAction.GetById(id)
-
 	pd := response.ProductDetail{}.FillFromEntity(result)
 	review, err := uc.getReviewByProduct.GetProductById(id)
 	records, err := uc.getCategoryByIdAction.FindById(result.CategoryId)
