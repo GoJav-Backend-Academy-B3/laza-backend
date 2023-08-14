@@ -10,7 +10,7 @@ func (r *ReviewRepo) GetReviewStatsByProduct(productID uint64) (averageRating fl
 
 	tx := r.db.
 		Model(&model.Review{}).
-		Select("AVG(ROUND(rating),1) as average_rating, COUNT(*) as total_reviews").
+		Select("AVG(rating) as average_rating, COUNT(*) as total_reviews").
 		Where("product_id = ?", productID).
 		Scan(&result)
 

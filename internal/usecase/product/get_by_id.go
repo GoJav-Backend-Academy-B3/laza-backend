@@ -31,10 +31,13 @@ func (uc *GetByIdProductUsecase) Execute(id uint64) *helper.Response {
 		return helper.GetResponse(err.Error(), 400, true)
 	}
 	pd.Categories = records
-	if len(review) >= 1 {
-		pd.Reviews = review[:1]
+	pd.Reviews = review
+	if len(review) == 0 {
+		// Create an empty slice of model.ProductReview
+		emptyReviews := []model.ProductReview{}
+		pd.Reviews = emptyReviews
 	} else {
-		pd.Reviews = review
+		pd.Reviews = review[:1]
 	}
 
 	return helper.GetResponse(pd, 200, false)

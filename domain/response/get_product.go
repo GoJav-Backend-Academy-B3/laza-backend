@@ -53,9 +53,10 @@ func (p ProductDetail) FillFromEntity(e model.Product) ProductDetail {
 		ImageUrl:    e.ImageUrl,
 		Price:       e.Price,
 		Categories:  e.Category,
-		Sizes:       e.Sizes,
-		CreatedAt:   e.CreatedAt,
-		UpdatedAt:   e.UpdatedAt,
+		// Reviews:     e.Reviews,
+		Sizes:     e.Sizes,
+		CreatedAt: e.CreatedAt,
+		UpdatedAt: e.UpdatedAt,
 	}
 	return p
 }
