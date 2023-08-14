@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync/atomic"
 
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
