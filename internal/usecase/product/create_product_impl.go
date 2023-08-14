@@ -44,7 +44,7 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	var sizes []model.Size
 	var category model.Category
 
-	var taskCount int = 0
+	var taskCount atomic.Int32
 	checkingContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
