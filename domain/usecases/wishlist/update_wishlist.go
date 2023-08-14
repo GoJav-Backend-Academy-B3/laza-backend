@@ -1,9 +1,7 @@
 package wishlist
 
-import (
-	"github.com/phincon-backend/laza/helper"
-)
+import "github.com/phincon-backend/laza/domain/requests"
 
 type UpdateWishListUsecase interface {
-	Execute(userId, productId uint64) *helper.Response
+	Execute(userId uint64, rb requests.WishlistRequest) (value any, err error)
 }

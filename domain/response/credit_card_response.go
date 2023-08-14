@@ -7,7 +7,7 @@ type CreditCardResponse struct {
 	CardNumber   string `json:"card_number,omitempty"`
 	ExpiredMonth int    `json:"expired_month,omitempty"`
 	ExpiredYear  int    `json:"expired_year,omitempty"`
-	UserId       uint64 `json:"user_id,omitempty"`
+	UserId       uint64 `json:"-"`
 }
 
 func (cc CreditCardResponse) FillFromEntity(md model.CreditCard) CreditCardResponse {

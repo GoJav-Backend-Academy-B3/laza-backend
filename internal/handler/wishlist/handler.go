@@ -12,7 +12,6 @@ import (
 
 type getWishlistHandler struct {
 	updateWishlistUsecase   usecase.UpdateWishListUsecase
-	getWishlistUsecase      usecase.GetWishListUsecase
 	getWishlistLimitUsecase usecase.GetWishListLimitUsecase
 }
 
@@ -20,7 +19,7 @@ func (h *getWishlistHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	hs = append(hs,
 		handler.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/products/:id/wishlists",
+			Path:        "/wishlists",
 			HandlerFunc: h.Put,
 			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},
@@ -35,13 +34,11 @@ func (h *getWishlistHandler) GetHandlers() (hs []handler.HandlerStruct) {
 
 func NewgetWishlistHandler(
 	uws usecase.UpdateWishListUsecase,
-	gws usecase.GetWishListUsecase,
 	gls usecase.GetWishListLimitUsecase,
 
 ) handler.HandlerInterface {
 	return &getWishlistHandler{
 		updateWishlistUsecase:   uws,
-		getWishlistUsecase:      gws,
 		getWishlistLimitUsecase: gls,
 	}
 }

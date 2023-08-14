@@ -28,6 +28,14 @@ func (h *twitterAuthHandler) twitterCallBack(c *gin.Context) {
 		return
 	}
 
-	rb := response.FillFromTwitter(user.Email, user.Name, user.NickName, user.RawData["profile_image_url_https"].(string))
-	h.useCaseTwitter.Execute(rb).Send(c)
+	var responseBody response.TwitterUser
+	responseBody.FillEntity(user)
+
+	_result, err := h.useCaseTwitter.Execute(responseBody)
+	if err != nil {
+		helper.GetResponse(err.Error(), 500, true).Send(c)
+		return
+	}
+
+	helper.GetResponse(_result, 200, false).Send(c)
 }
