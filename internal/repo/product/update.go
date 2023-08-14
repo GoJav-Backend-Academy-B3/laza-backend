@@ -24,6 +24,9 @@ func (r *ProductRepo) Update(id_r any, e model.Product) (product model.Product, 
 	tx = r.db.Save(&product)
 	err = tx.Error
 
+	// Should delete data on size_product table before updating
+	// Otherwise the data will be added.
+	r.db.Where("product_id = ?", product.Id).Delete(&model.SizeProduct{})
 	tx = r.db.Model(&product).Update("Sizes", product.Sizes)
 	err = tx.Error
 
