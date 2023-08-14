@@ -3,7 +3,6 @@ package product
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync/atomic"
 
 	"github.com/phincon-backend/laza/domain/model"
