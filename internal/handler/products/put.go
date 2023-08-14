@@ -54,6 +54,14 @@ func (h *productHandler) put(c *gin.Context) {
 		return
 	}
 
+	// Check if a file exceeds 2MiB
+	if request.Image.Size > (1 << 21) {
+		helper.GetResponse(
+			"file too big",
+			http.StatusRequestEntityTooLarge,
+			true).Send(c)
+		return
+	}
 	model, err := h.updateProductUsecase.Execute(id, request)
 	if err != nil {
 		helper.GetResponse(err.Error(), http.StatusBadRequest, true).Send(c)
