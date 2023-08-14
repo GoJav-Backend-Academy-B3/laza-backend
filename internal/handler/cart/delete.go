@@ -13,7 +13,7 @@ import (
 // @Tags cart
 // @Accept json
 // @Produce json
-// @Param address body requests.CartRequest true "add product to cart"
+// @Param wishlist body requests.CartRequest true "add product to cart"
 // @Security JWT
 // @Success 200 {object} helper.Response{status=string,isError=bool,data=string}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}

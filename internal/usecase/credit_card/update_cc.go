@@ -2,18 +2,13 @@ package credit_card
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
 	repo "github.com/phincon-backend/laza/domain/repositories"
 	"github.com/phincon-backend/laza/domain/repositories/midtrans"
 	"github.com/phincon-backend/laza/domain/requests"
-	"github.com/phincon-backend/laza/domain/response"
 	uc "github.com/phincon-backend/laza/domain/usecases/credit_card"
-	"github.com/phincon-backend/laza/helper"
-
-	"gorm.io/gorm"
 )
 
 type updateCreditCardUsecase struct {
@@ -22,11 +17,12 @@ type updateCreditCardUsecase struct {
 	validate             *validator.Validate
 }
 
-func (uc *updateCreditCardUsecase) Execute(userId, ccId uint64, rb requests.CreditCardRequest) *helper.Response {
+func (uc *updateCreditCardUsecase) Execute(userId, ccId uint64, rb requests.CreditCardRequest) (_result model.CreditCard, statusCode int, err error) {
 
-	err := uc.validate.Struct(rb)
+	err = uc.validate.Struct(rb)
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusBadRequest, true)
+		statusCode = 400
+		return
 	}
 
 	if rb.CVV == "" {
@@ -35,24 +31,25 @@ func (uc *updateCreditCardUsecase) Execute(userId, ccId uint64, rb requests.Cred
 	responseMd, errMd := uc.fetchMidtransCCToken.FetchMidtransCCToken(rb.CardNumber, rb.ExpiredMonth, rb.ExpiredYear, rb.CVV)
 
 	if errMd != nil {
-		return helper.GetResponse(errMd.RawError.Error(), http.StatusInternalServerError, true)
+		statusCode = 500
+		err = errMd.RawError
+		return
 	}
 	if responseMd.StatusCode != "200" {
-		return helper.GetResponse(errors.New(responseMd.StatusMessage).Error(), http.StatusBadRequest, true)
+		statusCode = 400
+		err = errors.New(responseMd.StatusMessage)
+		return
 	}
 
-	md := model.CreditCard{Id: ccId}
-	rb.FilltoField(userId, &md)
+	md := model.CreditCard{Id: ccId, UserId: userId, ExpiredMonth: rb.ExpiredMonth, ExpiredYear: rb.ExpiredYear}
 
-	rs, err := uc.updateCcRepo.Update(ccId, md)
+	_result, err = uc.updateCcRepo.Update(ccId, md)
 
-	if err == gorm.ErrRecordNotFound {
-		return helper.GetResponse(errors.New("credit card not found").Error(), http.StatusNotFound, true)
-	}
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		statusCode = 500
+		return
 	}
-	return helper.GetResponse(response.CreditCardResponse{}.FillFromEntity(rs), http.StatusOK, false)
+	return
 }
 
 func NewupdateCreditCardUsecase(
