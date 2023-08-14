@@ -15,9 +15,6 @@ func (r *ReviewRepo) GetReviewStatsByProduct(productID uint64) (averageRating fl
 		Scan(&result)
 
 	err = tx.Error
-	if err != nil {
-		return 0, 0, err
-	}
 
 	return result.AverageRating, result.TotalReviews, nil
 }

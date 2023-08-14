@@ -3,9 +3,11 @@ package review
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/handlers"
 	"github.com/phincon-backend/laza/domain/usecases/review"
+	"github.com/phincon-backend/laza/middleware"
 )
 
 type reviewHandler struct {
@@ -32,9 +34,10 @@ func NewReviewHandler(
 
 func (h *reviewHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/products/:id/reviews", HandlerFunc: h.get},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/products/:id/reviews", HandlerFunc: h.post},
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/products/:id/review", HandlerFunc: h.getWithLimit},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/products/:id/reviews", HandlerFunc: h.get, Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()}},
+		handlers.HandlerStruct{Method: http.MethodPost, Path: "/products/:id/reviews", HandlerFunc: h.post,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()}},
+		handlers.HandlerStruct{Method: http.MethodGet, Path: "/products/:id/review", HandlerFunc: h.getWithLimit, Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()}},
 	)
 
 	return
