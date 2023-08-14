@@ -39,7 +39,7 @@ type ProductDetail struct {
 	ImageUrl    string                `json:"image_url"`
 	Price       float64               `json:"price"`
 	Categories  model.Category        `json:"category"`
-	Sizes       []GetSize             `json:"size"`
+	Sizes       []model.Size          `json:"size"`
 	Reviews     []model.ProductReview `json:"reviews"`
 	CreatedAt   time.Time             `json:"created_at"`
 	UpdatedAt   time.Time             `json:"updated_at"`
@@ -53,6 +53,7 @@ func (p ProductDetail) FillFromEntity(e model.Product) ProductDetail {
 		ImageUrl:    e.ImageUrl,
 		Price:       e.Price,
 		Categories:  e.Category,
+		Sizes:       e.Sizes,
 		CreatedAt:   e.CreatedAt,
 		UpdatedAt:   e.UpdatedAt,
 	}
