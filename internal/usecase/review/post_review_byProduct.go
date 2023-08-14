@@ -23,10 +23,6 @@ func NewinsertReviewUsecase(review repositories.InsertAction[m.Review], gcr d.Ge
 }
 
 func (uc *insertReviewUsecase) Execute(userId uint64, productId uint64, comment string, rating float32) *h.Response {
-	rs, err := uc.getCartByIdRepo.GetCartById(userId)
-	if len(rs) == 0 {
-		return h.GetResponse("You must checkout before giving a review", http.StatusBadRequest, true)
-	}
 	if rating > 5 {
 		return h.GetResponse("Rating cannot exceed 5", http.StatusBadRequest, true)
 	}
