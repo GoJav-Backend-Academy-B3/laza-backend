@@ -49,17 +49,17 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	defer cancel()
 
 	// Check existing name on repo
-	taskCount++
+	taskCount.Add(1)
 	go u.getBrandNameRepo(checkingContext, request.Brand, &brand, errorChan, &taskCount)
 
 	// Check existing size on repo
 	for _, v := range request.Sizes {
-		taskCount++
+		taskCount.Add(1)
 		go u.getSizeRepo(checkingContext, v, &sizes, errorChan, &taskCount)
 	}
 
 	// Check existing category on repo
-	taskCount++
+	taskCount.Add(1)
 	go u.getCategoryRepo(checkingContext, request.Category, &category, errorChan, &taskCount)
 
 	for e := range errorChan {
@@ -70,7 +70,7 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 			err = e
 			return
 		}
-		if taskCount == 0 {
+		if taskCount.Load() == 0 {
 			break
 		}
 	}
@@ -101,8 +101,8 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 	return
 }
 
-func (u *CreateProductUsecaseImpl) getBrandNameRepo(ctx context.Context, brandName string, brand *model.Brand, errChan chan<- error, taskCount *int) {
-	defer func() { *taskCount-- }()
+func (u *CreateProductUsecaseImpl) getBrandNameRepo(ctx context.Context, brandName string, brand *model.Brand, errChan chan<- error, taskCount *atomic.Int32) {
+	defer taskCount.Add(-1)
 
 	var err error
 	*brand, err = u.getBrandName.GetByNameWithContext(ctx, brandName)
@@ -113,8 +113,8 @@ func (u *CreateProductUsecaseImpl) getBrandNameRepo(ctx context.Context, brandNa
 	errChan <- err
 }
 
-func (u *CreateProductUsecaseImpl) getSizeRepo(ctx context.Context, sizeName string, sizes *[]model.Size, errChan chan<- error, taskCount *int) {
-	defer func() { *taskCount-- }()
+func (u *CreateProductUsecaseImpl) getSizeRepo(ctx context.Context, sizeName string, sizes *[]model.Size, errChan chan<- error, taskCount *atomic.Int32) {
+	defer taskCount.Add(-1)
 
 	sz, err := u.getSizeAction.GetByNameWithContext(ctx, sizeName)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -128,8 +128,8 @@ func (u *CreateProductUsecaseImpl) getSizeRepo(ctx context.Context, sizeName str
 	errChan <- nil
 }
 
-func (u *CreateProductUsecaseImpl) getCategoryRepo(ctx context.Context, categoryName string, category *model.Category, errChan chan<- error, taskCount *int) {
-	defer func() { *taskCount-- }()
+func (u *CreateProductUsecaseImpl) getCategoryRepo(ctx context.Context, categoryName string, category *model.Category, errChan chan<- error, taskCount *atomic.Int32) {
+	defer taskCount.Add(-1)
 
 	var err error
 	*category, err = u.getCategoryAction.GetByNameWithContext(ctx, categoryName)
