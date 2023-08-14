@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/helper"
+	"gorm.io/gorm"
 )
 
 // Get Credit Card by Id godoc
@@ -26,5 +27,12 @@ func (h *getCreditCardHandler) GetById(c *gin.Context) {
 		helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
 		return
 	}
-	h.getByIdCcUc.Execute(ccId).Send(c)
+
+	_result, err := h.getByIdCcUc.Execute(ccId)
+	if err == gorm.ErrRecordNotFound {
+		helper.GetResponse(err.Error(), 404, true).Send(c)
+		return
+	}
+
+	helper.GetResponse(_result, 200, false).Send(c)
 }
