@@ -64,9 +64,7 @@ func (u *CreateProductUsecaseImpl) Execute(request requests.ProductRequest) (pro
 
 	for e := range errorChan {
 		if e != nil {
-			// EMERGENCY! CANCEL ALL ROUTINES
 			cancel()
-			fmt.Println("chan error: ", e.Error())
 			err = e
 			return
 		}
