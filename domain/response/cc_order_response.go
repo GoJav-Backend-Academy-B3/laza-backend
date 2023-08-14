@@ -14,9 +14,9 @@ func (r *CreditCardOrderResponse) FillFromEntity(m *model.Order) {
 	r.UpdatedAt = m.UpdatedAt
 	r.OrderStatus = m.OrderStatus
 	r.AddressId = m.AddressId
-	if m.CreditCardId.Valid {
-		r.CreditCardId = uint64(m.CreditCardId.Int64)
-	} else {
-		panic("CreditCardId is nil! Cannot fill.")
-	}
+	//if m.CreditCardId.Valid {
+	//	r.CreditCardId = uint64(m.CreditCardId.Int64)
+	//} else {
+	//	panic("CreditCardId is nil! Cannot fill.")
+	//}
 }

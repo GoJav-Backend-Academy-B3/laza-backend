@@ -26,7 +26,7 @@ func (r *Order) FillFromEntity(m *model.Order) {
 	r.AddressId = m.AddressId
 	r.UserId = m.UserId
 	r.OrderStatus = m.OrderStatus
-	r.GopayId = m.GopayId.Int64
-	r.CreditCardId = m.CreditCardId.Int64
-	r.TransactionBankId = m.TransactionBankId.Int64
+	//r.GopayId = m.GopayId.Int64
+	//r.CreditCardId = m.CreditCardId.Int64
+	//r.TransactionBankId = m.TransactionBankId.Int64
 }

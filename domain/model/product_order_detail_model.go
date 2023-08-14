@@ -11,6 +11,7 @@ type ProductOrderDetail struct {
 	Quantity    int    `json:"quantity"`
 	Size        string `json:"size"`
 	TotalPrice  int    `json:"total_price"`
+	OrderId     string `json:"order_id,omitempty"`
 }
 
 func (ProductOrderDetail) TableName() string {

@@ -1,26 +1,29 @@
 package order
 
 import (
-	"database/sql"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	d "github.com/phincon-backend/laza/domain/repositories/cart"
 	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
-	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 	"time"
 )
 
 type CreateOrderWithCCUsecase struct {
-	insertOrder        repositories.InsertAction[model.Order]
-	getAddressById     repositories.GetByIdAction[model.Address]
-	chargeMidtrans     midtranscore.ChargeMidtransAction
-	getCCToken         midtranscore.FetchMidtransCCTokenAction
-	insertCreditCard   repositories.InsertAction[model.CreditCard]
-	getOrder           repositories.GetByIdAction[model.Order]
-	getProduct         repositories.GetByIdAction[model.Product]
-	insertProductOrder repositories.InsertAction[model.ProductOrder]
+	insertOrder              repositories.InsertAction[model.Order]
+	getAddressById           repositories.GetByIdAction[model.Address]
+	chargeMidtrans           midtranscore.ChargeMidtransAction
+	getCCToken               midtranscore.FetchMidtransCCTokenAction
+	insertCreditCard         repositories.InsertAction[model.CreditCard]
+	getOrder                 repositories.GetByIdAction[model.Order]
+	getProduct               repositories.GetByIdAction[model.Product]
+	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail]
+	getCategory              repositories.GetByIdAction[model.Category]
+	getBrand                 repositories.GetByIdAction[model.Brand]
+	insertPaymentMethod      repositories.InsertAction[model.PaymentMethod]
+	getCartByIdRepo          d.GetCartByIdAction
 }
 
 func NewCreateOrderWithCCUsecase(
@@ -31,23 +34,31 @@ func NewCreateOrderWithCCUsecase(
 	insertCreditCard repositories.InsertAction[model.CreditCard],
 	getOrder repositories.GetByIdAction[model.Order],
 	getProduct repositories.GetByIdAction[model.Product],
-	insertProductOrder repositories.InsertAction[model.ProductOrder],
+	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail],
+	getCategory repositories.GetByIdAction[model.Category],
+	getBrand repositories.GetByIdAction[model.Brand],
+	insertPaymentMethod repositories.InsertAction[model.PaymentMethod],
+	getCartByIdRepo d.GetCartByIdAction,
 ) *CreateOrderWithCCUsecase {
 	return &CreateOrderWithCCUsecase{
-		insertOrder:        insertOrder,
-		getAddressById:     getAddressById,
-		chargeMidtrans:     chargeMidtrans,
-		getCCToken:         getCCToken,
-		insertCreditCard:   insertCreditCard,
-		getOrder:           getOrder,
-		getProduct:         getProduct,
-		insertProductOrder: insertProductOrder,
+		insertOrder:              insertOrder,
+		getAddressById:           getAddressById,
+		chargeMidtrans:           chargeMidtrans,
+		getCCToken:               getCCToken,
+		insertCreditCard:         insertCreditCard,
+		getOrder:                 getOrder,
+		getProduct:               getProduct,
+		insertProductOrderDetail: insertProductOrderDetail,
+		getCategory:              getCategory,
+		getBrand:                 getBrand,
+		insertPaymentMethod:      insertPaymentMethod,
+		getCartByIdRepo:          getCartByIdRepo,
 	}
 }
 
-func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc model.CreditCard, cvv string, products []requests.ProductOrder) (*model.Order, *model.CreditCard, error) {
+func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc model.CreditCard, cvv string) (*model.Order, *model.PaymentMethod, error) {
 	// check if address exists
-	_, err := uc.getAddressById.GetById(addressId)
+	address, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -63,22 +74,39 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 	}
 
 	// count gross amount
-	var grossAmount float64 = 0
-	var productOrders = make([]model.ProductOrder, 0)
-	for _, product := range products {
-		productTemp, err := uc.getProduct.GetById(product.Id)
+	var grossAmount int = 0
+	productsDetails := make([]model.ProductOrderDetail, 0)
+	productCarts, err := uc.getCartByIdRepo.GetCartById(userId)
+	for _, productCart := range productCarts {
+		productTemp, err := uc.getProduct.GetById(productCart.Id)
 		if err != nil {
 			return nil, nil, err
 		}
 
-		productOrderTemp := model.ProductOrder{
-			ProductId: productTemp.Id,
-			OrderId:   orderNumber,
-			Quantity:  uint16(product.Quantity),
-			Price:     productTemp.Price * float64(product.Quantity),
+		categoryTemp, err := uc.getCategory.GetById(productTemp.CategoryId)
+		if err != nil {
+			return nil, nil, err
 		}
-		productOrders = append(productOrders, productOrderTemp)
-		grossAmount += productTemp.Price * float64(product.Quantity)
+
+		brandTemp, err := uc.getBrand.GetById(productTemp.BrandId)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		productsDetails = append(productsDetails,
+			model.ProductOrderDetail{
+				Name:        productTemp.Name,
+				Description: productTemp.Description,
+				ImageUrl:    productTemp.ImageUrl,
+				Price:       int(productTemp.Price),
+				Category:    categoryTemp.Category,
+				BrandName:   brandTemp.Name,
+				Quantity:    productCart.Quantity,
+				Size:        "",
+				TotalPrice:  int(productTemp.Price) * productCart.Quantity,
+				OrderId:     orderNumber,
+			},
+		)
 	}
 
 	// get cc token
@@ -107,31 +135,50 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 		return nil, nil, err
 	}
 
+	// parsing time
+	parsedTime, err := time.Parse(responseMd.ExpiryTime, responseMd.ExpiryTime)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// insert payment method to db
+	paymentMethod, err := uc.insertPaymentMethod.Insert(model.PaymentMethod{
+		Id:               0,
+		PaymentMethod:    "credit_card",
+		CreditCardNumber: cc.CardNumber,
+		RedirectUrl:      responseMd.RedirectURL,
+		ExpiryTime:       parsedTime,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
 	// insert order to db
 	order := model.Order{
-		Id:          orderNumber,
-		Amount:      int64(grossAmount),
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-		UserId:      userId,
-		OrderStatus: responseMd.TransactionStatus,
-		AddressId:   uint64(addressId),
-		CreditCardId: sql.NullInt64{
-			Int64: int64(cc.Id),
-			Valid: true,
-		},
+		Id:              orderNumber,
+		Amount:          int64(grossAmount),
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
+		PaidAt:          time.Time{},
+		ExpiryDate:      paymentMethod.ExpiryTime,
+		ShippingFee:     helper.GenerateShippingFee(address),
+		AdminFee:        helper.GenerateAdminFee(),
+		OrderStatus:     responseMd.TransactionStatus,
+		UserId:          userId,
+		AddressId:       uint64(addressId),
+		PaymentMethodId: paymentMethod.Id,
 	}
 	orderRespond, err := uc.insertOrder.Insert(order)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	for _, productOrder := range productOrders {
-		_, err = uc.insertProductOrder.Insert(productOrder)
+	for _, productsDetail := range productsDetails {
+		_, err = uc.insertProductOrderDetail.Insert(productsDetail)
 		if err != nil {
 			return nil, nil, err
 		}
 	}
 
-	return &orderRespond, &cc, nil
+	return &orderRespond, &paymentMethod, nil
 }

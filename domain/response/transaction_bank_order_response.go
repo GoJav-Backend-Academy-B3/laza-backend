@@ -14,9 +14,9 @@ func (r *TransactionBankOrderResponse) FillFromEntity(m *model.Order) {
 	r.UpdatedAt = m.UpdatedAt
 	r.OrderStatus = m.OrderStatus
 	r.AddressId = m.AddressId
-	if m.TransactionBankId.Valid {
-		r.TransactionBankId = uint64(m.TransactionBankId.Int64)
-	} else {
-		panic("TransactionBankId is nil! Cannot fill.")
-	}
+	//if m.TransactionBankId.Valid {
+	//	r.TransactionBankId = uint64(m.TransactionBankId.Int64)
+	//} else {
+	//	panic("TransactionBankId is nil! Cannot fill.")
+	//}
 }

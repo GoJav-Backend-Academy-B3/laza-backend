@@ -1,51 +1,59 @@
 package order
 
 import (
-	"database/sql"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
+	d "github.com/phincon-backend/laza/domain/repositories/cart"
 	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
-	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 	"strings"
 	"time"
 )
 
 type CreateOrderWithBankUsecase struct {
-	insertOrder           repositories.InsertAction[model.Order]
-	getAddressById        repositories.GetByIdAction[model.Address]
-	chargeMidtrans        midtranscore.ChargeMidtransAction
-	insertTransactionBank repositories.InsertAction[model.TransactionBank]
-	getOrder              repositories.GetByIdAction[model.Order]
-	getProduct            repositories.GetByIdAction[model.Product]
-	insertProductOrder    repositories.InsertAction[model.ProductOrder]
+	insertOrder              repositories.InsertAction[model.Order]
+	getAddressById           repositories.GetByIdAction[model.Address]
+	chargeMidtrans           midtranscore.ChargeMidtransAction
+	getOrder                 repositories.GetByIdAction[model.Order]
+	getProduct               repositories.GetByIdAction[model.Product]
+	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail]
+	getCategory              repositories.GetByIdAction[model.Category]
+	getBrand                 repositories.GetByIdAction[model.Brand]
+	insertPaymentMethod      repositories.InsertAction[model.PaymentMethod]
+	getCartByIdRepo          d.GetCartByIdAction
 }
 
 func NewCreateOrderWithBankUsecase(
 	insertOrder repositories.InsertAction[model.Order],
 	getAddressById repositories.GetByIdAction[model.Address],
 	chargeMidtrans midtranscore.ChargeMidtransAction,
-	insertTransactionBank repositories.InsertAction[model.TransactionBank],
 	getOrder repositories.GetByIdAction[model.Order],
 	getProduct repositories.GetByIdAction[model.Product],
-	insertProductOrder repositories.InsertAction[model.ProductOrder],
+	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail],
+	getCategory repositories.GetByIdAction[model.Category],
+	getBrand repositories.GetByIdAction[model.Brand],
+	insertPaymentMethod repositories.InsertAction[model.PaymentMethod],
+	getCartByIdRepo d.GetCartByIdAction,
 ) *CreateOrderWithBankUsecase {
 	return &CreateOrderWithBankUsecase{
-		insertOrder:           insertOrder,
-		getAddressById:        getAddressById,
-		chargeMidtrans:        chargeMidtrans,
-		insertTransactionBank: insertTransactionBank,
-		getOrder:              getOrder,
-		getProduct:            getProduct,
-		insertProductOrder:    insertProductOrder,
+		insertOrder:              insertOrder,
+		getAddressById:           getAddressById,
+		chargeMidtrans:           chargeMidtrans,
+		getOrder:                 getOrder,
+		getProduct:               getProduct,
+		insertProductOrderDetail: insertProductOrderDetail,
+		getCategory:              getCategory,
+		getBrand:                 getBrand,
+		insertPaymentMethod:      insertPaymentMethod,
+		getCartByIdRepo:          getCartByIdRepo,
 	}
 }
 
-func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank string, products []requests.ProductOrder) (*model.Order, *model.TransactionBank, error) {
+func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank string) (*model.Order, *model.PaymentMethod, error) {
 	// check if address exists
-	_, err := uc.getAddressById.GetById(addressId)
+	address, err := uc.getAddressById.GetById(addressId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -61,22 +69,39 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 	}
 
 	// count gross amount
-	var grossAmount float64 = 0
-	var productOrders = make([]model.ProductOrder, 0)
-	for _, product := range products {
-		productTemp, err := uc.getProduct.GetById(product.Id)
+	var grossAmount int = 0
+	productsDetails := make([]model.ProductOrderDetail, 0)
+	productCarts, err := uc.getCartByIdRepo.GetCartById(userId)
+	for _, productCart := range productCarts {
+		productTemp, err := uc.getProduct.GetById(productCart.Id)
 		if err != nil {
 			return nil, nil, err
 		}
 
-		productOrderTemp := model.ProductOrder{
-			ProductId: productTemp.Id,
-			OrderId:   orderNumber,
-			Quantity:  uint16(product.Quantity),
-			Price:     productTemp.Price * float64(product.Quantity),
+		categoryTemp, err := uc.getCategory.GetById(productTemp.CategoryId)
+		if err != nil {
+			return nil, nil, err
 		}
-		productOrders = append(productOrders, productOrderTemp)
-		grossAmount += productTemp.Price * float64(product.Quantity)
+
+		brandTemp, err := uc.getBrand.GetById(productTemp.BrandId)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		productsDetails = append(productsDetails,
+			model.ProductOrderDetail{
+				Name:        productTemp.Name,
+				Description: productTemp.Description,
+				ImageUrl:    productTemp.ImageUrl,
+				Price:       int(productTemp.Price),
+				Category:    categoryTemp.Category,
+				BrandName:   brandTemp.Name,
+				Quantity:    productCart.Quantity,
+				Size:        "",
+				TotalPrice:  int(productTemp.Price) * productCart.Quantity,
+				OrderId:     orderNumber,
+			},
+		)
 	}
 
 	// charge bank to midtrans
@@ -110,56 +135,68 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 		return nil, nil, err
 	}
 
-	// insert bank to db
-	var transactionBankModel model.TransactionBank
+	// parsing time
+	parsedTime, err := time.Parse(respondMd.ExpiryTime, respondMd.ExpiryTime)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// insert payment method to db
+	var paymentMethod model.PaymentMethod
 	if strings.ToLower(bank) == "mandiri" {
-		transactionBankModel = model.TransactionBank{
-			BankCode:   bank,
-			BillerCode: respondMd.BillerCode,
-			VANumber:   respondMd.BillKey,
+		paymentMethod = model.PaymentMethod{
+			PaymentMethod: "bank",
+			Bank:          bank,
+			BillerCode:    respondMd.BillerCode,
+			BillKey:       respondMd.BillKey,
+			ExpiryTime:    parsedTime,
 		}
 	} else if strings.ToLower(bank) == "permata" {
-		transactionBankModel = model.TransactionBank{
-			BankCode: bank,
-			VANumber: respondMd.PermataVaNumber,
+		paymentMethod = model.PaymentMethod{
+			PaymentMethod: "bank",
+			Bank:          bank,
+			VANumber:      respondMd.PermataVaNumber,
+			ExpiryTime:    parsedTime,
 		}
 	} else {
-		transactionBankModel = model.TransactionBank{
-			BankCode: bank,
-			VANumber: respondMd.VaNumbers[0].VANumber,
+		paymentMethod = model.PaymentMethod{
+			PaymentMethod: "bank",
+			Bank:          bank,
+			VANumber:      respondMd.VaNumbers[0].VANumber,
+			ExpiryTime:    parsedTime,
 		}
 	}
-	insertRes, err := uc.insertTransactionBank.Insert(transactionBankModel)
-	transactionBankModel.Id = insertRes.Id
+	paymentMethod, err = uc.insertPaymentMethod.Insert(paymentMethod)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	// insert order to db
 	order := model.Order{
-		Id:          orderNumber,
-		Amount:      int64(grossAmount),
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-		UserId:      userId,
-		OrderStatus: respondMd.TransactionStatus,
-		AddressId:   uint64(addressId),
-		TransactionBankId: sql.NullInt64{
-			Int64: int64(insertRes.Id),
-			Valid: true,
-		},
+		Id:              orderNumber,
+		Amount:          int64(grossAmount),
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
+		PaidAt:          time.Time{},
+		ExpiryDate:      paymentMethod.ExpiryTime,
+		ShippingFee:     helper.GenerateShippingFee(address),
+		AdminFee:        helper.GenerateAdminFee(),
+		OrderStatus:     respondMd.TransactionStatus,
+		UserId:          userId,
+		AddressId:       uint64(addressId),
+		PaymentMethodId: paymentMethod.Id,
 	}
 	orderRespond, err := uc.insertOrder.Insert(order)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	for _, productOrder := range productOrders {
-		_, err = uc.insertProductOrder.Insert(productOrder)
+	for _, productsDetail := range productsDetails {
+		_, err = uc.insertProductOrderDetail.Insert(productsDetail)
 		if err != nil {
 			return nil, nil, err
 		}
 	}
 
-	return &orderRespond, &transactionBankModel, nil
+	return &orderRespond, &paymentMethod, nil
 }

@@ -1,5 +1,7 @@
 package helper
 
-func GenerateShippingFee() int {
-	return 18000
+import "github.com/phincon-backend/laza/domain/model"
+
+func GenerateShippingFee(address model.Address) int {
+	return 10000
 }
