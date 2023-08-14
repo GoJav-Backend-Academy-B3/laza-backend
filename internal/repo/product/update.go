@@ -24,5 +24,8 @@ func (r *ProductRepo) Update(id_r any, e model.Product) (product model.Product, 
 	tx = r.db.Save(&product)
 	err = tx.Error
 
+	tx = r.db.Model(&product).Update("Sizes", product.Sizes)
+	err = tx.Error
+
 	return product, err
 }
