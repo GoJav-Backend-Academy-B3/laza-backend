@@ -1,8 +1,6 @@
 package twitterauth
 
 import (
-	"net/http"
-
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	action "github.com/phincon-backend/laza/domain/repositories/user"
@@ -19,37 +17,32 @@ type twitterAuthUsecase struct {
 	emailExistsAction     action.ExistsEmail
 }
 
-func (uc *twitterAuthUsecase) Execute(rp response.TwitterFieldResponse) *helper.Response {
+func (uc *twitterAuthUsecase) Execute(rb response.TwitterUser) (_result any, err error) {
 	var userDAO = new(model.User)
-	rp.TwitterUser(userDAO)
 
-	response := map[string]string{}
-	if exist, emailExist := uc.existByUsernameAction.ExistsUsername(userDAO.Username), uc.emailExistsAction.ExistsEmail(userDAO.Email); !exist && !emailExist {
+	if exist, emailExist := uc.existByUsernameAction.ExistsUsername(rb.NickName), uc.emailExistsAction.ExistsEmail(rb.Email); !exist && !emailExist {
 
 		insertedUser, err := uc.insertUserAction.Insert(*userDAO)
 		userDAO.Id, userDAO.IsAdmin = insertedUser.Id, insertedUser.IsAdmin
-
 		if err != nil {
-			return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+			return _result, err
 		}
+
 	} else {
-		user, err := uc.findByEmailAction.FindByEmail(rp.Email)
+		user, err := uc.findByEmailAction.FindByEmail(rb.Email)
 		userDAO.Id, userDAO.IsAdmin = user.Id, user.IsAdmin
 
 		if err != nil {
-			return helper.GetResponse("user is not exist", 401, true)
+			return _result, err
 		}
+
 	}
 
 	jwt := helper.NewToken(uint64(userDAO.Id), userDAO.IsAdmin)
 	accessToken, err := jwt.Create()
 
-	if err != nil {
-		return helper.GetResponse(err.Error(), 500, true)
-	}
-
-	response["access_token"] = accessToken
-	return helper.GetResponse(response, 200, false)
+	_result = map[string]string{"access_token": accessToken}
+	return
 }
 
 func NewtwitterAuthUsecase(
