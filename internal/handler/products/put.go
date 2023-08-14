@@ -24,8 +24,7 @@ import (
 // @Param brand formData string true "Product brand (must exists in database)"
 // @Param category formData string true "Product category (must exists in database)"
 // @Param id path int true "ID of the product"
-// TODO: Swagger not separating form value for []string
-// @Param sizes formData []string true "Product available sizes"
+// @Param sizes formData []string true "Product available sizes. Note: You should use multi-valued form data outside this Swagger UI"
 // @Security JWT
 // @Success 200 {object} helper.Response{isError=bool,status=string,data=response.Product}
 // @Failure 422 {object} helper.Response{isError=bool,status=string,description=map[string]string}

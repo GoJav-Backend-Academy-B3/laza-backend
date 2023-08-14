@@ -2,6 +2,7 @@ package products
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -22,8 +23,7 @@ import (
 // @Param price formData number true "Product price"
 // @Param brand formData string true "Product brand (must exists in database)"
 // @Param category formData string true "Product category (must exists in database)"
-// TODO: Swagger not separating form value for []string
-// @Param sizes formData []string true "Product available sizes"
+// @Param sizes formData []string true "Product available sizes. Note: You should use multi-valued form data outside this Swagger UI"
 // @Security JWT
 // @Success 201 {object} helper.Response{isError=bool,status=string,data=response.Product}
 // @Failure 422 {object} helper.Response{isError=bool,status=string,description=map[string]string}
@@ -48,6 +48,8 @@ func (h *productHandler) post(c *gin.Context) {
 			true).Send(c)
 		return
 	}
+
+	request.Sizes = strings.Split(request.Sizes[0], ", ")
 
 	model, err := h.createProductUsecase.Execute(request)
 	if err != nil {
