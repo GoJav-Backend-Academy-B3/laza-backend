@@ -32,7 +32,6 @@ func (h *productHandler) GetHandlers() (hs []hd.HandlerStruct) {
 		Method:      http.MethodGet,
 		Path:        h.path + "/:id",
 		HandlerFunc: h.getById,
-		Middlewares: gin.HandlersChain{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()},
 	})
 	hs = append(hs, hd.HandlerStruct{
 		Method:      http.MethodPost,

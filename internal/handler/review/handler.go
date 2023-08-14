@@ -34,10 +34,20 @@ func NewReviewHandler(
 
 func (h *reviewHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/products/:id/reviews", HandlerFunc: h.get, Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()}},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/products/:id/reviews", HandlerFunc: h.post,
-			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()}},
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/products/:id/review", HandlerFunc: h.getWithLimit, Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()}},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/products/:id/reviews",
+			HandlerFunc: h.get},
+		handlers.HandlerStruct{
+			Method:      http.MethodPost,
+			Path:        "/products/:id/reviews",
+			HandlerFunc: h.post,
+			Middlewares: []gin.HandlerFunc{middleware.AuthMiddleware()},
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/products/:id/review",
+			HandlerFunc: h.getWithLimit},
 	)
 
 	return

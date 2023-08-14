@@ -27,14 +27,13 @@ func (uc *InsertBanksUsecase) Execute(request requests.BankRequest) *helper.Resp
 
 	file, err := request.LogoUrl.Open()
 	if err != nil {
-		// TODO: Should return error here
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 	defer file.Close()
 
 	url, err := helper.UploadImageFile("bank", file)
 	if err != nil {
-		// TODO: Should return error here
+
 		return helper.GetResponse(err.Error(), 500, true)
 	}
 
