@@ -22,6 +22,7 @@ import (
 // @Router /products/{id}/reviews/ [get]
 
 func (h *reviewHandler) get(c *gin.Context) {
+
 	productId, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		helper.GetResponse(err.Error(), http.StatusInternalServerError, true)

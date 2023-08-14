@@ -2,7 +2,7 @@ package review
 
 import (
 	review "github.com/phincon-backend/laza/domain/repositories/Review"
-	rw "github.com/phincon-backend/laza/domain/usecases/review"
+	action "github.com/phincon-backend/laza/domain/usecases/review"
 	"github.com/phincon-backend/laza/helper"
 )
 
@@ -10,7 +10,7 @@ type GetWithLimitReviewUsecase struct {
 	getWithLimitAction review.GetWithLimitReviewsAction
 }
 
-func NewGetWithLimitReviewUsecase(repo review.GetWithLimitReviewsAction) rw.GetWithLimitReviewUsecase {
+func NewGetWithLimitReviewUsecase(repo review.GetWithLimitReviewsAction) action.GetWithLimitReviewUsecase {
 	return &GetWithLimitReviewUsecase{getWithLimitAction: repo}
 }
 

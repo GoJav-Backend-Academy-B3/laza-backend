@@ -7,8 +7,9 @@ type Review struct {
 	Comment   string    `json:"comment,omitempty"`
 	Rating    float32   `json:"rating,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
-	UserId    uint64    `json:"user_id,omitempty"`
-	ProductId uint64    `json:"product_id,omitempty"`
+	// ProducReviews []ProductReview `json:"product_reviews"`
+	UserId    uint64 `json:"user_id,omitempty"`
+	ProductId uint64 `json:"product_id,omitempty"`
 }
 type ProductReview struct {
 	Id        uint      `json:"id" gorm:"primarykey"`

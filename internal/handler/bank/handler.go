@@ -40,11 +40,34 @@ func NewBankHandler(
 // GetHandlers implements handlers.HandlerInterface.
 func (h *bankHandler) GetHandlers() (hs []handlers.HandlerStruct) {
 	hs = append(hs,
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/bank", HandlerFunc: h.get, Middlewares: gin.HandlersChain{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()}},
-		handlers.HandlerStruct{Method: http.MethodGet, Path: "/bank/:id", HandlerFunc: h.getBankById, Middlewares: []gin.HandlerFunc{middleware.AdminRoleMiddleware()}},
-		handlers.HandlerStruct{Method: http.MethodPost, Path: "/bank", HandlerFunc: h.insert, Middlewares: []gin.HandlerFunc{middleware.AdminRoleMiddleware()}},
-		handlers.HandlerStruct{Method: http.MethodPut, Path: "/bank/:id", HandlerFunc: h.update, Middlewares: []gin.HandlerFunc{middleware.AdminRoleMiddleware()}},
-		handlers.HandlerStruct{Method: http.MethodDelete, Path: "/bank/:id", HandlerFunc: h.delete, Middlewares: []gin.HandlerFunc{middleware.AdminRoleMiddleware()}},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/bank",
+			HandlerFunc: h.get,
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodGet,
+			Path:        "/bank/:id",
+			HandlerFunc: h.getBankById,
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodPost,
+			Path:        "/bank",
+			HandlerFunc: h.insert,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()},
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodPut,
+			Path:        "/bank/:id",
+			HandlerFunc: h.update,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()},
+		},
+		handlers.HandlerStruct{
+			Method:      http.MethodDelete,
+			Path:        "/bank/:id",
+			HandlerFunc: h.delete,
+			Middlewares: gin.HandlersChain{middleware.AuthMiddleware(), middleware.AdminRoleMiddleware()},
+		},
 	)
 	return
 }
