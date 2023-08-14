@@ -5,28 +5,21 @@ import (
 	"gorm.io/gorm"
 )
 
-func (r *WishListRepo) UpdateWishList(user_id any, product_id any) (value any, err error) {
-	userId := user_id.(uint64)
-	productId := product_id.(uint64)
+func (r *WishListRepo) UpdateWishList(md model.Wishlist) (value any, err error) {
+
 	var ws model.Wishlist
 
-	tx := r.db.Where("user_id = ? AND product_id = ?", userId, productId).First(&ws)
+	tx := r.db.Where("user_id = ? AND product_id = ?", md.UserId, md.ProductId).First(&ws)
 	err = tx.Error
 	value = ""
 
 	if err == gorm.ErrRecordNotFound {
-		tx = r.db.Create(&model.Wishlist{
-			UserId:    userId,
-			ProductId: productId},
-		)
+		tx = r.db.Create(&md)
 		err = tx.Error
 		value = "successfully added wishlist"
 
 	} else {
-		tx = r.db.Delete(&model.Wishlist{
-			UserId:    userId,
-			ProductId: productId},
-		)
+		tx = r.db.Delete(&md)
 		value = "successfully delete wishlist"
 		err = tx.Error
 	}

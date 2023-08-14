@@ -19,7 +19,7 @@ func (h *getWishlistHandler) GetHandlers() (hs []handler.HandlerStruct) {
 	hs = append(hs,
 		handler.HandlerStruct{
 			Method:      http.MethodPut,
-			Path:        "/products/:id/wishlists",
+			Path:        "/wishlists",
 			HandlerFunc: h.Put,
 			Middlewares: gin.HandlersChain{middleware.AuthMiddleware()},
 		},

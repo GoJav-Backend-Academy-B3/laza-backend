@@ -1,10 +1,9 @@
 package wishlist
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/phincon-backend/laza/domain/requests"
 	"github.com/phincon-backend/laza/helper"
 )
 
@@ -14,22 +13,26 @@ import (
 // @Tags wishlist
 // @Accept json
 // @Produce json
-// @Param id path int true "ID of the product"
+// @Param wishlist body requests.WishlistRequest true "add product to wishlist"
 // @Security JWT
 // @Success 200 {object} helper.Response{status=string,isError=bool,data=string}
-// @Success 404 {object} helper.Response{status=string,isError=bool,data=string}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
-// @Router /products/{id}/wishlists [PUT]
+// @Router /wishlists [PUT]
 func (h *getWishlistHandler) Put(ctx *gin.Context) {
 	userId := ctx.MustGet("userId").(uint64)
 
-	productid, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+	var requestBody requests.WishlistRequest
+	err := ctx.Bind(&requestBody)
 	if err != nil {
-		helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		helper.GetResponse(err.Error(), 400, true).Send(ctx)
 		return
 	}
 
-	value, err := h.updateWishlistUsecase.Execute(userId, productid)
+	value, err := h.updateWishlistUsecase.Execute(userId, requestBody)
+	if err, ok := err.(validator.ValidationErrors); ok {
+		helper.GetResponse(err.Error(), 400, true).Send(ctx)
+		return
+	}
 
 	if err != nil {
 		helper.GetResponse(err.Error(), 500, true).Send(ctx)

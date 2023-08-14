@@ -1,5 +1,7 @@
 package wishlist
 
+import "github.com/phincon-backend/laza/domain/model"
+
 type UpdateWishListAction interface {
-	UpdateWishList(userId, productId any) (value any, err error)
+	UpdateWishList(model model.Wishlist) (value any, err error)
 }

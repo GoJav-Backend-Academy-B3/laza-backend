@@ -13,12 +13,11 @@ import (
 // @Tags cart
 // @Accept json
 // @Produce json
-// @Param id path int true "ID of the product"
+// @Param address body requests.CartRequest true "add product to cart"
 // @Security JWT
 // @Success 200 {object} helper.Response{status=string,isError=bool,data=string}
-// @Failure 401 {object} helper.Response{status=string,description=string,isError=bool}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
-// @Router /products/{id}/carts [delete]
+// @Router /carts [delete]
 func (ct *CartHandler) Delete(ctx *gin.Context) {
 	userId := ctx.MustGet("userId").(uint64)
 

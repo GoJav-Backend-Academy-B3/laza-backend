@@ -13,11 +13,11 @@ import (
 // @Tags cart
 // @Accept json
 // @Produce json
-// @Param id path int true "ID of the product"
+// @Param wishlist body requests.CartRequest true "add product to cart"
 // @Security JWT
 // @Success 200 {object} helper.Response{status=string,isError=bool,data=model.Cart}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
-// @Router /products/{id}/carts [PUT]
+// @Router /carts [PUT]
 func (h *CartHandler) Update(ctx *gin.Context) {
 	userId := ctx.MustGet("userId").(uint64)
 
