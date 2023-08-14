@@ -16,7 +16,7 @@ type Product struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 	Sizes       []Size    `json:"size" gorm:"many2many:size_product"`
 	Reviews     []Review  `json:"reviews" gorm:"foreignkey:Id"`
-	Category    Category  `json:"category" gorm:"many2many:category_product"` //many 2 many
+	Category    Category  `json:"category" gorm:"foreignKey:id"`
 
 	// Category      Category  `json:"category"  gorm:"foreignKey:id"`
 
