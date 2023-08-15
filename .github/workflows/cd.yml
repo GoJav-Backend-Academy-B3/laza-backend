@@ -1,0 +1,25 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH and deploy app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/laza_backend
+            git pull origin staging
+            swag init -g cmd/server/router/router.go
+            docker build -t laza-image .
+            docker-compose up -d

@@ -1,0 +1,41 @@
+version: '3'
+services:
+  laza-backend:
+    image: adimaspph/laza-backend
+    container_name: laza-backend
+    environment:
+      JWT_KEYS: sadjlasdjasdasda
+      JWT_EXPIRY: 15
+      PSQL_USER: phinconlazauser
+      PSQL_PASS: phinconlazadb
+      PSQL_HOST: laza-db-staging.cay6emqiofwj.ap-southeast-3.rds.amazonaws.com
+      PSQL_PORT: 5432
+      PSQL_DBNAME: phinconlaza
+      PSQL_SSL_MODE: require
+      PSQL_TIMEZONE: Asia/Jakarta
+      PSQL_TIMEOUT_1: 1
+      PSQL_TIMEOUT_2: 4
+      PSQL_TIMEOUT_3: 7
+      PSQL_SEARCH_PATH: laza
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      MAIL_USER: golaza.backend@gmail.com
+      MAIL_PASS: byrzsgpfhvrhpdss
+      CLOUD_NAME: dmacd1wra
+      CLOUD_APIKEY: 368669336358594
+      CLOUD_SECRET: jdmJQ1YWSiYDMAxP3QhAdRSQ4Fg
+      GOOGLE_CLIENT_ID: 586817315795-1ifsdvl9n9vos2kvra6ag91e2usu4hb9.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: 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
+      GOOGLE_REDIRECT_URI: http://localhost:8080/login-google/callback
+      FB_CLIENT_ID: 841478084198068
+      FB_CLIENT_SECRET: 6e5f6a32a681f832a6e2406b16da65eb
+      FB_AUTH_REDIRECT_URL: http://localhost:8080/auth/facebook/callback
+      TWITTER_KEY: 9mwWDkCn5twBQPHjSKO9cUO2Q
+      TWITTER_SECRET: sDP9A3GyypcicyEoW0zG4D2WDIEcZVNsPM16IIAWGLrfd5m4AK
+      MIDTRANS_CLIENT_KEY: SB-Mid-client-RoG71GkViRrFWrrQ
+      MIDTRANS_SERVER_KEY: SB-Mid-server-2eZ9gW_7UzLK41SsEDTiBTWw
+      APP_PORT: 8080
+      IP_HOST: 0.0.0.0
+      FRONTEND_ORIGIN_URL: http://localhost:8080
+    ports:
+      - "8080:8080"
