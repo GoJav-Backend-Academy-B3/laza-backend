@@ -3,22 +3,22 @@ package review
 import (
 	"net/http"
 
-	m "github.com/phincon-backend/laza/domain/model"
+	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
-	d "github.com/phincon-backend/laza/domain/repositories/cart"
+	cart "github.com/phincon-backend/laza/domain/repositories/cart"
 	usecase "github.com/phincon-backend/laza/domain/usecases/review"
 	h "github.com/phincon-backend/laza/helper"
 )
 
 type insertReviewUsecase struct {
-	insertReviewRepo repositories.InsertAction[m.Review]
-	getCartByIdRepo  d.GetCartByIdAction
+	insertReviewRepo repositories.InsertAction[model.Review]
+	getCartByIdRepo  cart.GetCartByIdAction
 }
 
-func NewinsertReviewUsecase(review repositories.InsertAction[m.Review], gcr d.GetCartByIdAction) usecase.InsertReviewUsecase {
+func NewinsertReviewUsecase(reviews repositories.InsertAction[model.Review], carts cart.GetCartByIdAction) usecase.InsertReviewUsecase {
 	return &insertReviewUsecase{
-		insertReviewRepo: review,
-		getCartByIdRepo:  gcr,
+		insertReviewRepo: reviews,
+		getCartByIdRepo:  carts,
 	}
 }
 
@@ -26,7 +26,7 @@ func (uc *insertReviewUsecase) Execute(userId uint64, productId uint64, comment 
 	if rating > 5 {
 		return h.GetResponse("Rating cannot exceed 5", http.StatusBadRequest, true)
 	}
-	review := m.Review{
+	review := model.Review{
 		UserId:    userId,
 		ProductId: productId,
 		Comment:   comment,

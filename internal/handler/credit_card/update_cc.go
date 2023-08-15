@@ -37,6 +37,12 @@ func (h *getCreditCardHandler) Update(c *gin.Context) {
 		return
 	}
 
-	h.updateCcUc.Execute(userId, ccId, requestBody).Send(c)
+	_result, statusCode, err := h.updateCcUc.Execute(userId, ccId, requestBody)
+	if err != nil {
+		helper.GetResponse(err.Error(), statusCode, true).Send(c)
+		return
+	}
+
+	helper.GetResponse(_result, 200, false).Send(c)
 
 }

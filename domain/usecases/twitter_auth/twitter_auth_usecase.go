@@ -1,10 +1,9 @@
 package twitterauth
 
 import (
-	rp "github.com/phincon-backend/laza/domain/response"
-	"github.com/phincon-backend/laza/helper"
+	"github.com/phincon-backend/laza/domain/response"
 )
 
 type TwitterAuthUsecase interface {
-	Execute(rp.TwitterFieldResponse) *helper.Response
+	Execute(rb response.TwitterUser) (_result any, err error)
 }

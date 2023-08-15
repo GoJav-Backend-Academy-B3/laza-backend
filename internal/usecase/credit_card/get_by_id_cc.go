@@ -1,28 +1,18 @@
 package credit_card
 
 import (
-	"net/http"
-
 	"github.com/phincon-backend/laza/domain/model"
 	repo "github.com/phincon-backend/laza/domain/repositories"
-	"github.com/phincon-backend/laza/domain/response"
 	uc "github.com/phincon-backend/laza/domain/usecases/credit_card"
-	"github.com/phincon-backend/laza/helper"
 )
 
 type getByIdCreditCardUsecase struct {
 	getCcRepo repo.GetByIdAction[model.CreditCard]
 }
 
-func (h *getByIdCreditCardUsecase) Execute(ccId uint64) *helper.Response {
-	rp, err := h.getCcRepo.GetById(ccId)
-
-	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
-	}
-
-	dt := response.CreditCardResponse{}.FillFromEntity(rp)
-	return helper.GetResponse(dt, http.StatusOK, false)
+func (h *getByIdCreditCardUsecase) Execute(ccId uint64) (_result model.CreditCard, err error) {
+	_result, err = h.getCcRepo.GetById(ccId)
+	return
 }
 
 func NewgetByIdCreditCardUsecase(getCcRepo repo.GetByIdAction[model.CreditCard]) uc.GetByIdCreditCardUsecase {

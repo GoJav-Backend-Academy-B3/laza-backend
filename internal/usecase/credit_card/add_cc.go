@@ -2,18 +2,15 @@ package credit_card
 
 import (
 	"errors"
-	"net/http"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
 	repo "github.com/phincon-backend/laza/domain/repositories"
 	rp "github.com/phincon-backend/laza/domain/repositories/credit_card"
 	"github.com/phincon-backend/laza/domain/repositories/midtrans"
-
 	"github.com/phincon-backend/laza/domain/requests"
-	"github.com/phincon-backend/laza/domain/response"
+
 	uc "github.com/phincon-backend/laza/domain/usecases/credit_card"
-	"github.com/phincon-backend/laza/helper"
 )
 
 type AddCreditCardUsecase struct {
@@ -23,11 +20,12 @@ type AddCreditCardUsecase struct {
 	validate             *validator.Validate
 }
 
-func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardRequest) *helper.Response {
+func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardRequest) (_result model.CreditCard, statusCode int, err error) {
 
-	err := ad.validate.Struct(rb)
+	err = ad.validate.Struct(rb)
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusBadRequest, true)
+		statusCode = 400
+		return
 	}
 
 	if rb.CVV == "" {
@@ -36,29 +34,32 @@ func (ad *AddCreditCardUsecase) Execute(userId uint64, rb requests.CreditCardReq
 	responseMd, errMd := ad.fetchMidtransCCToken.FetchMidtransCCToken(rb.CardNumber, rb.ExpiredMonth, rb.ExpiredYear, rb.CVV)
 
 	if errMd != nil {
-		return helper.GetResponse(errMd.RawError.Error(), http.StatusInternalServerError, true)
+		statusCode = 500
+		err = errMd.RawError
+		return
 	}
 	if responseMd.StatusCode != "200" {
-		return helper.GetResponse(errors.New(responseMd.StatusMessage).Error(), http.StatusBadRequest, true)
+		statusCode = 400
+		err = errors.New(responseMd.StatusMessage)
+		return
 	}
 
 	tf, err := ad.isExistsCc.IsExistsCc(userId, rb.CardNumber)
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		statusCode = 500
+		return
 	}
 	if tf {
-		return helper.GetResponse("credit card already saved", http.StatusBadRequest, true)
+		err = errors.New("credit card already saved")
+		statusCode = 400
+		return
 	}
 
 	md := model.CreditCard{UserId: userId, CardNumber: rb.CardNumber, ExpiredMonth: rb.ExpiredMonth, ExpiredYear: rb.ExpiredYear}
 
-	rs, err := ad.addCcRepo.Insert(md)
-	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
-	}
+	_result, err = ad.addCcRepo.Insert(md)
 
-	data := response.CreditCardResponse{}.FillFromEntity(rs)
-	return helper.GetResponse(data, http.StatusCreated, false)
+	return
 }
 
 func NewaddCreditCardUsecase(

@@ -1,42 +1,38 @@
 package cart
 
 import (
-	"errors"
-	"net/http"
-
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
-	d "github.com/phincon-backend/laza/domain/repositories"
 	dc "github.com/phincon-backend/laza/domain/repositories/cart"
+	"github.com/phincon-backend/laza/domain/requests"
 
 	usecase "github.com/phincon-backend/laza/domain/usecases/cart"
-	"github.com/phincon-backend/laza/helper"
 )
 
 type deleteCartUsecase struct {
-	deleteCartRepo d.DeleteAction[model.Cart]
-	isCartRepo     dc.IsCarttByIdAction
+	deleteCartRepo dc.DeleteCartAction
+	validate       *validator.Validate
 }
 
-func (us *deleteCartUsecase) Execute(userId, productId uint64) *helper.Response {
-
-	tf := us.isCartRepo.IsCart(model.Cart{UserId: userId, ProductId: productId})
-	if !tf {
-		return helper.GetResponse(errors.New("there are no products in the cart").Error(), http.StatusNotFound, false)
-	}
-
-	id := map[string]uint64{"userId": userId, "productId": productId}
-	err := us.deleteCartRepo.Delete(id)
+func (us *deleteCartUsecase) Execute(userId uint64, rb requests.CartRequest) (value any, err error) {
+	err = us.validate.Struct(rb)
 
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		return
 	}
 
-	return helper.GetResponse("successfully deleted product from cart", http.StatusOK, false)
+	_model := model.Cart{UserId: userId, ProductId: rb.ProductId, SizeId: rb.SizeId}
+	value, err = us.deleteCartRepo.DeleteCart(_model)
+
+	return value, err
 }
 
-func NewdeleteCartUsecase(deleteCartRepo d.DeleteAction[model.Cart], isCartRepo dc.IsCarttByIdAction) usecase.DeleteCartUsecase {
+func NewdeleteCartUsecase(
+	deleteCartRepo dc.DeleteCartAction,
+	validator *validator.Validate,
+) usecase.DeleteCartUsecase {
 	return &deleteCartUsecase{
 		deleteCartRepo: deleteCartRepo,
-		isCartRepo:     isCartRepo,
+		validate:       validator,
 	}
 }

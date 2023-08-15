@@ -1,18 +1,14 @@
 package cart
 
 import (
-	"errors"
-
 	"github.com/phincon-backend/laza/domain/model"
 )
 
-func (r *CartRepo) Delete(id any) (err error) {
-	m, ok := id.(map[string]uint64)
-	if !ok {
-		err = errors.New("there is an error in the delete cart repo")
-		return
-	}
+func (r *CartRepo) DeleteCart(model model.Cart) (value any, err error) {
 
-	err = r.db.Where("user_id = ? AND product_id = ?", m["userId"], m["productId"]).Delete(&model.Cart{}).Error
+	tx := r.db.Where("user_id = ? AND product_id = ? AND size_id = ?", model.UserId, model.ProductId, model.SizeId).
+		Delete(&model)
+	err = tx.Error
+	value = "successfully delete product cart"
 	return
 }

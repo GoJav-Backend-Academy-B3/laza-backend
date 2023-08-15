@@ -1,7 +1,9 @@
 package wishlist
 
-import "github.com/phincon-backend/laza/domain/response"
+import (
+	"github.com/phincon-backend/laza/domain/model"
+)
 
-type GetCartWithLimitAction interface {
-	GetCartWithLimit(userId, offset, limit uint64) (rs []response.WishProduct, err error)
+type GetWishlistProductAction interface {
+	GetWishlistProductLimit(userId, offset, limit uint64) (rs []model.Product, err error)
 }
