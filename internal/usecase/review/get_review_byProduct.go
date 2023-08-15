@@ -28,7 +28,7 @@ func (uc *GetAllReviewUsecase) Execute(productID uint64) *helper.Response {
 	if err != nil {
 		return helper.GetResponse(err.Error(), 500, true)
 	}
-	averageRating = math.Round(averageRating*100) / 100
+	averageRating = math.Round(averageRating*10) / 10
 	newProdustReviews := response.GetReviews{
 		Total:       total,
 		Reviews:     product,

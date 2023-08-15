@@ -19,13 +19,12 @@ import (
 // @Produce json
 // @Param name formData string true "Product name"
 // @Param description formData string true "Product description"
-// @Param image formData file true "Product images"
+// @Param image formData file true "Product images. The file should not exceed 2MiB or approximately equivalent to 2.0971MB"
 // @Param price formData number true "Product price"
 // @Param brand formData string true "Product brand (must exists in database)"
 // @Param category formData string true "Product category (must exists in database)"
 // @Param id path int true "ID of the product"
-// TODO: Swagger not separating form value for []string
-// @Param sizes formData []string true "Product available sizes"
+// @Param sizes formData []string true "Product available sizes. Note: You should use multi-valued form data outside this Swagger UI"
 // @Security JWT
 // @Success 200 {object} helper.Response{isError=bool,status=string,data=response.Product}
 // @Failure 422 {object} helper.Response{isError=bool,status=string,description=map[string]string}
@@ -50,6 +49,15 @@ func (h *productHandler) put(c *gin.Context) {
 		helper.GetResponse(
 			gin.H{"reason": "Cannot process data", "err": err.Error()},
 			http.StatusUnprocessableEntity,
+			true).Send(c)
+		return
+	}
+
+	// Check if a file exceeds 2MiB
+	if request.Image.Size > (1 << 21) {
+		helper.GetResponse(
+			"file too big",
+			http.StatusRequestEntityTooLarge,
 			true).Send(c)
 		return
 	}

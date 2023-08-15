@@ -22,7 +22,6 @@ import (
 // @Router /address [post]
 func (h *addressHandler) PostAddressHandler(ctx *gin.Context) {
 	var request requests.AddressRequest
-
 	userId := ctx.MustGet("userId").(uint64)
 
 	err := ctx.ShouldBindJSON(&request)

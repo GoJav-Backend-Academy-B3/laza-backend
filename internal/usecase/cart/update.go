@@ -1,41 +1,38 @@
 package cart
 
 import (
-	"errors"
-	"net/http"
-
+	"github.com/go-playground/validator/v10"
 	"github.com/phincon-backend/laza/domain/model"
-	d "github.com/phincon-backend/laza/domain/repositories"
 	dc "github.com/phincon-backend/laza/domain/repositories/cart"
+	"github.com/phincon-backend/laza/domain/requests"
 
 	usecase "github.com/phincon-backend/laza/domain/usecases/cart"
-	"github.com/phincon-backend/laza/helper"
 )
 
 type updateCartUsecase struct {
-	updateCartRepo d.UpdateAction[model.Cart]
-	isCartRepo     dc.IsCarttByIdAction
+	updateCartRepo dc.UpdateCartAction
+	validate       *validator.Validate
 }
 
-func (uc *updateCartUsecase) Execute(userId, productId uint64) *helper.Response {
-	md := model.Cart{UserId: userId, ProductId: productId}
-
-	if bl := uc.isCartRepo.IsCart(md); !bl {
-		return helper.GetResponse(errors.New("there are no products in the cart").Error(), http.StatusNotFound, true)
-	}
-
-	rs, err := uc.updateCartRepo.Update("", md)
-
+func (uc *updateCartUsecase) Execute(userId uint64, rb requests.CartRequest) (_result any, err error) {
+	err = uc.validate.Struct(rb)
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		return
 	}
 
-	return helper.GetResponse(rs, http.StatusOK, false)
+	_model := model.Cart{UserId: userId, ProductId: rb.ProductId, SizeId: rb.SizeId}
+	_result, err = uc.updateCartRepo.UpdateCart(_model)
+
+	return
+
 }
 
-func NewupdateCartUsecase(updateCartRepo d.UpdateAction[model.Cart], isCartRepo dc.IsCarttByIdAction) usecase.UpdateCartUsecase {
+func NewupdateCartUsecase(
+	updateCartRepo dc.UpdateCartAction,
+	validate *validator.Validate,
+) usecase.UpdateCartUsecase {
 	return &updateCartUsecase{
 		updateCartRepo: updateCartRepo,
-		isCartRepo:     isCartRepo,
+		validate:       validate,
 	}
 }

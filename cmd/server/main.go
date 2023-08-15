@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/twitter"
+	"github.com/markbates/goth/providers/twitterv2"
 	"github.com/phincon-backend/laza/cmd/server/router"
 	"github.com/phincon-backend/laza/config"
 	_ "github.com/phincon-backend/laza/docs"
@@ -19,10 +19,11 @@ func main() {
 	godotenv.Load(".env")
 
 	goth.UseProviders(
-		twitter.New(os.Getenv("TWITTER_KEY"), os.Getenv("TWITTER_SECRET"), os.Getenv("TWITTER_REDIRECT_URI")),
+		twitterv2.New(os.Getenv("TWITTER_KEY"), os.Getenv("TWITTER_SECRET"), os.Getenv("TWITTER_REDIRECT_URI")),
 	)
 
 	apps := router.NewServerGin()
+
 	var address string = os.Getenv("HOST_IP") + ":" + os.Getenv("APP_PORT")
 
 	apps.Run(address)

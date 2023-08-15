@@ -1,12 +1,11 @@
 package provider
 
 import (
+	"github.com/go-playground/validator/v10"
 	d "github.com/phincon-backend/laza/domain/handlers"
 	h "github.com/phincon-backend/laza/internal/handler/wishlist"
 
 	u "github.com/phincon-backend/laza/internal/usecase/wishlist"
-
-	p "github.com/phincon-backend/laza/internal/repo/product"
 
 	r "github.com/phincon-backend/laza/internal/repo/wishlist"
 
@@ -18,13 +17,12 @@ func NewWishListsHandler() d.HandlerInterface {
 	// TODO: instantiate or get db
 	db := b.GetPostgreSQLConnection()
 	gorm := db.(*b.PsqlDB).Dbs
+	newValidate := validator.New()
 
 	wishlistRepo := r.NewWishList(gorm)
-	productRepo := p.NewProductRepo(gorm)
 
-	wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo, productRepo)
-	wistlistGet := u.NewgetWishlistUsecase(wishlistRepo, productRepo)
-	wishlistGetLimit := u.NewgetWishlistLimitUsecase(wishlistRepo, wishlistRepo)
-	return h.NewgetWishlistHandler(wishlistUpdate, wistlistGet, wishlistGetLimit)
+	wishlistUpdate := u.NewUpdateWishListUsecaseImpl(wishlistRepo, newValidate)
+	wishlistGetLimit := u.NewgetWishlistLimitUsecase(wishlistRepo)
+	return h.NewgetWishlistHandler(wishlistUpdate, wishlistGetLimit)
 
 }

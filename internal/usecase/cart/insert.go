@@ -1,54 +1,44 @@
 package cart
 
 import (
-	"errors"
-	"net/http"
-
+	"github.com/go-playground/validator/v10"
+	"github.com/phincon-backend/laza/domain/model"
 	m "github.com/phincon-backend/laza/domain/model"
 	d "github.com/phincon-backend/laza/domain/repositories"
+	"github.com/phincon-backend/laza/domain/requests"
 	usecase "github.com/phincon-backend/laza/domain/usecases/cart"
-	"github.com/phincon-backend/laza/helper"
-	"gorm.io/gorm"
-
-	h "github.com/phincon-backend/laza/helper"
 )
 
 type insertCartUsecase struct {
-	insertCartRepo       d.InsertAction[m.Cart]
-	getProductByIdAction d.GetByIdAction[m.Product]
+	insertCartRepo d.InsertAction[m.Cart]
+	validate       *validator.Validate
 }
 
-func (uc *insertCartUsecase) Execute(userId uint64, productId uint64) *h.Response {
+func (uc *insertCartUsecase) Execute(userid uint64, rb requests.CartRequest) (_result model.Cart, err error) {
 
-	_, err := uc.getProductByIdAction.GetById(productId)
-
-	if err == gorm.ErrRecordNotFound {
-		return helper.GetResponse(errors.New("product not found").Error(), http.StatusNotFound, true)
-	}
-
+	err = uc.validate.Struct(rb)
 	if err != nil {
-		return helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
+		return
 	}
-
-	cart := m.Cart{
-		UserId:    userId,
-		ProductId: productId,
+	_model := model.Cart{
+		UserId:    userid,
+		ProductId: rb.ProductId,
+		SizeId:    rb.SizeId,
 		Quantity:  1,
 	}
-	rs, err := uc.insertCartRepo.Insert(cart)
-	if err != nil {
-		return h.GetResponse(err.Error(), http.StatusInternalServerError, true)
-	}
 
-	return h.GetResponse(rs, http.StatusOK, false)
+	_result, err = uc.insertCartRepo.Insert(_model)
+	return
+
 }
 
 func NewinsertCartUsecase(
 	icp d.InsertAction[m.Cart],
-	gpi d.GetByIdAction[m.Product],
+	validate *validator.Validate,
+
 ) usecase.InsertCartUsecase {
 	return &insertCartUsecase{
-		insertCartRepo:       icp,
-		getProductByIdAction: gpi,
+		insertCartRepo: icp,
+		validate:       validate,
 	}
 }
