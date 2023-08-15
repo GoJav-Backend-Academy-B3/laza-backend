@@ -102,6 +102,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 				OrderId:     orderNumber,
 			},
 		)
+		grossAmount += int(productTemp.Price) * productCart.Quantity
 	}
 
 	// charge bank to midtrans

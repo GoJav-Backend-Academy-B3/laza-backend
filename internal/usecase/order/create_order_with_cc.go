@@ -107,6 +107,7 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 				OrderId:     orderNumber,
 			},
 		)
+		grossAmount += int(productTemp.Price) * productCart.Quantity
 	}
 
 	// get cc token

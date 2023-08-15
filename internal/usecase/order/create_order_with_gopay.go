@@ -71,6 +71,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	var grossAmount int = 0
 	productsDetails := make([]model.ProductOrderDetail, 0)
 	productCarts, err := uc.getCartByIdRepo.GetCartById(userId)
+
 	for _, productCart := range productCarts {
 		productTemp, err := uc.getProduct.GetById(productCart.Id)
 		if err != nil {
@@ -101,6 +102,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 				OrderId:     orderNumber,
 			},
 		)
+		grossAmount += int(productTemp.Price) * productCart.Quantity
 	}
 
 	// Charge gopay to midtrans
