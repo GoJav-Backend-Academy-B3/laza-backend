@@ -123,7 +123,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	}
 
 	// parsing time
-	parsedTime, err := time.Parse(gopayRespondMd.ExpiryTime, gopayRespondMd.ExpiryTime)
+	parsedTime, err := time.Parse("2006-01-02 15:04:05", gopayRespondMd.ExpiryTime)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -131,7 +131,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	// insert payment method to db
 	paymentMethod, err := uc.insertPaymentMethod.Insert(model.PaymentMethod{
 		PaymentMethod: "gopay",
-		QRCode:        gopayRespondMd.Actions[0].URL,
+		QRCodeUrl:     gopayRespondMd.Actions[0].URL,
 		Deeplink:      gopayRespondMd.Actions[1].URL,
 		ExpiryTime:    parsedTime,
 	})

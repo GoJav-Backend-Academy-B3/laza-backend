@@ -6,7 +6,7 @@ type PaymentMethod struct {
 	Id               uint64    `json:"id,omitempty"  gorm:"primarykey"`
 	PaymentMethod    string    `json:"payment_method"`
 	Deeplink         string    `json:"deeplink,omitempty"`
-	QRCode           string    `json:"qr_code,omitempty"`
+	QRCodeUrl        string    `json:"qr_code,omitempty"`
 	Bank             string    `json:"bank,omitempty"`
 	BillerCode       string    `json:"biller_code,omitempty"`
 	BillKey          string    `json:"bill_key,omitempty"`
