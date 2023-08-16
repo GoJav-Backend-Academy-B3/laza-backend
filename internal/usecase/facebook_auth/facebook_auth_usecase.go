@@ -18,31 +18,36 @@ type facebookAuthUsecaseImpl struct {
 	findByEmail      action.FindByEmail
 }
 
-func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (accessToken string, err error) {
-	var userDTO = new(model.User)
-	userDTO.Email = fbResponse.Email
-	userDTO.Username = helper.ExtractUsernameFromEmail(fbResponse.Email)
-	userDTO.FullName = fbResponse.Name
-	userDTO.ImageUrl = fbResponse.Picture.Data.URL
-	userDTO.IsAdmin = false
-	userDTO.IsVerified = true
+func (fb *facebookAuthUsecaseImpl) Execute(fbResponse response.FBAuthResponse) (accessToken string, refreshToken string, err error) {
+	var userDTO = &model.User{
+		Email:      fbResponse.Email,
+		Username:   helper.ExtractUsernameFromEmail(fbResponse.Email),
+		FullName:   fbResponse.Name,
+		ImageUrl:   fbResponse.Picture.Data.URL,
+		IsAdmin:    false,
+		IsVerified: true,
+	}
 
-	user, err := fb.findByEmail.FindByEmail(userDTO.Email)
+	userByEmail, err := fb.findByEmail.FindByEmail(userDTO.Email)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			user, err = fb.insertUserAction.Insert(*userDTO)
+			userByEmail, err = fb.insertUserAction.Insert(*userDTO)
 			if err != nil {
-				return "", err
+				return "", "", err
 			}
 		} else {
-			return "", err
+			return "", "", err
 		}
 	}
-	jwt := helper.NewToken(uint64(user.Id), false)
+	jwt := helper.NewToken(uint64(userByEmail.Id), false)
 
 	accessToken, err = jwt.Create()
 	if err != nil {
-		return "", err
+		return "", "", err
+	}
+	refreshToken, err = helper.NewRefresh(uint64(userByEmail.Id), userByEmail.IsAdmin).CreateRefresh()
+	if err != nil {
+		return "", "", err
 	}
 	return
 }
