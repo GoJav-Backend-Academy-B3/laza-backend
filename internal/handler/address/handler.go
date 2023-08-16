@@ -16,8 +16,7 @@ type addressHandler struct {
 	get       address.GetAddressUsecase
 	update    address.UpdateAddressUsecase
 	delete    address.DeleteAddressUsecase
-
-	validate *validator.Validate
+	validate  *validator.Validate
 }
 
 // GetHandlers implements handlers.HandlerInterface.
