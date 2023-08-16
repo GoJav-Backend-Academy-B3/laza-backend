@@ -2,8 +2,6 @@ package response
 
 import (
 	"time"
-
-	"github.com/phincon-backend/laza/domain/model"
 )
 
 type GopayPaymentResponse struct {
@@ -14,10 +12,10 @@ type GopayPaymentResponse struct {
 	ExpiryTime time.Time `json:"expiry_time"`
 }
 
-func (r *GopayPaymentResponse) FillFromEntity(m *model.Gopay) {
-	r.Id = m.Id
-	r.Phone = m.Phone
-	r.DeepLink = m.Deeplink
-	r.QRCode = m.QRCode
-	r.ExpiryTime = m.ExpiryTime
-}
+//func (r *GopayPaymentResponse) FillFromEntity(m *model.Gopay) {
+//	r.Id = m.Id
+//	r.Phone = m.Phone
+//	r.DeepLink = m.Deeplink
+//	r.QRCode = m.QRCode
+//	r.ExpiryTime = m.ExpiryTime
+//}

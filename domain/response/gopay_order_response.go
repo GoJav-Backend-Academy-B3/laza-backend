@@ -14,9 +14,9 @@ func (r *GopayOrderResponse) FillFromEntity(m *model.Order) {
 	r.UpdatedAt = m.UpdatedAt
 	r.OrderStatus = m.OrderStatus
 	r.AddressId = m.AddressId
-	if m.GopayId.Valid {
-		r.GopayId = uint64(m.GopayId.Int64)
-	} else {
-		panic("GopayId is nil! Cannot fill.")
-	}
+	//if m.GopayId.Valid {
+	//	r.GopayId = uint64(m.GopayId.Int64)
+	//} else {
+	//	panic("GopayId is nil! Cannot fill.")
+	//}
 }
