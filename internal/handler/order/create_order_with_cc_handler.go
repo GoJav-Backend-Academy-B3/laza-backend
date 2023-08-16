@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/requests"
-	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 	"net/http"
 )
@@ -21,7 +20,7 @@ func (h *orderHandler) CreateOrderWithCC(c *gin.Context) {
 
 	userId := c.MustGet("userId").(uint64)
 
-	order, CCDetails, err := h.createOrderWithCCUsecase.Execute(
+	order, paymentMethod, err := h.createOrderWithCCUsecase.Execute(
 		userId,
 		orderCCRequest.AddressId,
 		model.CreditCard{
@@ -31,7 +30,6 @@ func (h *orderHandler) CreateOrderWithCC(c *gin.Context) {
 			ExpiredYear:  orderCCRequest.CreditCard.ExpYear,
 		},
 		orderCCRequest.CreditCard.CVV,
-		orderCCRequest.Products,
 	)
 	if err != nil {
 		response := helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
@@ -41,11 +39,11 @@ func (h *orderHandler) CreateOrderWithCC(c *gin.Context) {
 
 	result := make(map[string]any)
 
-	orderResponse := &response.CreditCardOrderResponse{}
-	orderResponse.FillFromEntity(order)
+	//orderResponse := &response.CreditCardOrderResponse{}
+	//orderResponse.FillFromEntity(order)
 
-	result["order"] = orderResponse
-	result["cc_detail"] = CCDetails
+	result["order"] = order
+	result["payment_method"] = paymentMethod
 
 	response := helper.GetResponse(result, http.StatusCreated, false)
 	response.Send(c)

@@ -7,6 +7,7 @@ type CartPorduct struct {
 	Price     float64 `json:"price"`
 	BrandName string  `json:"brand_name"`
 	Quantity  int     `json:"quantity"`
+	Size      string  `json:"size"`
 }
 
 type CartOrderInfo struct {

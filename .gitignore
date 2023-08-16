@@ -200,3 +200,5 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
+# docker
+docker-compose.yml

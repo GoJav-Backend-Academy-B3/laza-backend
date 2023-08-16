@@ -6,13 +6,15 @@ import (
 	"github.com/phincon-backend/laza/internal/db"
 	handler "github.com/phincon-backend/laza/internal/handler/order"
 	addressRepo "github.com/phincon-backend/laza/internal/repo/address"
+	brandRepo "github.com/phincon-backend/laza/internal/repo/brand"
+	cartRepo "github.com/phincon-backend/laza/internal/repo/cart"
+	categoryRepo "github.com/phincon-backend/laza/internal/repo/category"
 	creditCardRepo "github.com/phincon-backend/laza/internal/repo/credit_card"
-	gopayRepo "github.com/phincon-backend/laza/internal/repo/gopay"
 	midtrans "github.com/phincon-backend/laza/internal/repo/midtrans_repo"
 	orderRepo "github.com/phincon-backend/laza/internal/repo/order"
+	paymentMethodRepo "github.com/phincon-backend/laza/internal/repo/payment_method"
 	productRepo "github.com/phincon-backend/laza/internal/repo/product"
-	productOrderRepo "github.com/phincon-backend/laza/internal/repo/product_order"
-	transactionBankRepo "github.com/phincon-backend/laza/internal/repo/transaction_bank"
+	productOrderDetailRepo "github.com/phincon-backend/laza/internal/repo/product_order_detail"
 	orderUsecase "github.com/phincon-backend/laza/internal/usecase/order"
 )
 
@@ -24,18 +26,61 @@ func NewOrderHandler() domain.HandlerInterface {
 
 	orderRepo := orderRepo.NewOrderRepo(gorm)
 	addressRepo := addressRepo.NewAddressRepo(gorm)
-	gopayRepo := gopayRepo.NewGopayRepo(gorm)
 	productRepo := productRepo.NewProductRepo(gorm)
-	productOrderRepo := productOrderRepo.NewProductOrderRepo(gorm)
-	transactionBankRepo := transactionBankRepo.NewTransactionBankRepo(gorm)
+
 	creditCardRepo := creditCardRepo.NewCreditCardRepo(gorm)
+	productOrderDetailRepo := productOrderDetailRepo.NewProductOrderDetailRepo(gorm)
+	cartRepo := cartRepo.NewCartRepo(gorm)
+	brandRepo := brandRepo.NewBrandRepo(gorm)
+	categoryRepo := categoryRepo.NewCategoryRepo(gorm)
+	paymentMethodRepo := paymentMethodRepo.NewPaymentMethod(gorm)
 
 	midtransRepo := midtrans.NewMidtransRepo(midtransCore)
 
-	createOrderWithGopay := orderUsecase.NewCreateOrderWithGopayUsecase(orderRepo, addressRepo, midtransRepo, gopayRepo, orderRepo, productRepo, productOrderRepo)
-	createOrderWithBank := orderUsecase.NewCreateOrderWithBankUsecase(orderRepo, addressRepo, midtransRepo, transactionBankRepo, orderRepo, productRepo, productOrderRepo)
-	createOrderWithCC := orderUsecase.NewCreateOrderWithCCUsecase(orderRepo, addressRepo, midtransRepo, midtransRepo, creditCardRepo, orderRepo, productRepo, productOrderRepo)
-	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo, orderRepo, midtransRepo)
+	createOrderWithGopay := orderUsecase.NewCreateOrderWithGopayUsecase(
+		orderRepo,
+		addressRepo,
+		midtransRepo,
+		orderRepo,
+		productRepo,
+		productOrderDetailRepo,
+		categoryRepo,
+		brandRepo,
+		paymentMethodRepo,
+		cartRepo,
+		cartRepo,
+	)
+
+	createOrderWithBank := orderUsecase.NewCreateOrderWithBankUsecase(orderRepo,
+		addressRepo,
+		midtransRepo,
+		orderRepo,
+		productRepo,
+		productOrderDetailRepo,
+		categoryRepo,
+		brandRepo,
+		paymentMethodRepo,
+		cartRepo,
+		cartRepo,
+	)
+
+	createOrderWithCC := orderUsecase.NewCreateOrderWithCCUsecase(
+		orderRepo,
+		addressRepo,
+		midtransRepo,
+		midtransRepo,
+		creditCardRepo,
+		orderRepo,
+		productRepo,
+		productOrderDetailRepo,
+		categoryRepo,
+		brandRepo,
+		paymentMethodRepo,
+		cartRepo,
+		cartRepo,
+	)
+
+	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo, orderRepo, midtransRepo, productOrderDetailRepo)
 	getAllOrderByUser := orderUsecase.NewGetAllOrderByUserUsecaseImpl(orderRepo)
 
 	return handler.NewOrderHandler(createOrderWithGopay, createOrderWithBank, createOrderWithCC, getOrderById, getAllOrderByUser)
