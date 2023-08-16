@@ -1,8 +1,7 @@
 package requests
 
 type OrderBasic struct {
-	AddressId int            `json:"address_id" binding:"required"`
-	Products  []ProductOrder `json:"products" binding:"required"`
+	AddressId int `json:"address_id" binding:"required"`
 }
 
 type OrderWithGopay struct {

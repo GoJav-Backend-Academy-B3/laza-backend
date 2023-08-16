@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 )
 
@@ -23,7 +22,7 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 
 	userId := c.MustGet("userId").(uint64)
 
-	order, gopay, err := h.createOrderWithGopayUsecase.Execute(userId, orderRequest.AddressId, orderRequest.CallbackUrl, orderRequest.Products)
+	order, paymentMethod, err := h.createOrderWithGopayUsecase.Execute(userId, orderRequest.AddressId, orderRequest.CallbackUrl)
 	if err != nil {
 		fmt.Println("error create order: ", err)
 		response := helper.GetResponse(err.Error(), http.StatusInternalServerError, true)
@@ -33,13 +32,13 @@ func (h *orderHandler) CreateOrderWithGopay(c *gin.Context) {
 
 	result := make(map[string]any)
 
-	orderResponse := &response.GopayOrderResponse{}
-	orderResponse.FillFromEntity(order)
+	//orderResponse := &response.GopayOrderResponse{}
+	//orderResponse.FillFromEntity(order)
 
-	gopayPaymentResponse := &response.GopayPaymentResponse{}
-	gopayPaymentResponse.FillFromEntity(gopay)
-	result["order"] = orderResponse
-	result["gopay"] = gopayPaymentResponse
+	//gopayPaymentResponse := &response.GopayPaymentResponse{}
+	//gopayPaymentResponse.FillFromEntity(gopay)
+	result["order"] = order
+	result["payment_method"] = paymentMethod
 
 	response := helper.GetResponse(result, http.StatusCreated, false)
 	response.Send(c)
