@@ -18,8 +18,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            docker system prune -f
             cd ~/laza_backend
             git pull origin staging
             swag init -g cmd/server/router/router.go
             docker build -t laza-image .
             docker-compose up -d
+            docker system prune
