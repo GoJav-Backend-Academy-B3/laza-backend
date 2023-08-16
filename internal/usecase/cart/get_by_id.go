@@ -1,6 +1,8 @@
 package cart
 
 import (
+	"fmt"
+
 	dc "github.com/phincon-backend/laza/domain/repositories"
 	d "github.com/phincon-backend/laza/domain/repositories/cart"
 	"github.com/phincon-backend/laza/domain/response"
@@ -25,6 +27,12 @@ func (uc *getCartByIdUsecase) Execute(userId uint64) (_result response.CartInfo,
 		return
 	}
 
+	// set cost value
+	if len(rs) == 0 {
+		cr.ShippingCost = 0
+		cr.Total = 0
+		fmt.Println("GGWP")
+	}
 	_result = response.CartInfo{CartPorduct: rs, CartOrderInfo: cr}
 
 	return
