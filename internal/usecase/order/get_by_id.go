@@ -2,7 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/repositories"
 	midtranscore "github.com/phincon-backend/laza/domain/repositories/midtrans"
@@ -34,7 +33,6 @@ func (u *GetByIdUsecase) Execute(orderId string) (order model.Order, productDeta
 
 	if midtransTransaction.TransactionStatus == "success" || midtransTransaction.TransactionStatus == "settlement" || midtransTransaction.TransactionStatus == "capture" {
 		// parsing time
-		fmt.Println(midtransTransaction.TransactionTime)
 		parsedTime, errParse := time.Parse("2006-01-02 15:04:05", midtransTransaction.TransactionTime)
 		if errParse != nil {
 			return order, productDetails, errParse
@@ -47,12 +45,11 @@ func (u *GetByIdUsecase) Execute(orderId string) (order model.Order, productDeta
 	if order.OrderStatus != midtransTransaction.TransactionStatus {
 		order.OrderStatus = midtransTransaction.TransactionStatus
 		order.UpdatedAt = time.Now()
-	}
-
-	fmt.Println(order.PaidAt)
-	updatedOrder, err := u.updateOrder.Update(orderId, order)
-	if err != nil {
-		return
+		updatedOrder, err := u.updateOrder.Update(orderId, order)
+		if err != nil {
+			return updatedOrder, productDetails, err
+		}
+		return updatedOrder, productDetails, err
 	}
 
 	productDetails, err = u.getAllProductOrderDetail.GetAllByOrder(orderId)
@@ -60,5 +57,5 @@ func (u *GetByIdUsecase) Execute(orderId string) (order model.Order, productDeta
 		return
 	}
 
-	return updatedOrder, productDetails, err
+	return order, productDetails, err
 }
