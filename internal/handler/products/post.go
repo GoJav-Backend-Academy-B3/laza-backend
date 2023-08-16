@@ -49,7 +49,10 @@ func (h *productHandler) post(c *gin.Context) {
 		return
 	}
 
-	request.Sizes = strings.Split(request.Sizes[0], ", ")
+	splits := strings.Split(request.Sizes[0], ",")
+	if len(splits) > 0 {
+		request.Sizes = append(request.Sizes[1:], splits...)
+	}
 
 	model, err := h.createProductUsecase.Execute(request)
 	if err != nil {
