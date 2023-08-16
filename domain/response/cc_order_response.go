@@ -14,6 +14,11 @@ func (r *CreditCardOrderResponse) FillFromEntity(m *model.Order) {
 	r.UpdatedAt = m.UpdatedAt
 	r.OrderStatus = m.OrderStatus
 	r.AddressId = m.AddressId
+	r.PaidAt = m.PaidAt.Time
+	r.AdminFee = m.AdminFee
+	r.ExpiryDate = m.ExpiryDate
+	r.PaymentMethodId = m.PaymentMethodId
+	r.ShippingFee = m.ShippingFee
 	//if m.CreditCardId.Valid {
 	//	r.CreditCardId = uint64(m.CreditCardId.Int64)
 	//} else {

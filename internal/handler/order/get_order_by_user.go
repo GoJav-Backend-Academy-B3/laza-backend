@@ -17,7 +17,7 @@ func (h *orderHandler) GetOrderById(c *gin.Context) {
 		return
 	}
 
-	order, err := h.getById.Execute(orderId)
+	order, productDetails, err := h.getById.Execute(orderId)
 	if err != nil {
 		helper.GetResponse(err.Error(), http.StatusInternalServerError, true).Send(c)
 		return
@@ -26,6 +26,11 @@ func (h *orderHandler) GetOrderById(c *gin.Context) {
 	orderResponse := response.Order{}
 	orderResponse.FillFromEntity(&order)
 
-	helper.GetResponse(orderResponse, 200, false).Send(c)
+	result := make(map[string]any)
+
+	result["order"] = orderResponse
+	result["product_details"] = productDetails
+
+	helper.GetResponse(result, 200, false).Send(c)
 	return
 }

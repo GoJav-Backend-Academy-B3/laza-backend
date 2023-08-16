@@ -153,10 +153,13 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 		return nil, nil, err
 	}
 
+	adminFee := helper.GenerateAdminFee()
+	shippingFee := helper.GenerateShippingFee(address)
+
 	// insert order to db
 	order := model.Order{
 		Id:              orderNumber,
-		Amount:          int64(grossAmount),
+		Amount:          int64(grossAmount + shippingFee + adminFee),
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 		PaidAt:          sql.NullTime{Valid: false},

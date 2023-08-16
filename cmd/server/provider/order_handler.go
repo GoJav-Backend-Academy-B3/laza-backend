@@ -80,7 +80,7 @@ func NewOrderHandler() domain.HandlerInterface {
 		cartRepo,
 	)
 
-	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo, orderRepo, midtransRepo)
+	getOrderById := orderUsecase.NewGetByIdUsecase(orderRepo, orderRepo, midtransRepo, productOrderDetailRepo)
 	getAllOrderByUser := orderUsecase.NewGetAllOrderByUserUsecaseImpl(orderRepo)
 
 	return handler.NewOrderHandler(createOrderWithGopay, createOrderWithBank, createOrderWithCC, getOrderById, getAllOrderByUser)

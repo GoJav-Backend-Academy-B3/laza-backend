@@ -119,16 +119,19 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		return nil, nil, err
 	}
 
+	adminFee := helper.GenerateAdminFee()
+	shippingFee := helper.GenerateShippingFee(address)
+
 	// insert order to db
 	order := model.Order{
 		Id:              orderNumber,
-		Amount:          int64(grossAmount),
+		Amount:          int64(grossAmount + shippingFee + adminFee),
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 		PaidAt:          sql.NullTime{Valid: false},
 		ExpiryDate:      paymentMethod.ExpiryTime,
-		ShippingFee:     helper.GenerateShippingFee(address),
-		AdminFee:        helper.GenerateAdminFee(),
+		ShippingFee:     shippingFee,
+		AdminFee:        adminFee,
 		OrderStatus:     gopayRespondMd.TransactionStatus,
 		UserId:          userId,
 		AddressId:       address.Id,
