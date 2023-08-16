@@ -38,6 +38,7 @@ type ProductDetail struct {
 	Description string                `json:"description"`
 	ImageUrl    string                `json:"image_url"`
 	Price       float64               `json:"price"`
+	BrandId     uint64                `json:"brand_id"`
 	Categories  model.Category        `json:"category"`
 	Sizes       []model.Size          `json:"size"`
 	Reviews     []model.ProductReview `json:"reviews"`
@@ -53,6 +54,7 @@ func (p ProductDetail) FillFromEntity(e model.Product) ProductDetail {
 		ImageUrl:    e.ImageUrl,
 		Price:       e.Price,
 		Categories:  e.Category,
+		BrandId:     e.BrandId,
 		// Reviews:     e.Reviews,
 		Sizes:     e.Sizes,
 		CreatedAt: e.CreatedAt,
