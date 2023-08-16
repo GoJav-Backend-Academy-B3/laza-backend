@@ -2,6 +2,7 @@ package order
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -36,6 +37,9 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	if err != nil {
 		return nil, nil, err
 	}
+	if address.UserId != userId {
+		return nil, nil, errors.New("invalid address")
+	}
 
 	// Generate order number
 	var orderNumber string
@@ -51,6 +55,10 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 	var grossAmount int = 0
 	productsDetails := make([]model.ProductOrderDetail, 0)
 	productCarts, err := uc.getCartByIdRepo.GetCartById(userId)
+
+	if len(productCarts) == 0 {
+		return nil, nil, errors.New("no product in cart")
+	}
 
 	for _, productCart := range productCarts {
 		productTemp, err := uc.getProduct.GetById(productCart.Id)
