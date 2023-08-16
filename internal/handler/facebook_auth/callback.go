@@ -75,13 +75,14 @@ func (fb *facebookAuthHandler) FbCallback(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := fb.facebookAuthUsecase.Execute(fbResponse)
+	accessToken, refreshToken, err := fb.facebookAuthUsecase.Execute(fbResponse)
 	if err != nil {
 		helper.GetResponse(fmt.Sprintf("failed to create access token %s", err.Error()), http.StatusUnauthorized, true).Send(c)
 		return
 	}
 	responseMap := map[string]string{
-		"access_token": accessToken,
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	}
 
 	// send back response to browse
