@@ -24,32 +24,11 @@ type CreateOrderWithBankUsecase struct {
 	getBrand                 repositories.GetByIdAction[model.Brand]
 	insertPaymentMethod      repositories.InsertAction[model.PaymentMethod]
 	getCartByIdRepo          d.GetCartByIdAction
+	deleteCartByUser         repositories.DeleteAction[model.Cart]
 }
 
-func NewCreateOrderWithBankUsecase(
-	insertOrder repositories.InsertAction[model.Order],
-	getAddressById repositories.GetByIdAction[model.Address],
-	chargeMidtrans midtranscore.ChargeMidtransAction,
-	getOrder repositories.GetByIdAction[model.Order],
-	getProduct repositories.GetByIdAction[model.Product],
-	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail],
-	getCategory repositories.GetByIdAction[model.Category],
-	getBrand repositories.GetByIdAction[model.Brand],
-	insertPaymentMethod repositories.InsertAction[model.PaymentMethod],
-	getCartByIdRepo d.GetCartByIdAction,
-) *CreateOrderWithBankUsecase {
-	return &CreateOrderWithBankUsecase{
-		insertOrder:              insertOrder,
-		getAddressById:           getAddressById,
-		chargeMidtrans:           chargeMidtrans,
-		getOrder:                 getOrder,
-		getProduct:               getProduct,
-		insertProductOrderDetail: insertProductOrderDetail,
-		getCategory:              getCategory,
-		getBrand:                 getBrand,
-		insertPaymentMethod:      insertPaymentMethod,
-		getCartByIdRepo:          getCartByIdRepo,
-	}
+func NewCreateOrderWithBankUsecase(insertOrder repositories.InsertAction[model.Order], getAddressById repositories.GetByIdAction[model.Address], chargeMidtrans midtranscore.ChargeMidtransAction, getOrder repositories.GetByIdAction[model.Order], getProduct repositories.GetByIdAction[model.Product], insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail], getCategory repositories.GetByIdAction[model.Category], getBrand repositories.GetByIdAction[model.Brand], insertPaymentMethod repositories.InsertAction[model.PaymentMethod], getCartByIdRepo d.GetCartByIdAction, deleteCartByUser repositories.DeleteAction[model.Cart]) *CreateOrderWithBankUsecase {
+	return &CreateOrderWithBankUsecase{insertOrder: insertOrder, getAddressById: getAddressById, chargeMidtrans: chargeMidtrans, getOrder: getOrder, getProduct: getProduct, insertProductOrderDetail: insertProductOrderDetail, getCategory: getCategory, getBrand: getBrand, insertPaymentMethod: insertPaymentMethod, getCartByIdRepo: getCartByIdRepo, deleteCartByUser: deleteCartByUser}
 }
 
 func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank string) (*model.Order, *model.PaymentMethod, error) {
@@ -73,6 +52,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 	var grossAmount int = 0
 	productsDetails := make([]model.ProductOrderDetail, 0)
 	productCarts, err := uc.getCartByIdRepo.GetCartById(userId)
+
 	for _, productCart := range productCarts {
 		productTemp, err := uc.getProduct.GetById(productCart.Id)
 		if err != nil {
@@ -98,7 +78,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 				Category:    categoryTemp.Category,
 				BrandName:   brandTemp.Name,
 				Quantity:    productCart.Quantity,
-				Size:        "",
+				Size:        productCart.Size,
 				TotalPrice:  int(productTemp.Price) * productCart.Quantity,
 				OrderId:     orderNumber,
 			},
@@ -193,11 +173,18 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 		return nil, nil, err
 	}
 
+	// add product to prodcut
 	for _, productsDetail := range productsDetails {
 		_, err = uc.insertProductOrderDetail.Insert(productsDetail)
 		if err != nil {
 			return nil, nil, err
 		}
+	}
+
+	// delete all cart user
+	err = uc.deleteCartByUser.Delete(userId)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	return &orderRespond, &paymentMethod, nil

@@ -26,30 +26,8 @@ type CreateOrderWithGopayUsecase struct {
 	deleteCartByUser         repositories.DeleteAction[model.Cart]
 }
 
-func NewCreateOrderWithGopayUsecase(
-	insertOrder repositories.InsertAction[model.Order],
-	getAddressById repositories.GetByIdAction[model.Address],
-	chargeGopay midtranscore.ChargeMidtransAction,
-	getOrder repositories.GetByIdAction[model.Order],
-	getProduct repositories.GetByIdAction[model.Product],
-	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail],
-	getCategory repositories.GetByIdAction[model.Category],
-	getBrand repositories.GetByIdAction[model.Brand],
-	insertPaymentMethod repositories.InsertAction[model.PaymentMethod],
-	getCartByIdRepo d.GetCartByIdAction,
-) *CreateOrderWithGopayUsecase {
-	return &CreateOrderWithGopayUsecase{
-		insertOrder:              insertOrder,
-		getAddressById:           getAddressById,
-		chargeGopay:              chargeGopay,
-		getOrder:                 getOrder,
-		getProduct:               getProduct,
-		insertProductOrderDetail: insertProductOrderDetail,
-		getCategory:              getCategory,
-		getBrand:                 getBrand,
-		insertPaymentMethod:      insertPaymentMethod,
-		getCartByIdRepo:          getCartByIdRepo,
-	}
+func NewCreateOrderWithGopayUsecase(insertOrder repositories.InsertAction[model.Order], getAddressById repositories.GetByIdAction[model.Address], chargeGopay midtranscore.ChargeMidtransAction, getOrder repositories.GetByIdAction[model.Order], getProduct repositories.GetByIdAction[model.Product], insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail], getCategory repositories.GetByIdAction[model.Category], getBrand repositories.GetByIdAction[model.Brand], insertPaymentMethod repositories.InsertAction[model.PaymentMethod], getCartByIdRepo d.GetCartByIdAction, deleteCartByUser repositories.DeleteAction[model.Cart]) *CreateOrderWithGopayUsecase {
+	return &CreateOrderWithGopayUsecase{insertOrder: insertOrder, getAddressById: getAddressById, chargeGopay: chargeGopay, getOrder: getOrder, getProduct: getProduct, insertProductOrderDetail: insertProductOrderDetail, getCategory: getCategory, getBrand: getBrand, insertPaymentMethod: insertPaymentMethod, getCartByIdRepo: getCartByIdRepo, deleteCartByUser: deleteCartByUser}
 }
 
 func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, callbackUrl string) (*model.Order, *model.PaymentMethod, error) {
@@ -161,6 +139,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		return nil, nil, err
 	}
 
+	// add product to prodcut
 	for _, productsDetail := range productsDetails {
 		_, err = uc.insertProductOrderDetail.Insert(productsDetail)
 		if err != nil {

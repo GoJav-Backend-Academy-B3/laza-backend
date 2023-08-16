@@ -25,36 +25,11 @@ type CreateOrderWithCCUsecase struct {
 	getBrand                 repositories.GetByIdAction[model.Brand]
 	insertPaymentMethod      repositories.InsertAction[model.PaymentMethod]
 	getCartByIdRepo          d.GetCartByIdAction
+	deleteCartByUser         repositories.DeleteAction[model.Cart]
 }
 
-func NewCreateOrderWithCCUsecase(
-	insertOrder repositories.InsertAction[model.Order],
-	getAddressById repositories.GetByIdAction[model.Address],
-	chargeMidtrans midtranscore.ChargeMidtransAction,
-	getCCToken midtranscore.FetchMidtransCCTokenAction,
-	insertCreditCard repositories.InsertAction[model.CreditCard],
-	getOrder repositories.GetByIdAction[model.Order],
-	getProduct repositories.GetByIdAction[model.Product],
-	insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail],
-	getCategory repositories.GetByIdAction[model.Category],
-	getBrand repositories.GetByIdAction[model.Brand],
-	insertPaymentMethod repositories.InsertAction[model.PaymentMethod],
-	getCartByIdRepo d.GetCartByIdAction,
-) *CreateOrderWithCCUsecase {
-	return &CreateOrderWithCCUsecase{
-		insertOrder:              insertOrder,
-		getAddressById:           getAddressById,
-		chargeMidtrans:           chargeMidtrans,
-		getCCToken:               getCCToken,
-		insertCreditCard:         insertCreditCard,
-		getOrder:                 getOrder,
-		getProduct:               getProduct,
-		insertProductOrderDetail: insertProductOrderDetail,
-		getCategory:              getCategory,
-		getBrand:                 getBrand,
-		insertPaymentMethod:      insertPaymentMethod,
-		getCartByIdRepo:          getCartByIdRepo,
-	}
+func NewCreateOrderWithCCUsecase(insertOrder repositories.InsertAction[model.Order], getAddressById repositories.GetByIdAction[model.Address], chargeMidtrans midtranscore.ChargeMidtransAction, getCCToken midtranscore.FetchMidtransCCTokenAction, insertCreditCard repositories.InsertAction[model.CreditCard], getOrder repositories.GetByIdAction[model.Order], getProduct repositories.GetByIdAction[model.Product], insertProductOrderDetail repositories.InsertAction[model.ProductOrderDetail], getCategory repositories.GetByIdAction[model.Category], getBrand repositories.GetByIdAction[model.Brand], insertPaymentMethod repositories.InsertAction[model.PaymentMethod], getCartByIdRepo d.GetCartByIdAction, deleteCartByUser repositories.DeleteAction[model.Cart]) *CreateOrderWithCCUsecase {
+	return &CreateOrderWithCCUsecase{insertOrder: insertOrder, getAddressById: getAddressById, chargeMidtrans: chargeMidtrans, getCCToken: getCCToken, insertCreditCard: insertCreditCard, getOrder: getOrder, getProduct: getProduct, insertProductOrderDetail: insertProductOrderDetail, getCategory: getCategory, getBrand: getBrand, insertPaymentMethod: insertPaymentMethod, getCartByIdRepo: getCartByIdRepo, deleteCartByUser: deleteCartByUser}
 }
 
 func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc model.CreditCard, cvv string) (*model.Order, *model.PaymentMethod, error) {
@@ -78,6 +53,7 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 	var grossAmount int = 0
 	productsDetails := make([]model.ProductOrderDetail, 0)
 	productCarts, err := uc.getCartByIdRepo.GetCartById(userId)
+
 	for _, productCart := range productCarts {
 		productTemp, err := uc.getProduct.GetById(productCart.Id)
 		if err != nil {
@@ -103,7 +79,7 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 				Category:    categoryTemp.Category,
 				BrandName:   brandTemp.Name,
 				Quantity:    productCart.Quantity,
-				Size:        "",
+				Size:        productCart.Size,
 				TotalPrice:  int(productTemp.Price) * productCart.Quantity,
 				OrderId:     orderNumber,
 			},
@@ -175,11 +151,18 @@ func (uc *CreateOrderWithCCUsecase) Execute(userId uint64, addressId int, cc mod
 		return nil, nil, err
 	}
 
+	// add product to prodcut
 	for _, productsDetail := range productsDetails {
 		_, err = uc.insertProductOrderDetail.Insert(productsDetail)
 		if err != nil {
 			return nil, nil, err
 		}
+	}
+
+	// delete all cart user
+	err = uc.deleteCartByUser.Delete(userId)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	return &orderRespond, &paymentMethod, nil

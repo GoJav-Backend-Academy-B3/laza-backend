@@ -48,6 +48,7 @@ func NewOrderHandler() domain.HandlerInterface {
 		brandRepo,
 		paymentMethodRepo,
 		cartRepo,
+		cartRepo,
 	)
 
 	createOrderWithBank := orderUsecase.NewCreateOrderWithBankUsecase(orderRepo,
@@ -59,7 +60,9 @@ func NewOrderHandler() domain.HandlerInterface {
 		categoryRepo,
 		brandRepo,
 		paymentMethodRepo,
-		cartRepo)
+		cartRepo,
+		cartRepo,
+	)
 
 	createOrderWithCC := orderUsecase.NewCreateOrderWithCCUsecase(
 		orderRepo,
@@ -73,6 +76,7 @@ func NewOrderHandler() domain.HandlerInterface {
 		categoryRepo,
 		brandRepo,
 		paymentMethodRepo,
+		cartRepo,
 		cartRepo,
 	)
 
