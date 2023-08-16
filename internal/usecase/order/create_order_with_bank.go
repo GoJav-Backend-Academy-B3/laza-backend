@@ -1,6 +1,7 @@
 package order
 
 import (
+	"database/sql"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -178,7 +179,7 @@ func (uc *CreateOrderWithBankUsecase) Execute(userId uint64, addressId int, bank
 		Amount:          int64(grossAmount),
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
-		PaidAt:          time.Time{},
+		PaidAt:          sql.NullTime{Valid: false},
 		ExpiryDate:      paymentMethod.ExpiryTime,
 		ShippingFee:     helper.GenerateShippingFee(address),
 		AdminFee:        helper.GenerateAdminFee(),

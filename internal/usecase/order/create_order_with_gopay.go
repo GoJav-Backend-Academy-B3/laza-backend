@@ -1,6 +1,7 @@
 package order
 
 import (
+	"database/sql"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 	"github.com/phincon-backend/laza/domain/model"
@@ -22,6 +23,7 @@ type CreateOrderWithGopayUsecase struct {
 	getBrand                 repositories.GetByIdAction[model.Brand]
 	insertPaymentMethod      repositories.InsertAction[model.PaymentMethod]
 	getCartByIdRepo          d.GetCartByIdAction
+	deleteCartByUser         repositories.DeleteAction[model.Cart]
 }
 
 func NewCreateOrderWithGopayUsecase(
@@ -97,7 +99,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 				Category:    categoryTemp.Category,
 				BrandName:   brandTemp.Name,
 				Quantity:    productCart.Quantity,
-				Size:        "",
+				Size:        productCart.Size,
 				TotalPrice:  int(productTemp.Price) * productCart.Quantity,
 				OrderId:     orderNumber,
 			},
@@ -145,7 +147,7 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		Amount:          int64(grossAmount),
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
-		PaidAt:          time.Time{},
+		PaidAt:          sql.NullTime{Valid: false},
 		ExpiryDate:      paymentMethod.ExpiryTime,
 		ShippingFee:     helper.GenerateShippingFee(address),
 		AdminFee:        helper.GenerateAdminFee(),
@@ -164,6 +166,12 @@ func (uc *CreateOrderWithGopayUsecase) Execute(userId uint64, addressId int, cal
 		if err != nil {
 			return nil, nil, err
 		}
+	}
+
+	// delete all cart user
+	err = uc.deleteCartByUser.Delete(userId)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	return &orderRespond, &paymentMethod, nil
