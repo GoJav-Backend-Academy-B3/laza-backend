@@ -13,7 +13,7 @@ import (
 // GetProducts godoc
 // @Summary Gets all products
 // @Description Gets all products with the abilities to serch queries
-// @Tags products
+// @Tags product
 // @Produce json
 // @Param limit query int false "limit for pagination"
 // @Param  offset query int false "offset for pagination"
