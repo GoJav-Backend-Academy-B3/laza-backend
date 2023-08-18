@@ -7,6 +7,16 @@ import (
 	"net/http"
 )
 
+// Get order by id godoc
+// @Summary Get order by id
+// @Description Get detail order by id order
+// @Tags order
+// @Accept json
+// @Produce json
+// @Security JWT
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=response.OrderResponse}
+// @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
+// @Router /orders [GET]
 func (h *orderHandler) GetOrderById(c *gin.Context) {
 
 	// Get limit and offset query string
@@ -26,10 +36,10 @@ func (h *orderHandler) GetOrderById(c *gin.Context) {
 	orderResponse := response.Order{}
 	orderResponse.FillFromEntity(&order)
 
-	result := make(map[string]any)
-
-	result["order"] = orderResponse
-	result["product_details"] = productDetails
+	result := response.OrderResponse{
+		Order:         orderResponse,
+		ProductDetail: productDetails,
+	}
 
 	helper.GetResponse(result, 200, false).Send(c)
 	return
