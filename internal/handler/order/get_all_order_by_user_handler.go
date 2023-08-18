@@ -7,6 +7,16 @@ import (
 	"net/http"
 )
 
+// Get all order godoc
+// @Summary Get all order
+// @Description Get all order by id user
+// @Tags order
+// @Accept json
+// @Produce json
+// @Security JWT
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=[]response.Order}
+// @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
+// @Router /order/{order_id} [GET]
 func (h *orderHandler) GetOrderByUser(c *gin.Context) {
 
 	// Get userId

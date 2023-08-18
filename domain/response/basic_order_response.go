@@ -33,3 +33,8 @@ func (r *BasicOrderResponse) FillFromEntity(m *model.Order) {
 	r.PaymentMethodId = m.PaymentMethodId
 	r.ShippingFee = m.ShippingFee
 }
+
+type OrderCreateResponse struct {
+	Order         Order               `json:"order"`
+	PaymentMethod model.PaymentMethod `json:"payment_method"`
+}
