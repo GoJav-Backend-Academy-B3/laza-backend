@@ -32,7 +32,9 @@ func (r *Order) FillFromEntity(m *model.Order) {
 	r.ExpiryDate = m.ExpiryDate
 	r.PaymentMethodId = m.PaymentMethodId
 	r.ShippingFee = m.ShippingFee
-	//r.GopayId = m.GopayId.Int64
-	//r.CreditCardId = m.CreditCardId.Int64
-	//r.TransactionBankId = m.TransactionBankId.Int64
+}
+
+type OrderResponse struct {
+	Order         Order                      `json:"order"`
+	ProductDetail []model.ProductOrderDetail `json:"product_detail"`
 }

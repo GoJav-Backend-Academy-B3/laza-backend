@@ -10,7 +10,7 @@ type Order struct {
 	Amount          int64        `json:"amount"`
 	CreatedAt       time.Time    `json:"created_at"`
 	UpdatedAt       time.Time    `json:"updated_at"`
-	PaidAt          sql.NullTime `json:"paid_at"`
+	PaidAt          sql.NullTime `json:"paid_at" swaggertype:"primitive,string"`
 	ExpiryDate      time.Time    `json:"expiry_date"`
 	ShippingFee     int          `json:"shipping_fee"`
 	AdminFee        int          `json:"admin_fee"`

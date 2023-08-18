@@ -4,10 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phincon-backend/laza/domain/model"
 	"github.com/phincon-backend/laza/domain/requests"
+	"github.com/phincon-backend/laza/domain/response"
 	"github.com/phincon-backend/laza/helper"
 	"net/http"
 )
 
+// Create order with cedit card godoc
+// @Summary Create order with cedit card
+// @Description Create order with cedit card payment
+// @Tags order
+// @Accept json
+// @Produce json
+// @Param wishlist body requests.OrderWithCC true "order request"
+// @Security JWT
+// @Success 200 {object} helper.Response{status=string,isError=bool,data=response.OrderCreateResponse}
+// @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
+// @Router /order/cc [POST]
 func (h *orderHandler) CreateOrderWithCC(c *gin.Context) {
 	var orderCCRequest requests.OrderWithCC
 
@@ -37,13 +49,13 @@ func (h *orderHandler) CreateOrderWithCC(c *gin.Context) {
 		return
 	}
 
-	result := make(map[string]any)
+	orderResponse := response.Order{}
+	orderResponse.FillFromEntity(order)
 
-	//orderResponse := &response.CreditCardOrderResponse{}
-	//orderResponse.FillFromEntity(order)
-
-	result["order"] = order
-	result["payment_method"] = paymentMethod
+	result := response.OrderCreateResponse{
+		Order:         orderResponse,
+		PaymentMethod: *paymentMethod,
+	}
 
 	response := helper.GetResponse(result, http.StatusCreated, false)
 	response.Send(c)
