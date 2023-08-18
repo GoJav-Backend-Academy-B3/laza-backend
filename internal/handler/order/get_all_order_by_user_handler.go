@@ -16,7 +16,7 @@ import (
 // @Security JWT
 // @Success 200 {object} helper.Response{status=string,isError=bool,data=[]response.Order}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
-// @Router /order/{order_id} [GET]
+// @Router /orders [GET]
 func (h *orderHandler) GetOrderByUser(c *gin.Context) {
 
 	// Get userId

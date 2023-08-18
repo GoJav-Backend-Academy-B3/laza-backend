@@ -14,9 +14,10 @@ import (
 // @Accept json
 // @Produce json
 // @Security JWT
+// @Param id path int true "ID of the order"
 // @Success 200 {object} helper.Response{status=string,isError=bool,data=response.OrderResponse}
 // @Failure 500 {object} helper.Response{status=string,description=string,isError=bool}
-// @Router /orders [GET]
+// @Router /order/{order_id} [GET]
 func (h *orderHandler) GetOrderById(c *gin.Context) {
 
 	// Get limit and offset query string
