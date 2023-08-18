@@ -10,7 +10,7 @@ import (
 // GetProductById godoc
 // @Summary Get product identified by the given id
 // @Description get the product corresponding to the input Id
-// @Tags Product
+// @Tags product
 // @Accept json
 // @Produce json
 // @Param id path int true "ID of the Product"
