@@ -1,0 +1,4265 @@
+definitions:
+  helper.Response:
+    properties:
+      data: {}
+      description: {}
+      isError:
+        type: boolean
+      status:
+        type: string
+    type: object
+  model.Address:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: integer
+      is_primary:
+        type: boolean
+      orders:
+        items:
+          $ref: '#/definitions/model.Order'
+        type: array
+      phone_number:
+        type: string
+      receiver_name:
+        type: string
+      user:
+        $ref: '#/definitions/model.User'
+      user_id:
+        type: integer
+    type: object
+  model.Bank:
+    properties:
+      bank_code:
+        type: string
+      bank_name:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+    required:
+    - bank_code
+    - bank_name
+    type: object
+  model.Brand:
+    properties:
+      deleted_at:
+        type: integer
+      id:
+        type: integer
+      logo_url:
+        type: string
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+    type: object
+  model.Cart:
+    properties:
+      created_at:
+        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      size_id:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.Category:
+    properties:
+      category:
+        type: string
+      id:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+    type: object
+  model.CreditCard:
+    properties:
+      card_number:
+        type: string
+      expired_month:
+        type: integer
+      expired_year:
+        type: integer
+      id:
+        type: integer
+      orders:
+        items:
+          $ref: '#/definitions/model.Order'
+        type: array
+      user_id:
+        type: integer
+    type: object
+  model.Order:
+    properties:
+      address_id:
+        type: integer
+      admin_fee:
+        type: integer
+      amount:
+        type: integer
+      created_at:
+        type: string
+      expiry_date:
+        type: string
+      id:
+        type: string
+      order_status:
+        type: string
+      paid_at:
+        type: string
+      payment_method_id:
+        type: integer
+      shipping_fee:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.PaymentMethod:
+    properties:
+      bank:
+        type: string
+      bill_key:
+        type: string
+      biller_code:
+        type: string
+      credit_card_number:
+        type: string
+      deeplink:
+        type: string
+      expiry_time:
+        type: string
+      id:
+        type: integer
+      payment_method:
+        type: string
+      qr_code:
+        type: string
+      redirect_url:
+        type: string
+      va_number:
+        type: string
+    type: object
+  model.Product:
+    properties:
+      brand_id:
+        type: integer
+      cart_users:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+      category:
+        $ref: '#/definitions/model.Category'
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      orders:
+        items:
+          $ref: '#/definitions/model.Order'
+        type: array
+      price:
+        type: number
+      reviews:
+        items:
+          $ref: '#/definitions/model.Review'
+        type: array
+      size:
+        items:
+          $ref: '#/definitions/model.Size'
+        type: array
+      updated_at:
+        type: string
+      wishlisted_users:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+    type: object
+  model.ProductOrderDetail:
+    properties:
+      brand_name:
+        type: string
+      category_name:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      order_id:
+        type: string
+      price:
+        type: integer
+      quantity:
+        type: integer
+      size:
+        type: string
+      total_price:
+        type: integer
+    type: object
+  model.ProductReview:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      rating:
+        type: number
+    type: object
+  model.Review:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      product_id:
+        type: integer
+      rating:
+        type: number
+      user_id:
+        description: ProducReviews []ProductReview `json:"product_reviews"`
+        type: integer
+    type: object
+  model.Size:
+    properties:
+      id:
+        type: integer
+      product:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+      size:
+        type: string
+    type: object
+  model.User:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/model.Address'
+        type: array
+      cart_products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+      created_at:
+        type: string
+      credit_cards:
+        items:
+          $ref: '#/definitions/model.CreditCard'
+        type: array
+      deleted_at:
+        type: integer
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      is_admin:
+        type: boolean
+      is_verified:
+        type: boolean
+      orders:
+        items:
+          $ref: '#/definitions/model.Order'
+        type: array
+      password:
+        type: string
+      reviews:
+        items:
+          $ref: '#/definitions/model.Review'
+        type: array
+      updated_at:
+        type: string
+      username:
+        type: string
+      verification_codes:
+        items:
+          $ref: '#/definitions/model.VerificationCode'
+        type: array
+      verification_tokens:
+        items:
+          $ref: '#/definitions/model.VerificationToken'
+        type: array
+      wishlisted_product:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+    type: object
+  model.VerificationCode:
+    properties:
+      code:
+        type: string
+      expiry_date:
+        type: string
+      id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  model.VerificationToken:
+    properties:
+      expiry_date:
+        type: string
+      id:
+        type: integer
+      token:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  requests.AddressRequest:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      is_primary:
+        type: boolean
+      phone_number:
+        maxLength: 20
+        type: string
+      receiver_name:
+        type: string
+    required:
+    - city
+    - country
+    - phone_number
+    - receiver_name
+    type: object
+  requests.CartRequest:
+    properties:
+      product_id:
+        type: integer
+      size_id:
+        type: integer
+    required:
+    - product_id
+    - size_id
+    type: object
+  requests.CategoryRequest:
+    properties:
+      category:
+        type: string
+      id:
+        type: integer
+    required:
+    - category
+    type: object
+  requests.CreditCardOrder:
+    properties:
+      card_number:
+        type: string
+      cvv:
+        type: string
+      exp_month:
+        type: integer
+      exp_year:
+        type: integer
+      id:
+        type: integer
+    required:
+    - card_number
+    - cvv
+    - exp_month
+    - exp_year
+    - id
+    type: object
+  requests.CreditCardRequest:
+    properties:
+      card_number:
+        maxLength: 16
+        minLength: 16
+        type: string
+      cvv:
+        type: string
+      expired_month:
+        type: integer
+      expired_year:
+        type: integer
+    required:
+    - card_number
+    - expired_month
+    - expired_year
+    type: object
+  requests.Email:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  requests.Login:
+    properties:
+      password:
+        minLength: 8
+        type: string
+      username:
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  requests.OrderWithBank:
+    properties:
+      address_id:
+        type: integer
+      bank:
+        type: string
+    required:
+    - address_id
+    - bank
+    type: object
+  requests.OrderWithCC:
+    properties:
+      address_id:
+        type: integer
+      credit_card:
+        $ref: '#/definitions/requests.CreditCardOrder'
+    required:
+    - address_id
+    - credit_card
+    type: object
+  requests.OrderWithGopay:
+    properties:
+      address_id:
+        type: integer
+      callback_url:
+        type: string
+    required:
+    - address_id
+    - callback_url
+    type: object
+  requests.Register:
+    properties:
+      email:
+        type: string
+      full_name:
+        minLength: 3
+        type: string
+      password:
+        minLength: 8
+        type: string
+      username:
+        minLength: 3
+        type: string
+    required:
+    - email
+    - full_name
+    - password
+    - username
+    type: object
+  requests.ResetPassword:
+    properties:
+      new_password:
+        minLength: 8
+        type: string
+      re_password:
+        minLength: 8
+        type: string
+    required:
+    - new_password
+    - re_password
+    type: object
+  requests.VerificationCode:
+    properties:
+      code:
+        minLength: 4
+        type: string
+      email:
+        type: string
+    required:
+    - code
+    - email
+    type: object
+  requests.WishlistRequest:
+    properties:
+      product_id:
+        type: integer
+    required:
+    - product_id
+    type: object
+  response.CartInfo:
+    properties:
+      order_info:
+        $ref: '#/definitions/response.CartOrderInfo'
+      products:
+        items:
+          $ref: '#/definitions/response.CartPorduct'
+        type: array
+    type: object
+  response.CartOrderInfo:
+    properties:
+      shipping_cost:
+        type: number
+      sub_total:
+        type: number
+      total:
+        type: number
+    type: object
+  response.CartPorduct:
+    properties:
+      brand_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      price:
+        type: number
+      product_name:
+        type: string
+      quantity:
+        type: integer
+      size:
+        type: string
+    type: object
+  response.CategorySimpleResponse:
+    properties:
+      category:
+        type: string
+      id:
+        type: integer
+    type: object
+  response.CreditCardResponse:
+    properties:
+      card_number:
+        type: string
+      expired_month:
+        type: integer
+      expired_year:
+        type: integer
+      id:
+        type: integer
+    type: object
+  response.Order:
+    properties:
+      address_id:
+        type: integer
+      admin_fee:
+        type: integer
+      amount:
+        type: integer
+      created_at:
+        type: string
+      expiry_date:
+        type: string
+      id:
+        type: string
+      order_status:
+        type: string
+      paid_at:
+        type: string
+      payment_method_id:
+        type: integer
+      shipping_fee:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  response.OrderCreateResponse:
+    properties:
+      order:
+        $ref: '#/definitions/response.Order'
+      payment_method:
+        $ref: '#/definitions/model.PaymentMethod'
+    type: object
+  response.OrderResponse:
+    properties:
+      order:
+        $ref: '#/definitions/response.Order'
+      product_detail:
+        items:
+          $ref: '#/definitions/model.ProductOrderDetail'
+        type: array
+    type: object
+  response.Product:
+    properties:
+      brand_id:
+        type: integer
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      size:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: string
+    type: object
+  response.ProductDetail:
+    properties:
+      brand_id:
+        type: integer
+      category:
+        $ref: '#/definitions/model.Category'
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      reviews:
+        items:
+          $ref: '#/definitions/model.ProductReview'
+        type: array
+      size:
+        items:
+          $ref: '#/definitions/model.Size'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  response.ProductOverview:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  response.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      is_admin:
+        type: boolean
+      is_verified:
+        type: boolean
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  response.WishListProductLimit:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/response.ProductOverview'
+        type: array
+      total:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: soberkoder@swagger.io
+    name: API Support
+  description: This is a Final Project
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Laza
+  version: "1.0"
+paths:
+  /address:
+    get:
+      consumes:
+      - application/json
+      description: Get all Address By User ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Address'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All Address By User ID
+      tags:
+      - address
+    post:
+      consumes:
+      - application/json
+      description: Post details of address
+      parameters:
+      - description: create address
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AddressRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Address'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Post Details
+      tags:
+      - address
+  /address/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the address corresponding to the input Id
+      parameters:
+      - description: ID of the address
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete address identified by the given id
+      tags:
+      - address
+    get:
+      consumes:
+      - application/json
+      description: Get details of address corresponding is the input Id
+      parameters:
+      - description: ID of the address
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Address'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get Details for a given id
+      tags:
+      - address
+    put:
+      consumes:
+      - application/json
+      description: put details of address
+      parameters:
+      - description: update address
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AddressRequest'
+      - description: ID of the address
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Address'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: put Details
+      tags:
+      - address
+  /auth:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint is login endpoint for twitter
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Redirecting...
+          schema:
+            type: string
+        "405":
+          description: Method Not Allowed
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Twitter Login auth
+      tags:
+      - twitterauth
+  /auth/confirm:
+    get:
+      consumes:
+      - application/json
+      description: Verification email for user
+      parameters:
+      - description: Query Token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 'Query Email '
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Verification Email For User
+      tags:
+      - auth
+  /auth/confirm/resend:
+    post:
+      consumes:
+      - application/json
+      description: Resend Email for verify email user
+      parameters:
+      - description: Resend Email
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Email'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Resend Email For Verify Email User
+      tags:
+      - auth
+  /auth/facebook:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint is only used to generate redirect URL to facebook
+        login dialog.
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Redirecting...
+          schema:
+            type: string
+        "405":
+          description: Method Not Allowed
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Facebook login oauth
+      tags:
+      - facebookauth
+  /auth/facebook/callback:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint is a callback endpoint for facebook login or sign
+        up.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "405":
+          description: Method Not Allowed
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Facebook callback endpoint when login success.
+      tags:
+      - facebookauth
+  /auth/forgotpassword:
+    post:
+      consumes:
+      - application/json
+      description: Forget password for user
+      parameters:
+      - description: Forget Password
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Email'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Forget Password For User
+      tags:
+      - auth
+  /auth/google:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint is only used to generate redirect URL to google login
+        dialog.
+      produces:
+      - application/json
+      responses:
+        "307":
+          description: Redirecting...
+          schema:
+            type: string
+        "405":
+          description: Method Not Allowed
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Google login oauth
+      tags:
+      - googleauth
+  /auth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint is a callback endpoint for google login or sign up.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "405":
+          description: Method Not Allowed
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Google callback endpoint when login success.
+      tags:
+      - googleauth
+  /auth/refresh:
+    get:
+      consumes:
+      - application/json
+      description: Refresh Token for user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Refresh Token
+      tags:
+      - auth
+  /auth/reset-password/:
+    post:
+      consumes:
+      - application/json
+      description: Reset password for user
+      parameters:
+      - description: 'Query Email '
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Reset Password
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ResetPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Reset Password For User
+      tags:
+      - auth
+  /auth/twitter/callback:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint is a callback endpoint when login success
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "405":
+          description: Method Not Allowed
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Twitter callback endpoint when login success
+      tags:
+      - twitterauth
+  /auth/verification-code:
+    post:
+      consumes:
+      - application/json
+      description: Verification email for user
+      parameters:
+      - description: Verification Code
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.VerificationCode'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Verification Email For User
+      tags:
+      - auth
+  /bank:
+    get:
+      consumes:
+      - application/json
+      description: Get all Bank
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All Bank
+      tags:
+      - bank
+    post:
+      consumes:
+      - multipart/form-data
+      description: Post details of bank
+      parameters:
+      - in: formData
+        name: bank_code
+        required: true
+        type: string
+      - in: formData
+        name: bank_name
+        required: true
+        type: string
+      - description: bank
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Post Details
+      tags:
+      - bank
+  /bank/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete details of bank corresponding is the input Id
+      parameters:
+      - description: ID of the bank
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete Details for a given id
+      tags:
+      - bank
+    get:
+      consumes:
+      - application/json
+      description: get the bank corresponding to the input Id
+      parameters:
+      - description: ID of the bank
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get bank identified by the given id
+      tags:
+      - bank
+    put:
+      consumes:
+      - multipart/form-data
+      description: put details of address
+      parameters:
+      - description: ID of the bank
+        in: path
+        name: id
+        required: true
+        type: integer
+      - in: formData
+        name: bank_code
+        required: true
+        type: string
+      - in: formData
+        name: bank_name
+        required: true
+        type: string
+      - description: bank
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Bank'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: put Details
+      tags:
+      - bank
+  /brand:
+    get:
+      consumes:
+      - application/json
+      description: Get all brand
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Brand'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Get All brand
+      tags:
+      - brand
+    post:
+      consumes:
+      - multipart/form-data
+      description: Post details of brand
+      parameters:
+      - in: formData
+        name: name
+        required: true
+        type: string
+      - description: brand logo
+        in: formData
+        name: logo_url
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Brand'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Post Details
+      tags:
+      - brand
+  /brand/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the brand corresponding to the input Id
+      parameters:
+      - description: ID of the brand
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete brand identified by the given id
+      tags:
+      - brand
+    get:
+      consumes:
+      - application/json
+      description: Get details of brand corresponding is the input Id
+      parameters:
+      - description: ID of the brand
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Brand'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Get Details for a given id
+      tags:
+      - brand
+    put:
+      consumes:
+      - multiprat/form-data
+      description: put details of brand
+      parameters:
+      - description: ID of the brand
+        in: path
+        name: id
+        required: true
+        type: integer
+      - in: formData
+        name: name
+        required: true
+        type: string
+      - description: brand logo
+        in: formData
+        name: logo_url
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Brand'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: put Details
+      tags:
+      - brand
+  /brand/search:
+    get:
+      consumes:
+      - application/json
+      description: Delete the brand corresponding to the input Id
+      parameters:
+      - description: name of the brand
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/model.Brand'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Delete brand identified by the given id
+      tags:
+      - brand
+  /carts:
+    delete:
+      consumes:
+      - application/json
+      description: Delete cart with product id
+      parameters:
+      - description: add product to cart
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Delete Cart
+      tags:
+      - cart
+    get:
+      consumes:
+      - application/json
+      description: Get cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CartInfo'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get Cart
+      tags:
+      - cart
+    post:
+      consumes:
+      - application/json
+      description: Add cart
+      parameters:
+      - description: add product to cart
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Cart'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Add Cart
+      tags:
+      - cart
+    put:
+      consumes:
+      - application/json
+      description: Update cart
+      parameters:
+      - description: add product to cart
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Cart'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Update Cart
+      tags:
+      - cart
+  /category:
+    post:
+      consumes:
+      - application/json
+      description: It creates a new Category record.
+      parameters:
+      - description: create category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.CategorySimpleResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Create new category
+      tags:
+      - category
+  /category/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete category by id
+      tags:
+      - category
+    get:
+      consumes:
+      - application/json
+      description: Get category by its id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.CategorySimpleResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get category by id
+      tags:
+      - category
+    put:
+      consumes:
+      - application/json
+      description: It updates the category's name. It updates the category that has
+        the given ID.
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: body category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.CategorySimpleResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Update the category's name based on the given id.
+      tags:
+      - category
+  /category/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  items:
+                    $ref: '#/definitions/response.CategorySimpleResponse'
+                  type: array
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All Category
+      tags:
+      - category
+  /category/search:
+    get:
+      consumes:
+      - application/json
+      description: It returns a list of categories. This is not an exact match searching
+        method.
+      parameters:
+      - description: Category name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  items:
+                    $ref: '#/definitions/response.CategorySimpleResponse'
+                  type: array
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Find category by its name
+      tags:
+      - category
+  /credit-card:
+    get:
+      consumes:
+      - application/json
+      description: Get All Credit Card
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.CreditCardResponse'
+                  type: array
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get Credit Card by User
+      tags:
+      - creditcard
+    post:
+      consumes:
+      - application/json
+      description: Credit Card
+      parameters:
+      - description: create credit card
+        in: body
+        name: creditcard
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreditCardRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CreditCardResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Add Credit Card
+      tags:
+      - creditcard
+  /credit-card/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Credit Card
+      parameters:
+      - description: ID of the credit card
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CreditCardResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get Credit Card By Id
+      tags:
+      - creditcard
+    put:
+      consumes:
+      - application/json
+      description: Credit Card
+      parameters:
+      - description: ID of the credit card
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update credit card
+        in: body
+        name: creditcard
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreditCardRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CreditCardResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Update Credit Card
+      tags:
+      - creditcard
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login for user
+      parameters:
+      - description: Login
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Login
+      tags:
+      - auth
+  /order/{order_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get detail order by id order
+      parameters:
+      - description: ID of the order
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.OrderResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get order by id
+      tags:
+      - order
+  /order/bank:
+    post:
+      consumes:
+      - application/json
+      description: Create order with bank payment
+      parameters:
+      - description: order request
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.OrderWithBank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.OrderCreateResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Create order with bank
+      tags:
+      - order
+  /order/cc:
+    post:
+      consumes:
+      - application/json
+      description: Create order with cedit card payment
+      parameters:
+      - description: order request
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.OrderWithCC'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.OrderCreateResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Create order with cedit card
+      tags:
+      - order
+  /order/gopay:
+    post:
+      consumes:
+      - application/json
+      description: Create order with gopay payment
+      parameters:
+      - description: order request
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.OrderWithGopay'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.OrderCreateResponse'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Create order with gopay
+      tags:
+      - order
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Get all order by id user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.Order'
+                  type: array
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get all order
+      tags:
+      - order
+  /products:
+    get:
+      description: Gets all products with the abilities to serch queries
+      parameters:
+      - description: limit for pagination
+        in: query
+        name: limit
+        type: integer
+      - description: offset for pagination
+        in: query
+        name: offset
+        type: integer
+      - description: Search keyword for products
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  items:
+                    $ref: '#/definitions/response.ProductOverview'
+                  type: array
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Gets all products
+      tags:
+      - product
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds product to database with form-data as input
+      parameters:
+      - description: Product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Product description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Product images. The file should not exceed 2MiB or approximately
+          equivalent to 2.0971MB
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Product price
+        in: formData
+        name: price
+        required: true
+        type: number
+      - description: Product brand (must exists in database)
+        in: formData
+        name: brand
+        required: true
+        type: string
+      - description: Product category (must exists in database)
+        in: formData
+        name: category
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Product available sizes. Note: You should use multi-valued form
+          data outside this Swagger UI'
+        in: formData
+        items:
+          type: string
+        name: sizes
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.Product'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Adds product to database
+      tags:
+      - product
+  /products/{id}:
+    delete:
+      description: Deletes product corresponding to the input Id
+      parameters:
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Deletes product identified by the given id
+      tags:
+      - product
+    get:
+      consumes:
+      - application/json
+      description: get the product corresponding to the input Id
+      parameters:
+      - description: ID of the Product
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.ProductDetail'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get product identified by the given id
+      tags:
+      - product
+    put:
+      consumes:
+      - multipart/form-data
+      description: Updates product to database with form-data as input
+      parameters:
+      - description: Product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Product description
+        in: formData
+        name: description
+        required: true
+        type: string
+      - description: Product images. The file should not exceed 2MiB or approximately
+          equivalent to 2.0971MB
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Product price
+        in: formData
+        name: price
+        required: true
+        type: number
+      - description: Product brand (must exists in database)
+        in: formData
+        name: brand
+        required: true
+        type: string
+      - description: Product category (must exists in database)
+        in: formData
+        name: category
+        required: true
+        type: string
+      - description: ID of the product
+        in: path
+        name: id
+        required: true
+        type: integer
+      - collectionFormat: csv
+        description: 'Product available sizes. Note: You should use multi-valued form
+          data outside this Swagger UI'
+        in: formData
+        items:
+          type: string
+        name: sizes
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.Product'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Updates product to database
+      tags:
+      - product
+  /products/brand:
+    get:
+      consumes:
+      - application/json
+      description: It returns a list of products of a brand
+      parameters:
+      - description: Brand name
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: limit for pagination
+        in: query
+        name: limit
+        type: integer
+      - description: offset for pagination
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  items:
+                    $ref: '#/definitions/response.Product'
+                  type: array
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Find product by brand
+      tags:
+      - product
+  /register:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Register for user
+      parameters:
+      - description: Register
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/requests.Register'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      summary: Register
+      tags:
+      - auth
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All User
+      tags:
+      - user
+  /user/:
+    get:
+      consumes:
+      - application/json
+      description: Get user all with limit
+      parameters:
+      - description: Query Page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: 'Query Perpage '
+        in: query
+        name: perpage
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Get All User With Limit
+      tags:
+      - user
+  /user/change-password:
+    put:
+      consumes:
+      - application/json
+      description: Change passsword user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Change Password User
+      tags:
+      - user
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Delete User
+      tags:
+      - user
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      description: Profile user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Profile User
+      tags:
+      - user
+  /user/update:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update for user
+      parameters:
+      - in: formData
+        name: email
+        required: true
+        type: string
+      - in: formData
+        minLength: 3
+        name: full_name
+        required: true
+        type: string
+      - in: formData
+        minLength: 8
+        name: password
+        required: true
+        type: string
+      - in: formData
+        minLength: 3
+        name: username
+        required: true
+        type: string
+      - description: user
+        in: formData
+        name: image
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: string
+                data:
+                  $ref: '#/definitions/response.User'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                code:
+                  type: integer
+                description:
+                  type: string
+                isError:
+                  type: boolean
+              type: object
+      security:
+      - JWT: []
+      summary: Update User
+      tags:
+      - user
+  /wishlists:
+    get:
+      consumes:
+      - application/json
+      description: Get Wishlist
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.WishListProductLimit'
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Get Wishlist
+      tags:
+      - wishlist
+    put:
+      consumes:
+      - application/json
+      description: Update wish Wishlist
+      parameters:
+      - description: add product to wishlist
+        in: body
+        name: wishlist
+        required: true
+        schema:
+          $ref: '#/definitions/requests.WishlistRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                description:
+                  type: string
+                isError:
+                  type: boolean
+                status:
+                  type: string
+              type: object
+      security:
+      - JWT: []
+      summary: Update Wishlist
+      tags:
+      - wishlist
+securityDefinitions:
+  JWT:
+    description: 'How to input in swagger : ''Bearer <insert_your_token_here>'''
+    in: header
+    name: X-Auth-Token
+    type: apiKey
+swagger: "2.0"

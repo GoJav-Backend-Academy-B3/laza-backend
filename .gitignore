@@ -1,6 +1,6 @@
 ### dotenv ###
 .env
-docs/
+# docs/
 .local.env
 .stage.env
 .supa.env

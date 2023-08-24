@@ -1,7 +1,7 @@
 version: '3'
 services:
   laza-backend:
-    image: laza-backend
+    image: laza-image
     container_name: laza-backend
     environment:
       JWT_KEYS: sadjlasdjasdasda
