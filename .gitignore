@@ -202,3 +202,5 @@ Temporary Items
 
 # docker
 docker-compose.yml
+.docker-compose.yml
+**/docker-compose.yml

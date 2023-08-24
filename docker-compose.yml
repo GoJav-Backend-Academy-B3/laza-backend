@@ -1,7 +1,7 @@
 version: '3'
 services:
   laza-backend:
-    image: adimaspph/laza-backend
+    image: laza-backend
     container_name: laza-backend
     environment:
       JWT_KEYS: sadjlasdjasdasda
@@ -26,16 +26,17 @@ services:
       CLOUD_SECRET: jdmJQ1YWSiYDMAxP3QhAdRSQ4Fg
       GOOGLE_CLIENT_ID: 586817315795-1ifsdvl9n9vos2kvra6ag91e2usu4hb9.apps.googleusercontent.com
       GOOGLE_CLIENT_SECRET: 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
-      GOOGLE_REDIRECT_URI: http://localhost:8080/login-google/callback
+      GOOGLE_REDIRECT_URI: https://lazaapp.shop/auth/google/callback
       FB_CLIENT_ID: 841478084198068
       FB_CLIENT_SECRET: 6e5f6a32a681f832a6e2406b16da65eb
-      FB_AUTH_REDIRECT_URL: http://localhost:8080/auth/facebook/callback
+      FB_AUTH_REDIRECT_URL: https://lazaapp.shop/auth/facebook/callback
       TWITTER_KEY: 9mwWDkCn5twBQPHjSKO9cUO2Q
       TWITTER_SECRET: sDP9A3GyypcicyEoW0zG4D2WDIEcZVNsPM16IIAWGLrfd5m4AK
+      TWITTER_REDIRECT_URI: https://lazaapp.shop/auth/twitter/callback?provider=twitter
       MIDTRANS_CLIENT_KEY: SB-Mid-client-RoG71GkViRrFWrrQ
       MIDTRANS_SERVER_KEY: SB-Mid-server-2eZ9gW_7UzLK41SsEDTiBTWw
       APP_PORT: 8080
-      IP_HOST: 0.0.0.0
+      HOST_IP: 0.0.0.0
       FRONTEND_ORIGIN_URL: http://localhost:8080
     ports:
       - "8080:8080"

@@ -24,4 +24,4 @@ jobs:
             swag init -g cmd/server/router/router.go
             docker build -t laza-image .
             docker-compose up -d
-            docker system prune
+            docker system prune -f
