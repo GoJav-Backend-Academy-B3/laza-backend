@@ -33,7 +33,7 @@ func NewRefresh(id uint64, role bool) *claims {
 		UserId: id,
 		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(config.LoadJWTConfig().GetTokenExpiry())),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(config.LoadJWTConfig().GetRefreshExpiry())),
 		},
 	}
 
